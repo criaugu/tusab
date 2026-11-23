@@ -78,6 +78,7 @@ The release is built by the `.github/workflows/release.yml` workflow when a `vX.
 3. signs the package when the certificate is configured in the repository secrets (without it, the package is unsigned);
 4. generates the `tusab-X.Y.Z.mcpb.sha256` checksum;
 5. publishes the release with both files and notes taken from the changelog entry, **without marking it as the latest**. That is why the download link on the installation pages carries the version number, never `/releases/latest`.
+6. publishes the same package to npm as **`@criaugu/tusab`** (with provenance), for the other AI tools (`npx -y @criaugu/tusab@latest`). If the version is already on npm, the step is skipped. Authentication is npm trusted publishing (no password); until it is turned on, it uses the `NPM_TOKEN` secret.
 
 ### How to publish a version
 

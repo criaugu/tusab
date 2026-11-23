@@ -78,6 +78,7 @@ A release é gerada pelo workflow `.github/workflows/release.yml` quando uma eti
 3. assina o pacote quando o certificado está configurado nos segredos do repositório (sem ele, o pacote sai sem assinatura);
 4. gera a soma `tusab-X.Y.Z.mcpb.sha256`;
 5. publica a release com os dois arquivos e as notas tiradas da entrada do changelog, **sem marcá-la como a mais recente**. Por isso o link de download nas páginas de instalação leva o número da versão, e nunca `/releases/latest`.
+6. publica o mesmo pacote no npm como **`@criaugu/tusab`** (com proveniência), para as outras ferramentas de IA (`npx -y @criaugu/tusab@latest`). Se a versão já estiver no npm, o passo é pulado. A autenticação é a publicação confiável do npm (sem senha); até ela ser ligada, usa o segredo `NPM_TOKEN`.
 
 ### Como publicar uma versão
 

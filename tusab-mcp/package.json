@@ -1,17 +1,52 @@
 {
-  "name": "tusab-mcp",
+  "name": "@criaugu/tusab",
   "version": "2.0.0",
-  "private": true,
   "description": "Tusab, conector local (servidor MCP) para o Claude e outras IAs: caderno de estudo e pesquisa com as fontes no computador do usuário, consultadas pela IA com citação.",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "claude",
+    "chatgpt",
+    "gemini",
+    "local-first",
+    "study",
+    "research",
+    "youtube",
+    "citations"
+  ],
+  "homepage": "https://tusab.solutions",
+  "bugs": {
+    "url": "https://github.com/criaugu/tusab/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/criaugu/tusab.git",
+    "directory": "tusab-mcp"
+  },
   "license": "SEE LICENSE IN LICENSE",
   "author": "CriAugu",
   "type": "module",
   "main": "src/index.js",
   "bin": {
+    "tusab": "src/index.js",
     "tusab-mcp": "src/index.js"
   },
+  "files": [
+    "src/",
+    "interface/",
+    "LICENSE",
+    "TRADEMARK.md",
+    "THIRD_PARTY_NOTICES.txt",
+    "icon.png",
+    "README.md"
+  ],
   "engines": {
     "node": ">=18.17"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "start": "node src/index.js",
@@ -19,7 +54,8 @@
     "painel": "node src/cli.js painel",
     "build:interface": "cd ../web_interface && npx --no-install vite build --mode extensao --outDir ../tusab-mcp/interface --emptyOutDir",
     "pack": "npm run build:interface && node scripts/gerar-licencas.mjs && npx --yes @anthropic-ai/mcpb@2.1.2 pack . ../tusab.mcpb",
-    "test": "node --import ./test/_ambiente.js --test \"test/*.test.js\""
+    "test": "node --import ./test/_ambiente.js --test \"test/*.test.js\"",
+    "prepublishOnly": "node -e \"require('fs').statSync('interface/index.html')\""
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.2",
