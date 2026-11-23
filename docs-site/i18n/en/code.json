@@ -327,22 +327,22 @@
     "description": "The title of the tag list page"
   },
   "homepage.meta.title": {
-    "message": "Study and research notebook for Claude and other AIs"
+    "message": "Study and research notebook for your AI"
   },
   "homepage.meta.description": {
-    "message": "Tusab, a local connector (MCP) for Claude and other AIs: your sources stay on your computer, and the AI gets only the right excerpts, citing the video and minute or the page."
+    "message": "Tusab, a local connector (MCP) for Claude, ChatGPT, Gemini and other AIs: your sources stay on your computer, and the AI gets only the right excerpts, citing the video and minute or the page."
   },
   "homepage.hero.tagline": {
     "message": "Your study and research notebook inside your AI."
   },
   "homepage.hero.description": {
-    "message": "A local connector for Claude and other AIs: it keeps YouTube videos, documents and public sources on your computer and gives the AI only the right excerpts, citing the video and minute or the page."
+    "message": "A local connector for Claude, ChatGPT, Gemini and other AIs: it keeps YouTube videos, documents and public sources on your computer and gives the AI only the right excerpts, citing the video and minute or the page."
   },
   "homepage.hero.install": {
     "message": "Install in Claude Desktop"
   },
   "homepage.hero.otherAis": {
-    "message": "Use in other AIs"
+    "message": "Use in ChatGPT, Gemini and others"
   },
   "homepage.hero.firstSteps": {
     "message": "First steps"
@@ -411,25 +411,10 @@
     "message": "In the browser, on this computer only: extract, organize projects, see reports and copy requests. In Portuguese, English and Spanish, with light and dark themes."
   },
   "homepage.where.heading": {
-    "message": "Where it works"
+    "message": "Works with your AI"
   },
   "homepage.where.desktop.title": {
     "message": "Claude Desktop"
-  },
-  "homepage.where.desktop.text": {
-    "message": "One-file installation: open the .mcpb package and choose the base folder. Node.js already comes with Claude. The ready-made requests show up in the + button."
-  },
-  "homepage.where.others.title": {
-    "message": "Claude Code, VS Code, Cursor, Gemini CLI, Codex"
-  },
-  "homepage.where.others.text": {
-    "message": "Any tool that accepts local MCP servers. Needs Node.js installed; the configuration takes three values."
-  },
-  "homepage.where.web.title": {
-    "message": "AIs in the browser"
-  },
-  "homepage.where.web.text": {
-    "message": "Claude.ai, ChatGPT and Gemini on the web cannot reach your computer. For them, Tusab copies the request with the excerpts from your base already inside."
   },
   "homepage.privacy.heading": {
     "message": "Private by default"
@@ -457,5 +442,38 @@
   },
   "homepage.cta.docs": {
     "message": "Read the guide"
+  },
+  "homepage.where.desktop.badge": {
+    "message": "Most complete · one file"
+  },
+  "homepage.where.desktop.text": {
+    "message": "Open the .mcpb package and choose the base folder. Node.js already comes with Claude, and the ready-made requests show up in the + button."
+  },
+  "homepage.where.chatgpt.badge": {
+    "message": "With configuration"
+  },
+  "homepage.where.chatgpt.title": {
+    "message": "ChatGPT app and Codex"
+  },
+  "homepage.where.chatgpt.text": {
+    "message": "The ChatGPT desktop app accepts Tusab through the same configuration as Codex, in Codex tasks. Needs Node.js installed."
+  },
+  "homepage.where.others.badge": {
+    "message": "With configuration"
+  },
+  "homepage.where.others.title": {
+    "message": "Gemini CLI, Claude Code, Cursor, VS Code, LM Studio"
+  },
+  "homepage.where.others.text": {
+    "message": "Any tool that accepts local MCP servers. With LM Studio, even the AI runs on your computer, offline."
+  },
+  "homepage.where.web.badge": {
+    "message": "No install in the AI · copy and paste"
+  },
+  "homepage.where.web.title": {
+    "message": "Any AI in the browser"
+  },
+  "homepage.where.web.text": {
+    "message": "ChatGPT, Gemini, Claude.ai and Copilot on the web cannot reach your computer. For them, Tusab copies the request with the excerpts from your base already inside."
   }
 }

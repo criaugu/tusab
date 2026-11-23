@@ -12,7 +12,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'Tusab',
   tagline:
-    'Caderno de estudo e pesquisa para o Claude e outras IAs. Conector local (MCP): as fontes ficam no seu computador, e a IA recebe só os trechos certos, com citação.',
+    'Caderno de estudo e pesquisa para o Claude, o ChatGPT, o Gemini e outras IAs. Conector local (MCP): as fontes ficam no seu computador, e a IA recebe só os trechos certos, com citação.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here

@@ -58,6 +58,22 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
+/* Quatro cartões em duas colunas; numa tela estreita, uma coluna. */
+.gradeDupla {
+  grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+}
+
+.selo {
+  display: inline-block;
+  margin: 0 0 0.6rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-800);
+}
+
 .passo,
 .cartao {
   margin: 0;
