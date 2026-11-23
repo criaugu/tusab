@@ -21,12 +21,13 @@ function Cabecalho() {
           {siteConfig.title}
         </Heading>
         <p className={styles.heroLema}>
-          <Translate id="homepage.hero.tagline">Seu caderno de estudo e pesquisa dentro da IA.</Translate>
+          <Translate id="homepage.hero.tagline">Seu caderno de estudo e pesquisa dentro da sua IA.</Translate>
         </p>
         <p className={styles.heroDescription}>
           <Translate id="homepage.hero.description">
-            Um conector local para o Claude e outras IAs: guarda vídeos do YouTube, documentos e fontes públicas no
-            seu computador e entrega à IA só os trechos certos, com citação do vídeo e minuto ou da página.
+            Um conector local para o Claude, o ChatGPT, o Gemini e outras IAs: guarda vídeos do YouTube, documentos e
+            fontes públicas no seu computador e entrega à IA só os trechos certos, com citação do vídeo e minuto ou da
+            página.
           </Translate>
         </p>
         <div className={styles.buttons}>
@@ -34,7 +35,7 @@ function Cabecalho() {
             <Translate id="homepage.hero.install">Instalar no Claude Desktop</Translate>
           </Link>
           <Link className="button button--outline button--lg" style={contorno} to="/outras-ias">
-            <Translate id="homepage.hero.otherAis">Usar em outras IAs</Translate>
+            <Translate id="homepage.hero.otherAis">Usar no ChatGPT, Gemini e outras</Translate>
           </Link>
           <Link className="button button--outline button--lg" style={contorno} to="/primeiros-passos">
             <Translate id="homepage.hero.firstSteps">Primeiros passos</Translate>
@@ -184,53 +185,73 @@ function Recursos() {
   );
 }
 
+// Os quatro caminhos, do mais completo ao mais simples. Fatos conferidos em 23/11/2026:
+// o app do ChatGPT para computador aceita servidores MCP locais pela configuração do Codex
+// (documentado para as tarefas do Codex); o app do Gemini só aceita conectores remotos.
+const CAMINHOS = [
+  {
+    to: '/instalacao',
+    selo: <Translate id="homepage.where.desktop.badge">Mais completo · um arquivo</Translate>,
+    titulo: <Translate id="homepage.where.desktop.title">Claude Desktop</Translate>,
+    texto: (
+      <Translate id="homepage.where.desktop.text">
+        Abra o pacote .mcpb e escolha a pasta da base. O Node.js já vem com o Claude, e os pedidos prontos aparecem
+        no botão +.
+      </Translate>
+    ),
+  },
+  {
+    to: '/outras-ias',
+    selo: <Translate id="homepage.where.chatgpt.badge">Com configuração</Translate>,
+    titulo: <Translate id="homepage.where.chatgpt.title">App do ChatGPT e Codex</Translate>,
+    texto: (
+      <Translate id="homepage.where.chatgpt.text">
+        O app do ChatGPT para computador aceita o Tusab pela mesma configuração do Codex, nas tarefas do Codex.
+        Precisa do Node.js instalado.
+      </Translate>
+    ),
+  },
+  {
+    to: '/outras-ias',
+    selo: <Translate id="homepage.where.others.badge">Com configuração</Translate>,
+    titulo: <Translate id="homepage.where.others.title">Gemini CLI, Claude Code, Cursor, VS Code, LM Studio</Translate>,
+    texto: (
+      <Translate id="homepage.where.others.text">
+        Qualquer ferramenta que aceite servidores MCP locais. Com o LM Studio, até a IA roda no seu computador, sem
+        internet.
+      </Translate>
+    ),
+  },
+  {
+    to: '/biblioteca-de-prompts#ia-no-navegador',
+    selo: <Translate id="homepage.where.web.badge">Sem instalar na IA · copiar e colar</Translate>,
+    titulo: <Translate id="homepage.where.web.title">Qualquer IA no navegador</Translate>,
+    texto: (
+      <Translate id="homepage.where.web.text">
+        ChatGPT, Gemini, Claude.ai e Copilot na web não alcançam o seu computador. Para elas, o Tusab copia o pedido
+        já com os trechos da sua base dentro.
+      </Translate>
+    ),
+  },
+];
+
 function OndeFunciona() {
   return (
     <section className={styles.secao} aria-labelledby="onde-funciona">
       <div className="container">
         <Heading as="h2" id="onde-funciona">
-          <Translate id="homepage.where.heading">Onde funciona</Translate>
+          <Translate id="homepage.where.heading">Funciona com a sua IA</Translate>
         </Heading>
-        <ul className={styles.grade}>
-          <li className={styles.cartao}>
-            <Heading as="h3">
-              <Link to="/instalacao">
-                <Translate id="homepage.where.desktop.title">Claude Desktop</Translate>
-              </Link>
-            </Heading>
-            <p>
-              <Translate id="homepage.where.desktop.text">
-                Instalação com um arquivo: abra o pacote .mcpb e escolha a pasta da base. O Node.js já vem com o
-                Claude. Os pedidos prontos aparecem no botão +.
-              </Translate>
-            </p>
-          </li>
-          <li className={styles.cartao}>
-            <Heading as="h3">
-              <Link to="/outras-ias">
-                <Translate id="homepage.where.others.title">Claude Code, VS Code, Cursor, Gemini CLI, Codex</Translate>
-              </Link>
-            </Heading>
-            <p>
-              <Translate id="homepage.where.others.text">
-                Qualquer ferramenta que aceite servidores MCP locais. Precisa do Node.js instalado; a configuração
-                leva três dados.
-              </Translate>
-            </p>
-          </li>
-          <li className={styles.cartao}>
-            <Heading as="h3">
-              <Link to="/biblioteca-de-prompts#ia-no-navegador">
-                <Translate id="homepage.where.web.title">IAs no navegador</Translate>
-              </Link>
-            </Heading>
-            <p>
-              <Translate id="homepage.where.web.text">
-                Claude.ai, ChatGPT e Gemini na web não alcançam o seu computador. Para elas, o Tusab copia o pedido
-                já com os trechos da sua base dentro.
-              </Translate>
-            </p>
-          </li>
+        <ul className={clsx(styles.grade, styles.gradeDupla)}>
+          {CAMINHOS.map((c) => (
+            <li key={c.titulo.props.id} className={styles.cartao}>
+              <p className={styles.selo}>{c.selo}</p>
+              <Heading as="h3">
+                <Link to={c.to}>{c.titulo}</Link>
+              </Heading>
+              <p>{c.texto}</p>
+            </li>
+          ))}
         </ul>
       </div>
     </section>
@@ -298,11 +319,11 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={translate({id: 'homepage.meta.title', message: 'Caderno de estudo e pesquisa para o Claude e outras IAs'})}
+      title={translate({id: 'homepage.meta.title', message: 'Caderno de estudo e pesquisa para a sua IA'})}
       description={translate({
         id: 'homepage.meta.description',
         message:
-          'Tusab, conector local (MCP) para o Claude e outras IAs: as fontes ficam no seu computador, e a IA recebe só os trechos certos, com citação do vídeo e minuto ou da página.',
+          'Tusab, conector local (MCP) para o Claude, o ChatGPT, o Gemini e outras IAs: as fontes ficam no seu computador, e a IA recebe só os trechos certos, com citação do vídeo e minuto ou da página.',
       })}>
       <Cabecalho />
       <main>

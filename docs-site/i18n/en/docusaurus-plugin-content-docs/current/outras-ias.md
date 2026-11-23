@@ -3,12 +3,12 @@ id: outras-ias
 title: Use in other AIs
 sidebar_label: Use in other AIs
 slug: /outras-ias
-description: How to install Tusab as a local MCP server in Claude Code, VS Code, Cursor, Gemini CLI and Codex, including how to check for and install Node.js.
+description: How to use Tusab in the ChatGPT desktop app, Codex, Gemini CLI, Claude Code, Cursor, VS Code and LM Studio, including how to check for and install Node.js.
 ---
 
 # Use in other AIs
 
-Tusab works in any AI tool that accepts **local MCP servers**, that is, servers the tool itself starts on your computer: Claude Code, VS Code (with GitHub Copilot), Cursor, Gemini CLI, Codex and others. In them, installation is done by hand, in three steps:
+Tusab works in any AI tool that accepts **local MCP servers**, that is, servers the tool itself starts on your computer: the ChatGPT desktop app, Codex, Gemini CLI, Claude Code, Cursor, VS Code (with GitHub Copilot), LM Studio and others. In them, installation is done by hand, in three steps:
 
 1. have **Node.js** on the computer;
 2. put Tusab's files in a folder;
@@ -17,7 +17,7 @@ Tusab works in any AI tool that accepts **local MCP servers**, that is, servers 
 In Claude Desktop it is simpler: see [Install in Claude Desktop](/instalacao).
 
 :::info Where it does not work
-AIs in the browser (Claude.ai, ChatGPT, Gemini on the web) and mobile apps only connect to servers on the internet: they cannot reach the Tusab on your computer. To use them with your base, copy the request from the [Prompt Library](/biblioteca-de-prompts#ia-no-navegador) and use **Open in browser**: Tusab copies the request with the excerpts from the base already inside.
+AIs in the browser (Claude.ai, ChatGPT, Gemini on the web) and mobile apps only connect to servers on the internet: they cannot reach the Tusab on your computer. The Gemini app, including on the desktop, also accepts only internet connectors; for Gemini, use **Gemini CLI**. To use them with your base, copy the request from the [Prompt Library](/biblioteca-de-prompts#ia-no-navegador) and use **Open in browser**: Tusab copies the request with the excerpts from the base already inside.
 :::
 
 ## 1. Node.js: check and install
@@ -99,6 +99,10 @@ command = "node"
 args = ['C:\Users\augusto\tusab-servidor\src\index.js']
 env = { TUSAB_REPOSITORIO = 'C:\Users\augusto\Tusab' }
 ```
+
+**ChatGPT desktop app:** it uses the same configuration as Codex. If Codex already has Tusab (block above), there is nothing else to do. If not, in the app go to **Settings › MCP servers › Add server**, choose **STDIO**, enter the `node` command, the argument with the path to `src/index.js` and the `TUSAB_REPOSITORIO` variable, save and click **Restart**. OpenAI documents this configuration for **Codex** tasks inside the app; in regular ChatGPT conversations, local tools may not show up. In that case, use Codex in the app or copy the request from the Library.
+
+**LM Studio** (AIs that run on the computer itself, offline): the same `mcpServers` block in LM Studio's `mcp.json` file (`~/.lmstudio/mcp.json`; on Windows, `%USERPROFILE%\.lmstudio\mcp.json`), which can also be opened from the app. Choose a model that can use tools ("tool use"); very small models tend to get the calls wrong.
 
 After configuring, restart the tool and ask "open Tusab" or "list my Tusab projects". If the tool says the server did not start, check step 1 (`node --version` in the same terminal) and whether the path to `src/index.js` is right.
 

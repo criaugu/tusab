@@ -10,7 +10,7 @@ description: Tusab is a study and research notebook inside your AI, a local conn
 
 Tusab is your **study and research notebook inside your AI**. It is a **local connector**: it keeps your sources **on your computer** and gives the AI only the right excerpts, **with citations**: the video and the exact minute, or the document and the page.
 
-It works in **Claude Desktop** and in other AI tools that accept local MCP servers (Claude Code, VS Code, Cursor, Gemini CLI, Codex). For AIs in the browser, Tusab copies the request with the excerpts from your base already inside.
+It works in **Claude Desktop** (one-file installation), in the **ChatGPT desktop app**, in **Gemini CLI** and in other tools that accept local MCP servers, such as Codex, Claude Code, Cursor, VS Code and LM Studio. For any AI in the browser (ChatGPT, Gemini, Claude.ai, Copilot), Tusab copies the request with the excerpts from your base already inside.
 
 ## What it does
 
@@ -36,8 +36,8 @@ Which connections leave the computer, and where they go, is in [Privacy](/privac
 | Where | How to install | Note |
 |---|---|---|
 | Claude Desktop (Windows and macOS) | [Open the `.mcpb` package](/instalacao) | Node.js comes with Claude; the ready-made requests show up in **+** |
-| Claude Code, VS Code, Cursor, Gemini CLI, Codex | [Configure it as an MCP server](/outras-ias) | Needs Node.js installed |
-| Claude.ai, ChatGPT, Gemini on the web, mobile apps | Does not install | Copy the request with the excerpts from the [Prompt Library](/biblioteca-de-prompts#ia-no-navegador) |
+| ChatGPT desktop app, Codex, Gemini CLI, Claude Code, Cursor, VS Code, LM Studio | [Configure it as an MCP server](/outras-ias) | Needs Node.js installed. In the ChatGPT app, it applies to Codex tasks |
+| ChatGPT, Gemini, Claude.ai and Copilot in the browser; the Gemini app; mobile apps | Does not install | Copy the request with the excerpts from the [Prompt Library](/biblioteca-de-prompts#ia-no-navegador) |
 
 ## Name and format
 

@@ -8,9 +8,9 @@ description: O Tusab é um caderno de estudo e pesquisa dentro da IA, um conecto
 
 # O que é o Tusab
 
-O Tusab é o seu **caderno de estudo e pesquisa dentro da IA**. É um **conector local**: ele guarda as suas fontes **no seu computador** e entrega à IA só os trechos certos, **com citação**, seja o vídeo e o minuto exato, seja o documento e a página.
+O Tusab é o seu **caderno de estudo e pesquisa dentro da sua IA**. É um **conector local**: ele guarda as suas fontes **no seu computador** e entrega à IA só os trechos certos, **com citação**, seja o vídeo e o minuto exato, seja o documento e a página.
 
-Funciona no **Claude Desktop** e em outras ferramentas de IA que aceitam servidores MCP locais (Claude Code, VS Code, Cursor, Gemini CLI, Codex). Para IAs no navegador, o Tusab copia o pedido já com os trechos da sua base dentro.
+Funciona no **Claude Desktop** (instalação com um arquivo), no **app do ChatGPT para computador**, no **Gemini CLI** e em outras ferramentas que aceitam servidores MCP locais, como Codex, Claude Code, Cursor, VS Code e LM Studio. Para qualquer IA no navegador (ChatGPT, Gemini, Claude.ai, Copilot), o Tusab copia o pedido já com os trechos da sua base dentro.
 
 ## O que ele faz
 
@@ -36,8 +36,8 @@ Quais conexões saem do computador, e para onde, está em [Privacidade](/privaci
 | Onde | Como instalar | Observação |
 |---|---|---|
 | Claude Desktop (Windows e macOS) | [Abrir o pacote `.mcpb`](/instalacao) | O Node.js vem com o Claude; os pedidos prontos aparecem no **+** |
-| Claude Code, VS Code, Cursor, Gemini CLI, Codex | [Configurar como servidor MCP](/outras-ias) | Precisa do Node.js instalado |
-| Claude.ai, ChatGPT, Gemini na web, apps de celular | Não instala | Copie o pedido com os trechos pela [Biblioteca de Prompts](/biblioteca-de-prompts#ia-no-navegador) |
+| App do ChatGPT para computador, Codex, Gemini CLI, Claude Code, Cursor, VS Code, LM Studio | [Configurar como servidor MCP](/outras-ias) | Precisa do Node.js instalado. No app do ChatGPT, vale para as tarefas do Codex |
+| ChatGPT, Gemini, Claude.ai e Copilot no navegador; app do Gemini; apps de celular | Não instala | Copie o pedido com os trechos pela [Biblioteca de Prompts](/biblioteca-de-prompts#ia-no-navegador) |
 
 ## Nome e formato
 
