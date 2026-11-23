@@ -275,9 +275,9 @@ function HomeScreen({ darkMode, history, repositorio, agentStatus, ollamaStatus,
       {/* Left — logo (tablet+) */}
       <div className={`hidden md:flex flex-col items-center justify-center w-1/2 px-8 lg:px-12 border-r ${darkMode ? 'border-white/5' : 'border-slate-100'}`}>
         <img
-          src={darkMode ? '/logo_dark_mode.svg' : '/logo_light_mode.svg'}
-          alt="Tusab — Index.Augment.Chat"
-          className="w-full max-w-xs lg:max-w-sm object-contain object-top"
+          src={darkMode ? '/marca_escuro.png' : '/marca_claro.png'}
+          alt="Tusab"
+          className="w-full max-w-[11rem] lg:max-w-[13rem] object-contain object-top"
           onError={e => { e.target.style.display = 'none'; }}
         />
         <p className={`mt-2 text-sm text-center max-w-xs ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
@@ -292,9 +292,9 @@ function HomeScreen({ darkMode, history, repositorio, agentStatus, ollamaStatus,
         {/* Mobile logo (shown only when left panel is hidden) */}
         <div className="flex md:hidden flex-col items-center mb-6">
           <img
-            src={darkMode ? '/logo_dark_mode.svg' : '/logo_light_mode.svg'}
+            src={darkMode ? '/marca_escuro.png' : '/marca_claro.png'}
             alt="Tusab"
-            className="w-32 h-32 object-contain"
+            className="w-24 h-24 object-contain"
             onError={e => { e.target.style.display = 'none'; }}
           />
           <p className={`mt-2 text-sm text-center max-w-xs ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>

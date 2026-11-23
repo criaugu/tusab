@@ -83,7 +83,10 @@ function useConexaoDesde(desde) {
       // Várias IAs na mesma base (Tusab principal + mensageiros): a tela mostra todas.
       const clientes = Array.isArray(r.data?.clientes) ? r.data.clientes : (cliente ? [cliente] : []);
       setEstado({ carregado: true, mcp: Boolean(r.data?.mcp), cliente, clientes, consultou: uf && uf.em >= desde ? uf.nome : null });
-    }).catch(() => { if (vivo) setEstado((e) => ({ ...e, carregado: true })); });
+    }).catch(() => {
+      // A tela perdeu o Tusab (a IA fechou): não mostrar "conectado" com dado velho.
+      if (vivo) setEstado((e) => ({ ...e, carregado: true, mcp: false, cliente: null, clientes: [] }));
+    });
     ler();
     const id = setInterval(ler, 2000);
     return () => { vivo = false; clearInterval(id); };

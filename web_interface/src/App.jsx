@@ -1030,7 +1030,7 @@ function App() {
       });
       const notify = () => new Notification(t('notify.extraction_done'), {
         body: t('ext.app.notificacao_corpo', { n: status.stats.videos_processed, projeto: status.stats.projeto_nome || '' }),
-        icon: '/logo_light_mode.svg',
+        icon: '/icon.png',
       });
       if (Notification.permission === 'granted') {
         notify();

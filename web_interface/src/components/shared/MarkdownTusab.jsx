@@ -53,7 +53,9 @@ function DiagramaMermaid({ codigo, darkMode }) {
     setFalhou(false);
     carregarMermaid()
       .then(async (mermaid) => {
-        mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: darkMode ? 'dark' : 'default', fontFamily: 'inherit' });
+        mermaid.initialize(darkMode
+          ? { startOnLoad: false, securityLevel: 'strict', theme: 'base', fontFamily: 'inherit', themeVariables: TEMA_DIAGRAMA_ESCURO }
+          : { startOnLoad: false, securityLevel: 'strict', theme: 'default', fontFamily: 'inherit' });
         const { svg: desenho } = await mermaid.render(id, codigo);
         desenhos.set(chave, desenho);
         if (vivo) setSvg(desenho);
@@ -87,6 +89,26 @@ function DiagramaMermaid({ codigo, darkMode }) {
     </figure>
   );
 }
+
+
+// Tema escuro dos diagramas: o "dark" da Mermaid pinta os ramos do mapa mental de vermelho-escuro
+// com linhas quase pretas (pouco contraste no fundo da tela). Aqui: tons médios com texto claro
+// (contraste acima de 7:1) e linhas cinza-azuladas visíveis.
+const CORES_RAMOS = ['#1e3a5f', '#134e4a', '#3b2f63', '#5b3a1a', '#164e63', '#4a1d3f', '#1f4f2e', '#4c3a0f', '#334155', '#1e40af', '#065f46', '#6b21a8'];
+const TEMA_DIAGRAMA_ESCURO = {
+  darkMode: true,
+  background: '#0f172a',
+  primaryColor: '#1e3a5f',
+  primaryTextColor: '#f1f5f9',
+  primaryBorderColor: '#4B9FE8',
+  secondaryColor: '#134e4a',
+  tertiaryColor: '#3b2f63',
+  lineColor: '#94a3b8',
+  textColor: '#e2e8f0',
+  mainBkg: '#1e3a5f',
+  nodeBorder: '#4B9FE8',
+  ...Object.fromEntries(CORES_RAMOS.flatMap((cor, i) => [[`cScale${i}`, cor], [`cScaleLabel${i}`, '#f1f5f9']])),
+};
 
 export default function MarkdownTusab({ texto, darkMode }) {
   // Objeto estável: se mudasse a cada render, o ReactMarkdown remontaria o diagrama.

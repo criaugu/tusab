@@ -80,9 +80,9 @@ function LandingScreen({ darkMode, onToggleDark, onEnter, appUpdateInfo }) {
         {/* Logo com pulso */}
         <div className="relative" style={{ transform: `scale(${scale})`, transition: 'transform 0.1s ease-out' }}>
           <img
-            src={darkMode ? '/logo_dark_mode.svg' : '/logo_light_mode.svg'}
+            src={darkMode ? '/marca_escuro.png' : '/marca_claro.png'}
             alt="Tusab"
-            className="w-48 sm:w-64 lg:w-72 max-w-xs object-contain relative z-10"
+            className="w-36 sm:w-44 lg:w-52 max-w-xs object-contain relative z-10"
             onError={e => { e.target.style.display = 'none'; }}
           />
           <div
