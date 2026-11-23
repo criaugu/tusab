@@ -1,0 +1,289 @@
+{
+  "display_name": "Tusab",
+  "description": "Tu cuaderno de estudio e investigación dentro de la IA: arma una base en este ordenador con YouTube, documentos y 70 fuentes públicas, pregunta con citas al minuto o a la página y estudia con flashcards, quizzes y mapas mentales que quedan guardados.",
+  "long_description": "Tusab convierte a Claude (u otra IA compatible con MCP) en un cuaderno de estudio e investigación conectado a **tus** fuentes, guardadas en este ordenador.\n\n**Arma tu base**\n- **YouTube:** transcripciones de canales, listas y videos, extraídas en este ordenador, desde tu propia IP, con actualización automática de los canales.\n- **Documentos:** PDF, Word, Excel, CSV, TXT/Markdown, páginas web y FHIR, con el archivo original guardado.\n- **70 fuentes públicas** en 11 áreas: arXiv, PubMed, SciELO, Cámara y Senado de Brasil, Supremo Tribunal, IBGE, Banco Central, portales de datos abiertos y otras, sin registro ni clave.\n\n**Pregunta con citas**\n- La IA busca solo los fragmentos correctos y cita la fuente: el video y el minuto, con enlace, o la página del PDF.\n- Gasta menos tokens que adjuntar las fuentes enteras, y Tusab muestra cuánto ahorró.\n\n**Estudia, enseña y produce**\n- **Biblioteca con 41 prompts listos**, 20 de ellos basados en técnicas con evidencia (pre-test, práctica intercalada, planificación inversa, PRISMA, pre-mortem…), para estudiar, enseñar, investigar y decidir, con el modelo de IA sugerido para cada tarea.\n- **Lo que genera la IA queda guardado en Tusab:** flashcards con repaso espaciado, resúmenes, quizzes, mapas mentales y planes de clase, que se abren dibujados en la pestaña Materiales.\n\n**En la pantalla de Tusab** (en el navegador, servida por este ordenador): extracción, repositorio, materiales y exportación o importación de la base (.tusab, zip, hoja de cálculo y PDF). En portugués, inglés y español.\n\n**Privacidad:** la base queda en este ordenador. Nada pasa por servidores de CriAugu; solo los fragmentos que consulta la IA van a la IA que elegiste.",
+  "keywords": [
+    "estudio",
+    "investigación",
+    "youtube",
+    "transcripciones",
+    "flashcards",
+    "citas",
+    "fuentes públicas",
+    "local-first"
+  ],
+  "tools": [
+    {
+      "name": "tusab_buscar",
+      "description": "Busca en la base local y devuelve fragmentos con fuente, minuto y enlace."
+    },
+    {
+      "name": "tusab_listar_projetos",
+      "description": "Lista los proyectos, con fuentes, fragmentos y cobertura de las extracciones."
+    },
+    {
+      "name": "tusab_ler_fonte",
+      "description": "Lee una fuente en orden, a partir de un minuto."
+    },
+    {
+      "name": "tusab_ler_original",
+      "description": "Abre el archivo original de un documento (una imagen o páginas de un PDF) cuando el texto no basta."
+    },
+    {
+      "name": "tusab_adicionar_youtube",
+      "description": "Extrae un canal, una lista o un video en este ordenador y lo indexa."
+    },
+    {
+      "name": "tusab_adicionar_arquivo",
+      "description": "Añade un archivo .txt o .md a los textos del proyecto."
+    },
+    {
+      "name": "tusab_fontes_publicas",
+      "description": "Lista las 70 fuentes públicas (arXiv, PubMed, Cámara de Diputados de Brasil, IBGE...) por área."
+    },
+    {
+      "name": "tusab_buscar_fonte_publica",
+      "description": "Busca un tema en una fuente pública y guarda los resultados en el proyecto."
+    },
+    {
+      "name": "tusab_salvar_estudo",
+      "description": "Guarda flashcards, notas adhesivas o un resumen creados por la IA, para repasar en otras conversaciones."
+    },
+    {
+      "name": "tusab_revisao_hoje",
+      "description": "Lista las flashcards que vencen hoy (repaso espaciado)."
+    },
+    {
+      "name": "tusab_registrar_revisao",
+      "description": "Registra la nota de una flashcard repasada."
+    },
+    {
+      "name": "tusab_novidades_semana",
+      "description": "Lista lo que entró en el proyecto en los últimos 7 días."
+    },
+    {
+      "name": "tusab_economia",
+      "description": "Muestra cuántos tokens ahorró Tusab a la IA (solo fragmentos × fuentes completas). Estimación local."
+    },
+    {
+      "name": "tusab_status",
+      "description": "Muestra el repositorio, la extracción en curso y la cola."
+    },
+    {
+      "name": "tusab_abrir_painel",
+      "description": "Abre la pantalla de Tusab en el navegador, servida por este ordenador."
+    }
+  ],
+  "prompts": [
+    {
+      "name": "abrir_tusab",
+      "description": "Abre la pantalla de Tusab en el navegador.",
+      "text": "Abre el panel de Tusab."
+    },
+    {
+      "name": "flashcards",
+      "description": "Preguntas y respuestas cortas, guardadas para repaso espaciado.",
+      "text": "Flashcards — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "revisar-hoje",
+      "description": "Las flashcards que vencen hoy, una por vez, con nota y reprogramación.",
+      "text": "Repasar hoy — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "quiz",
+      "description": "Preguntas con 4 opciones, una por vez, con corrección comentada.",
+      "text": "Quiz de opción múltiple — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "resumo",
+      "description": "Tema central, conceptos clave, ideas y vacíos — guardado en el proyecto.",
+      "text": "Resumen de estudio — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "mapa-mental",
+      "description": "Estructura jerárquica de los conceptos (Mermaid).",
+      "text": "Mapa mental — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "explicar-simples",
+      "description": "Explicación para quien está empezando, con ejemplos.",
+      "text": "Explicar de forma sencilla — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "plano-estudo",
+      "description": "Itinerario por días, en el orden correcto del contenido.",
+      "text": "Plan de estudio — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "prova",
+      "description": "Preguntas objetivas y abiertas, clave de respuestas y criterios de corrección.",
+      "text": "Examen con respuestas — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "plano-aula",
+      "description": "Objetivos, secuencia, actividades y evaluación a partir de las fuentes.",
+      "text": "Plan de clase — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "exercicios",
+      "description": "Ejercicios básicos, intermedios y avanzados con resolución.",
+      "text": "Ejercicios por nivel — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "revisao-literatura",
+      "description": "Qué dicen las fuentes, en qué coinciden y en qué difieren.",
+      "text": "Revisión del material — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "contradicoes",
+      "description": "Dónde se contradicen las fuentes, lado a lado.",
+      "text": "Comparar fuentes y contradicciones — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "lacunas",
+      "description": "Lo que le falta al material para cubrir bien el tema.",
+      "text": "Vacíos de la base — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "ficha-leitura",
+      "description": "Para cada fuente: tesis, argumentos, evidencias y citas.",
+      "text": "Ficha de lectura por fuente — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "linha-do-tempo",
+      "description": "Eventos y fechas en orden cronológico.",
+      "text": "Línea de tiempo — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "citacoes",
+      "description": "Las frases más importantes, literales y con la fuente.",
+      "text": "Citas clave — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "resposta-verificavel",
+      "description": "Responde solo con fragmentos de la base e indica el grado de confianza.",
+      "text": "Respuesta verificable — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "nota-tecnica",
+      "description": "Contexto, análisis, recomendación y riesgos, con fuentes.",
+      "text": "Nota técnica — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "roteiro",
+      "description": "Guion con gancho, desarrollo y cierre.",
+      "text": "Guion de video — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "post",
+      "description": "Texto corto, con una idea central.",
+      "text": "Publicación para LinkedIn — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "digest",
+      "description": "Lo que entró en el proyecto en los últimos 7 días.",
+      "text": "Resumen de la semana — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "pre-teste",
+      "description": "Preguntas antes de ver el contenido, para preparar la memoria.",
+      "text": "Pre-test (antes de estudiar) — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "recordar-livre",
+      "description": "Escribe lo que recuerdas; la IA lo compara con la base y crea tarjetas de lo que faltó.",
+      "text": "Recordar sin mirar — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "autoexplicacao",
+      "description": "Tú explicas, la IA lo compara con las fuentes y señala lo que faltó.",
+      "text": "Explicar con mis palabras — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "pratica-intercalada",
+      "description": "Preguntas de subtemas mezclados: aprendes a reconocer qué concepto usar.",
+      "text": "Práctica mezclada — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "exemplo-resolvido",
+      "description": "Un ejemplo explicado, luego uno con huecos y uno sin ayuda.",
+      "text": "Ejemplo resuelto paso a paso — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "mapa-conceitual",
+      "description": "Conceptos unidos por frases (causa, depende de…), en Mermaid.",
+      "text": "Mapa conceptual — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "objetivos-bloom",
+      "description": "Objetivos de aprendizaje en los 6 niveles, con preguntas para cada uno.",
+      "text": "Objetivos por nivel (Bloom) — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "planejamento-reverso",
+      "description": "Del resultado esperado a la evaluación y las clases, con los fragmentos a usar.",
+      "text": "Planificación inversa de unidad — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "rubrica",
+      "description": "Criterios y niveles de desempeño, con versión para autoevaluación.",
+      "text": "Rúbrica de evaluación — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "checagem-formativa",
+      "description": "Pocas preguntas para ver si el grupo entendió y qué retomar.",
+      "text": "Comprobación rápida de fin de clase — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "aula-invertida",
+      "description": "Guía de fragmentos para ver antes y actividad para la clase.",
+      "text": "Clase invertida — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "pergunta-pico",
+      "description": "Convierte el tema en preguntas claras y dice qué responde ya la base.",
+      "text": "Pregunta de investigación (PICO) — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "triagem-prisma",
+      "description": "Criterios de inclusión, motivo de cada exclusión y conteo por etapa.",
+      "text": "Cribado de fuentes (estilo PRISMA) — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "matriz-sintese",
+      "description": "Tabla fuente × tema y una síntesis por idea, no por fuente.",
+      "text": "Matriz de síntesis — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "analise-tematica",
+      "description": "Códigos, temas y fragmentos de ejemplo a partir de entrevistas y reuniones.",
+      "text": "Análisis temático de testimonios — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "resumo-executivo",
+      "description": "Primero la conclusión, después los argumentos que la sostienen.",
+      "text": "Resumen ejecutivo (pirámide) — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "pre-mortem",
+      "description": "Imagina que salió mal y enumera por qué, con señales de alerta.",
+      "text": "Pre-mortem de una decisión — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "hipoteses-concorrentes",
+      "description": "Matriz de evidencias a favor y en contra de cada explicación posible.",
+      "text": "Hipótesis en competencia — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "ideia-memoravel",
+      "description": "Una idea del material en frase, párrafo y guion de 1 minuto.",
+      "text": "Una idea que se queda — proyecto ${arguments.projeto}"
+    },
+    {
+      "name": "reflexao-semana",
+      "description": "Lo que aprendí, lo que sigue confuso y la meta de la próxima semana.",
+      "text": "Reflexión de la semana — proyecto ${arguments.projeto}"
+    }
+  ]
+}

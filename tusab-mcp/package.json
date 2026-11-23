@@ -1,0 +1,36 @@
+{
+  "name": "tusab-mcp",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Tusab, conector local (servidor MCP) para o Claude e outras IAs: caderno de estudo e pesquisa com as fontes no computador do usuário, consultadas pela IA com citação.",
+  "license": "SEE LICENSE IN LICENSE",
+  "author": "CriAugu",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "tusab-mcp": "src/index.js"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "cli": "node src/cli.js",
+    "painel": "node src/cli.js painel",
+    "build:interface": "cd ../web_interface && npx --no-install vite build --mode extensao --outDir ../tusab-mcp/interface --emptyOutDir",
+    "pack": "npm run build:interface && node scripts/gerar-licencas.mjs && npx --yes @anthropic-ai/mcpb@2.1.2 pack . ../tusab.mcpb",
+    "test": "node --import ./test/_ambiente.js --test \"test/*.test.js\""
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "@sqlite.org/sqlite-wasm": "3.54.1-build1",
+    "fast-xml-parser": "5.12.1",
+    "fflate": "0.8.3",
+    "mammoth": "1.13.0",
+    "pdfjs-dist": "6.5.438",
+    "pdfkit": "0.20.2",
+    "read-excel-file": "9.3.20",
+    "write-excel-file": "4.1.1",
+    "zod": "4.6.7"
+  }
+}

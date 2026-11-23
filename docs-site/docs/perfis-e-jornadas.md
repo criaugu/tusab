@@ -1,72 +1,33 @@
 ---
 id: perfis-e-jornadas
-title: Perfis e jornadas de uso
-sidebar_label: Perfis e jornadas
+title: Para quem é
+sidebar_label: Para quem é
 slug: /perfis-e-jornadas
+description: Como estudantes, professores, pesquisadores e profissionais usam o Tusab, e como a Biblioteca de Prompts filtra os pedidos para cada um.
 ---
 
-# Perfis e jornadas de uso
+# Para quem é
 
-O Tusab tem quatro perfis com funcionalidades progressivamente mais avançadas. O perfil é escolhido no onboarding e pode ser trocado a qualquer momento pelo menu de perfil no cabeçalho.
+O Tusab serve a quem estuda, ensina, pesquisa ou precisa decidir a partir de fontes. Desde a versão 2.0.0, todos usam a **mesma tela, completa**: não há mais escolha de perfil. O que muda é o filtro da [Biblioteca de Prompts](/biblioteca-de-prompts), que separa os pedidos pelo que você quer fazer.
 
-## Mapa de funcionalidades por perfil
+| Para quê | Quem costuma usar | Exemplos de pedidos |
+|---|---|---|
+| **Estudar** | Estudantes, concurseiros, quem aprende por vídeo | Flashcards, Revisar hoje, Quiz de múltipla escolha, Resumo de estudo, Mapa mental, Pré-teste, Lembrar sem olhar, Explicar com minhas palavras |
+| **Ensinar** | Professores, criadores de curso | Prova com gabarito, Plano de aula, Planejamento reverso de unidade, Rubrica de avaliação, Checagem rápida de fim de aula, Aula invertida |
+| **Pesquisar** | Pesquisadores, pós-graduandos, jornalistas | Revisão do material, Comparar fontes e contradições, Lacunas da base, Pergunta de pesquisa (PICO), Triagem de fontes, Matriz de síntese |
+| **Trabalho e decisões** | Profissionais, gestores, consultores | Resposta verificável, Nota técnica, Resumo executivo (pirâmide), Pré-mortem de uma decisão, Hipóteses concorrentes |
 
-| Funcionalidade | Estudante | Professor | Pesquisador | Especialista |
-|---|:---:|:---:|:---:|:---:|
-| Chat RAG com streaming e fontes | ✅ | ✅ | ✅ | ✅ |
-| Repositório (visualizar + upload) | ✅ | ✅ | ✅ | ✅ |
-| Importar / exportar base `.tusab` | ✅ | ✅ | ✅ | ✅ |
-| Configurar provedor de IA / API key | ✅ | ✅ | ✅ | ✅ |
-| Busca Ampla | ✅ | ✅ | ✅ | ✅ |
-| Google Drive (sync) | ✅ | ✅ | ✅ | ✅ |
-| Extrair canal do YouTube / fila | — | ✅ | ✅ | ✅ |
-| Gerenciar repositório (deletar/limpar) | ✅ | ✅ | ✅ | ✅ |
-| Painel Admin | ✅ | ✅ | ✅ | ✅ |
-| Visão Geral (analytics do corpus) | — | ✅ | ✅ | ✅ |
-| [Busca em fontes públicas](/funcionalidades/fontes-publicas) (70 fontes) | — | ✅ | ✅ | ✅ |
-| Monitor de sistema | — | — | — | ✅ |
-| Reset total | ✅ | ✅ | ✅ | ✅ |
-| Persona padrão do assistente | Didático | Didático | Técnico | Objetivo |
+Um pedido pode estar em mais de um filtro, e a aba **Todos** mostra a lista inteira (inclusive Roteiro de vídeo e Post para LinkedIn). A aba **Meus prompts** guarda os seus próprios pedidos.
 
-## Estudante
+## Jornadas comuns
 
-Importa bases prontas (`.tusab`) compartilhadas por professores ou colegas e faz perguntas ao chat. Não precisa configurar provedor de IA, gerenciar extração nem administrar nada.
+- **Estudar um curso do YouTube.** Adicione o canal ou a playlist, peça um Resumo de estudo e Flashcards e use Revisar hoje nos dias seguintes. As respostas levam ao minuto exato da aula.
+- **Preparar uma aula.** Junte vídeos, PDFs e artigos de fontes públicas num projeto e peça Plano de aula e Prova com gabarito. A IA cita de onde tirou cada questão.
+- **Fazer uma revisão de pesquisa.** Busque artigos e teses nas fontes públicas, guarde os que interessam e peça Triagem de fontes, Matriz de síntese e Lacunas da base.
+- **Decidir com base em documentos.** Envie normas, relatórios e planilhas e peça Resposta verificável, Nota técnica ou Pré-mortem de uma decisão, com a página de cada afirmação.
 
-**Fluxo típico:** recebe o arquivo `.tusab` → instala o Tusab → escolhe o perfil Estudante no onboarding → importa a base pela Home ("Importar Base") → conversa no chat, recebendo respostas com citação de vídeo/minuto ou documento de origem.
+As [ferramentas MCP](/ferramentas-mcp) que a IA usa são as mesmas em todos os casos.
 
-## Professor
-
-Extrai canais do YouTube, organiza materiais didáticos em projetos, e exporta bases prontas para compartilhar com a turma.
-
-**Fluxo típico:** cola a URL do canal → seleciona fontes (desmarca Shorts, por exemplo) → inicia a extração (roda no IP do próprio professor, sem servidor intermediário) → cria um projeto no Repositório → adiciona PDFs complementares → indexa a base → exporta como `.tusab` e distribui aos alunos.
-
-A extração é incremental: numa nova rodada, só os vídeos novos são processados.
-
-Desde a v1.0.61, o Professor também busca em [fontes públicas](/funcionalidades/fontes-publicas) — em especial na área **Educação** (teses da BDTD e da CAPES, artigos do OasisBR, recursos do EduCAPES, Wikilivros, Wikiversidade e ERIC).
-
-## Pesquisador
-
-Constrói corpora de múltiplas fontes para análise aprofundada, com controle fino sobre o que entra na base.
-
-**Diferenciais em relação ao Professor:**
-- Persona padrão **técnico** no Assistente (no Professor é didático)
-- Mesmas [70 fontes públicas em 11 áreas](/funcionalidades/fontes-publicas) do Professor, com destaque para jurisprudência (STF, TCU, TST), portais de dados abertos (órgãos federais, estados, capitais e outros países) e repositórios de saúde (OPAS, OMS, Fiocruz)
-
-## Especialista
-
-Acesso completo — inclui monitoramento do sistema e administração. Voltado a inteligência de negócios sobre acervo próprio: relatórios, atas de reunião, vídeos de conferência.
-
-**Diferenciais em relação ao Pesquisador:**
-- Painel **Monitor** — status do sistema em tempo real (ETA de extração, uso de recursos)
-- Reconhecimento automático de documentos jurídicos (petição, contrato, parecer)
-- Pode ocultar o card de Modo Estudo na tela inicial — preferência persistida e reversível a qualquer momento, útil para quem não usa flashcards/resumos no dia a dia
-
-**Reset total** (limpeza completa da base — hard-reset global, não por projeto) está disponível para todos os perfis, na aba Admin.
-
-:::info Nota técnica
-Internamente o slug deste perfil é `profissional` — mantido por compatibilidade com dados de instalações já existentes. O rótulo visível na interface é "Especialista" desde junho de 2026.
+:::note Para quem usava o app desktop
+O app desktop, descontinuado, tinha quatro perfis (Estudante, Professor, Pesquisador e Especialista), que mostravam abas diferentes. No Tusab atual, todos veem a tela completa (internamente, o perfil `profissional`), e a separação virou filtro na Biblioteca. Veja [App desktop](/desktop/visao-geral).
 :::
-
-## O momento universal: primeira pergunta com fonte
-
-Independente do perfil, o momento definidor do produto é o mesmo: você pergunta, a resposta aparece em streaming, e ao final ela cita título, data e link da fonte exata. Clicar na fonte abre o vídeo original no YouTube ou o documento local correspondente.

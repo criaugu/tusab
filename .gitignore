@@ -42,6 +42,11 @@ output/
 web_interface/node_modules/
 web_interface/.vite/
 
+# --- Plugin MCP (tusab-mcp) ---
+tusab-mcp/node_modules/
+tusab-mcp/interface/
+*.mcpb
+
 # --- Ferramentas de análise de código (cache local, não versionar) ---
 graphify-out/
 
@@ -77,7 +82,7 @@ ENV/
 .claude/worktrees/
 
 # --- Documentação de produto: movida pra repo privado separado
-# (ahaugusto/tusab-docs) em 2026-08-07, junto com limpeza retroativa do
+# (criaugu/tusab-docs) em 2026-08-07, junto com limpeza retroativa do
 # histórico deste repo (git filter-repo --invert-paths) — estratégia de
 # negócio/roadmap/B2B não pode ficar exposta quando este repo virar público.
 # Continua presente localmente (fora do git), só não é mais rastreada aqui.
@@ -96,13 +101,19 @@ Apple/
 *.p12
 *.p8
 *.cer
-# Auditoria de segurança — venv isolado do gerador de PDF (recriar via python -m venv)
-docs/security-audit/.venv-report/
-docs/security-audit/__pycache__/
+# Fora do repositório público desde 18/11/2026 (história em criaugu/tusab-docs, instruções de IA no cofre
+# privado criaugu-orquestra): processo com agentes, especificações, material comercial e auditorias
+agents/
+.specify/
+marketing/
+docs/security-audit/
 
-marketing/video/saida/
-marketing/video/node_modules/
-marketing/video/voz/.venv/
-marketing/video/voz/*.onnx*
-marketing/video/voz/*.wav
-marketing/video/musica.mp3
+# Instruções de IA: ficam no repositório privado criaugu-orquestra, não aqui
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+
+# gerados por tusab-mcp/scripts/gerar-licencas.mjs no empacotamento
+tusab-mcp/LICENSE
+tusab-mcp/TRADEMARK.md
+tusab-mcp/THIRD_PARTY_NOTICES.txt

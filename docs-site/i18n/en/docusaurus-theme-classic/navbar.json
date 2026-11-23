@@ -7,16 +7,20 @@
     "message": "Tusab logo",
     "description": "The alt text of navbar logo"
   },
-  "item.label.Documentação": {
-    "message": "Documentation",
-    "description": "Navbar item with label Documentação"
-  },
   "item.label.GitHub": {
     "message": "GitHub",
     "description": "Navbar item with label GitHub"
   },
-  "item.label.Download": {
-    "message": "Download",
-    "description": "Navbar item with label Download"
+  "item.label.Instalar": {
+    "message": "Install",
+    "description": "Navbar item with label Instalar"
+  },
+  "item.label.Guia": {
+    "message": "Guide",
+    "description": "Navbar item with label Guia"
+  },
+  "item.label.Para desenvolvedores": {
+    "message": "For developers",
+    "description": "Navbar item with label Para desenvolvedores"
   }
 }

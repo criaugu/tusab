@@ -1,83 +1,56 @@
 ---
 id: instalacao
-title: Instalação
-sidebar_label: Instalação
+title: Instalar no Claude Desktop
+sidebar_label: Instalar no Claude Desktop
 slug: /instalacao
+description: Como instalar o Tusab, conector local, no Claude Desktop para Windows e macOS com o pacote .mcpb.
 ---
 
-# Instalação
+# Instalar no Claude Desktop
 
-## Download
+No Claude Desktop, o Tusab é instalado com um arquivo só, o pacote `.mcpb`. Funciona no **Windows** e no **macOS**. Não é preciso instalar mais nada: o Node.js, que o Tusab usa para rodar, já vem com o Claude Desktop.
 
-Baixe o instalador mais recente na [página de releases do GitHub](https://github.com/ahaugusto/tusab/releases/latest).
+Vai usar outra ferramenta (Claude Code, VS Code, Cursor, Gemini CLI, Codex)? Veja [Outras IAs](/outras-ias).
 
-| Plataforma | Requisito | Arquivo |
-|---|---|---|
-| Windows 10/11 x64 | — | `Tusab-Setup-X.X.X.exe` |
-| macOS (Apple Silicon — M1 ou mais novo) | macOS 14 (Sonoma) ou superior | `Tusab-X.X.X-arm64.dmg` |
-
-Python e yt-dlp já vêm empacotados nos dois instaladores — nada mais para instalar manualmente.
-
-:::note macOS Intel não é suportado
-Só Apple Silicon (arm64) no momento.
+:::info Onde o Tusab aparece
+O Tusab é um **conector local**: roda no **app desktop** do Claude, no seu computador. Ele não aparece no claude.ai nem no app de celular.
 :::
 
-## Instalando no Windows
+## 1. Baixar {#1-baixar}
 
-Execute o `.exe` e siga o instalador NSIS. Sem passos manuais adicionais.
+<a className="button button--primary button--lg" href="https://github.com/criaugu/tusab/releases/download/v2.0.0/tusab-2.0.0.mcpb">Baixar o Tusab 2.0.0 (.mcpb)</a>
 
-Se quiser escolher outra pasta, o caminho pode ter no máximo **65 caracteres** (por exemplo, `C:\Tusab`). A pasta sugerida pelo instalador sempre cabe. Com caminhos mais longos, a atualização automática do Windows não consegue substituir os arquivos antigos, por isso o botão **Instalar** fica desativado (a partir da 1.0.60).
+Baixe sempre da [página de releases do repositório oficial](https://github.com/criaugu/tusab/releases).
 
-:::caution Instalou no Windows entre agosto e outubro de 2026?
-As versões **1.0.42 a 1.0.57** para Windows saíram sem o motor do app (o Python embutido e o componente de download do YouTube). Nelas, o Tusab abria, mas a extração de canais, o chat e o repositório não funcionavam. Se esse foi o seu caso, baixe e instale a **1.0.58 ou mais recente** — seus dados e configurações continuam onde estavam.
-:::
+**Conferir o arquivo (opcional, recomendado).** Na mesma release há o arquivo `tusab-2.0.0.mcpb.sha256`, com a soma do pacote. Compare-a com a que o seu computador calcula:
 
-## Instalando no macOS
+- Windows (PowerShell): `Get-FileHash .\tusab-2.0.0.mcpb -Algorithm SHA256`
+- macOS (Terminal): `shasum -a 256 tusab-2.0.0.mcpb`
 
-1. Baixe o `.dmg`.
-2. Abra o `.dmg` e arraste o ícone do Tusab para **Applications**.
-3. Abra o Tusab pelo Applications. O app é **assinado e notarizado pela Apple** (Developer ID + notarização automatizada em CI) — abre normalmente, sem precisar liberar manualmente em Ajustes do Sistema → Privacidade e Segurança.
-4. Na primeira execução, o Tusab detecta se o Ollama está instalado e oferece baixar automaticamente caso não esteja.
+Se as somas forem diferentes, não instale e baixe de novo.
 
-## Primeira execução
+## 2. Instalar
 
-Na primeira abertura, o Tusab guia você por:
+1. Com o Claude Desktop instalado, **abra o arquivo `tusab-2.0.0.mcpb`** (duplo clique). Outra forma: no Claude Desktop, vá em **Configurações › Extensões** e instale o arquivo por lá. "Extensões" é o nome da tela do Claude para conectores locais.
+2. O Claude Desktop mostra o que o Tusab é e avisa que ele roda com as permissões do seu usuário. Confirme a instalação.
+3. Quando ele pedir a **Pasta do repositório**, escolha onde a sua base vai ficar (por exemplo, `Documentos\Tusab`). O Tusab cria a pasta `data/` dentro dela. Quem usava o app desktop pode escolher a pasta de dados dele para abrir a base antiga (veja [Dados e armazenamento](/arquitetura/dados-e-armazenamento#onde-os-dados-ficam)).
+4. Na primeira vez, o Tusab abre a [tela](/tela) no navegador com uma apresentação curta.
 
-1. Tela de boas-vindas (idioma e tema)
-2. Consentimento de telemetria (opt-in, pode ser recusado ou revogado depois)
-3. Escolha de perfil — Estudante, Professor, Pesquisador ou Especialista
-4. Configuração do motor de IA — Ollama local (recomendado, grátis) ou uma chave de provedor externo (Groq, OpenAI, Anthropic, Gemini)
+## 3. Ativar na conversa
 
-Veja o detalhe de cada jornada em [Perfis e jornadas de uso](/perfis-e-jornadas).
+Numa conversa do Claude Desktop, clique em **+ › Conectores** e confira se o conector **Tusab** está ativado. Com ele ativado:
 
-## Configurando o motor de IA
+- os pedidos prontos aparecem em **+ › Tusab** (41 pedidos e o atalho **Abrir o Tusab**);
+- a IA consegue buscar na sua base e citar as fontes.
 
-### Ollama (padrão, recomendado)
+Se a IA responder que o Tusab não está conectado, é este passo que falta.
 
-Zero custo, zero chave de API, funciona offline. O onboarding oferece o download automático; se preferir manualmente, baixe em [ollama.com/download](https://ollama.com/download). Modelo padrão: `llama3.2:1b` (~1.3 GB).
+## Atualizar
 
-### Provedores externos (BYOK — bring your own key)
+Baixe o pacote da versão nova e abra como na instalação. A base fica na pasta que você escolheu e não é apagada.
 
-Configuráveis a qualquer momento na aba **Assistente**:
+## Próximo passo
 
-| Provedor | Modelo padrão | Custo |
-|----------|--------------|-------|
-| Groq | llama-3.1-8b-instant | Camada gratuita |
-| OpenAI | gpt-4o-mini | Pago |
-| Anthropic | claude-haiku-4-5 (auxiliar) / claude-sonnet-4-6 (resposta principal) | Pago |
-| Google Gemini | gemini-1.5-flash | Pago |
-| Endpoint customizado | qualquer servidor compatível com OpenAI | Depende do servidor |
+[Primeiros passos](/primeiros-passos): montar a primeira base, fazer a primeira pergunta e conhecer os cuidados (por exemplo, usar uma IA por vez na mesma base).
 
-A chave é testada antes de ser salva e armazenada de forma criptografada no sistema operacional (DPAPI no Windows, Keychain no macOS) via `safeStorage` do Electron.
-
-## Google Drive (opcional)
-
-Para sincronizar/compartilhar bases via Google Drive:
-
-1. No [Google Cloud Console](https://console.cloud.google.com/), crie um projeto e habilite a **Google Drive API**
-2. Crie credenciais OAuth 2.0 (tipo Desktop app) e baixe o JSON
-3. Renomeie para `credentials.json` e coloque na raiz do projeto (build de desenvolvimento) ou na pasta de dados (build empacotado)
-4. Na interface do Tusab, habilite o Drive pela aba Repositório — o fluxo OAuth abre no navegador
-5. Após autorizar, `token.json` é salvo localmente (ambos os arquivos são gitignored)
-
-O escopo solicitado é o mínimo necessário: `drive.file` — o Tusab só acessa arquivos que ele mesmo criou.
+Quem quer gerar o pacote a partir do código encontra o passo a passo em [Build e testes](/desenvolvimento/build-e-testes). As variáveis de ambiente estão em [Setup de desenvolvimento](/desenvolvimento/setup).

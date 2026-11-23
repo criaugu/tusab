@@ -7,13 +7,54 @@ slug: /changelog
 
 # Changelog
 
-O histórico completo de todas as versões — formato [Keep a Changelog](https://keepachangelog.com), versionamento [semântico](https://semver.org) — vive em [`CHANGELOG.md`](https://github.com/ahaugusto/tusab/blob/main/CHANGELOG.md) no repositório principal. Esta página resume os marcos mais recentes.
+Resumo técnico das versões. A partir da 2.0.0 o Tusab é só o conector local (servidor MCP); a numeração continua a do produto (o app desktop parou na 1.0.64). O histórico completo do desktop, no formato [Keep a Changelog](https://keepachangelog.com), está em [`CHANGELOG.md`](https://github.com/criaugu/tusab/blob/main/CHANGELOG.md).
 
-## Destaques recentes
+## Tusab (`tusab-mcp/`)
+
+**v2.0.0 (2026-11-19)** — O Tusab passa a ser só o conector local para o Claude e outras IAs; o app desktop é descontinuado.
+
+- Nome da categoria: o Tusab passa a se apresentar como **conector local** (antes, "extensão"), o nome que o Claude Desktop usa em **+ › Conectores**. Nada muda na instalação.
+- Site de documentação reorganizado em dois guias (Guia e Para desenvolvedores), com página inicial nova e as páginas [Usar em outras IAs](https://tusab.solutions/outras-ias), [Primeiros passos](https://tusab.solutions/primeiros-passos) (com os cuidados) e [Para quem é](https://tusab.solutions/perfis-e-jornadas).
+- Primeira versão do conector local publicada nas [releases](https://github.com/criaugu/tusab/releases) como `tusab-2.0.0.mcpb`, com soma SHA-256 ao lado. A release é gerada pelo GitHub Actions a partir da etiqueta: testes, tela compilada, avisos de licença e pacote.
+- Ícone quadrado no pacote (versões para tema claro e escuro), feito a partir do logo.
+- Aba **Materiais**: o que a IA guarda no Tusab abre numa janela da tela (flashcards com revisão espaçada, resumos, post-its e documentos). Novo tipo `documento` em `tusab_salvar_estudo` (Markdown, até 60.000 caracteres), e os prompts que produzem documentos (quiz, mapa mental, plano de aula, prova, nota técnica…) pedem para guardá-los.
+- Conexão com a IA: todo prompt começa com uma checagem (sem as ferramentas do Tusab, a IA avisa em vez de responder de memória), e o aviso de "copiado" mostra se o Tusab está conectado e confirma quando a IA consultou a base (`GET /api/conexao`).
+- Biblioteca de Prompts: 20 prompts novos baseados em técnicas com evidência (pré-teste, recordação livre, prática intercalada, exemplo resolvido, planejamento reverso, rubrica, PRISMA, análise temática, pre-mortem, hipóteses concorrentes…), com a referência na tela; abas "Para quê" (Estudar, Ensinar, Pesquisar, Trabalho e decisões) no lugar dos perfis, que viram um só na extensão; selo de modelo sugerido (Rápido · Haiku, Intermediário · Sonnet, Mais capaz · Opus).
+- IA no navegador: "Abrir no navegador" copia o pedido com os trechos da base dentro (do tema ou um panorama do projeto), porque a IA do navegador não alcança o Tusab local.
+- Depois de `tusab_salvar_estudo`, a IA recebe e mostra o link **Abrir no Tusab**, que abre a tela direto no material.
+- Mapas mentais, fluxogramas e linhas do tempo (blocos `mermaid`) aparecem desenhados na aba Materiais (Mermaid, carregada só quando há diagrama; o layout opcional `elk` fica fora do pacote).
+- Descrições das ferramentas em inglês e espanhol (antes só os títulos mudavam de idioma).
+- O SDK do Microsoft Clarity (telemetria do antigo desktop) sai do pacote: no lugar dele vai um módulo vazio.
+- Correções na tela: no tema escuro, a lista aberta dos selects era branca com texto branco (agora os controles nativos seguem o tema); seta dos selects com espaço fixo da borda.
+- Uma só fonte para o número da versão: `tusab-mcp/package.json`. O servidor e a tela leem dali; um teste confere que o `manifest.json` bate.
+- Descrições da extensão (pt, en, es) sem referência ao app desktop.
+- App desktop descontinuado: o código (Electron, motor Python, testes e automações do instalador) saiu do repositório e está preservado na etiqueta [`desktop-final`](https://github.com/criaugu/tusab/tree/desktop-final). As releases 1.0.x continuam publicadas como histórico, sem novas correções.
+- CI testa a extensão no Windows, no macOS e no Linux e audita a acessibilidade da tela servida pelo plugin (pa11y-ci, tema claro e escuro).
+
+**v0.6.0 (2026-11-18)** — Primeira versão da extensão no repositório (não publicada como pacote).
+
+- Servidor MCP por stdio com 15 ferramentas: busca com citação (`tusab_buscar`), leitura de fonte e de original, extração do YouTube, arquivos de texto, fontes públicas, memória de estudo e revisão espaçada, novidades da semana, economia de tokens, status e abertura da tela.
+- Tela do Tusab servida em `127.0.0.1` com chave por sessão, `Host` e `Origin` conferidos, sem CORS e com CSP `'self'`: a interface do app desktop compilada em modo extensão.
+- Motor de extração do YouTube em Node, com o mesmo formato em disco do app desktop; yt-dlp oficial baixado com conferência SHA-256; atualização automática de canais a cada hora.
+- Documentos (PDF com marca de página, DOCX, XLSX, CSV, TXT/MD, FHIR, página web), originais guardados com conferência de tipo pela assinatura, imagens enviadas à IA sem EXIF/GPS.
+- Exportações (zip, XLSX, PDF) e `.tusab` compatível com o desktop nos dois sentidos, com originais opcionais.
+- 70 fontes públicas em 11 áreas, o mesmo registro do desktop.
+- Biblioteca de Prompts: 21 prompts em 6 categorias, regras fixas de busca e citação, "Meus prompts" com pastas.
+- Três idiomas (pt, en, es) na tela, nas mensagens do plugin, nos títulos das ferramentas e nos atalhos do "+".
+- Economia de tokens estimada localmente, com teste por linha de comando (`medir-tokens`).
+- Pacote `.mcpb` com `LICENSE`, `TRADEMARK.md` e `THIRD_PARTY_NOTICES.txt`.
+
+## App desktop (descontinuado em 19/11/2026)
+
+**v1.0.64 (2026-10-27)** — Telemetria opcional volta a ser gravada: o ID do Clarity apontava para um projeto do tipo aplicativo móvel; agora usa um projeto do tipo Site, com mascaramento rígido.
+
+**v1.0.63 (2026-10-27)** — Telemetria opcional passa do PostHog para o Microsoft Clarity. Continua opt-in, com o conteúdo da tela mascarado no computador; quem tinha aceitado é consultado de novo.
+
+**v1.0.62 (2026-10-27)** — Correção de rolagem no chat expandido; Electron 44.9.3 e dependências atualizadas.
 
 **v1.0.61 (2026-10-21)** — De 26 para 70 fontes públicas, em 11 áreas: jurisprudência (STF, TCU, TST), Senado e Câmara, saúde (OPAS, OMS, Fiocruz, ANVISA), Banco Mundial, NASA, Hugging Face e outras. Novas áreas **Educação** (teses e material didático) e **Dados abertos** (cerca de 40 portais de governo do Brasil e do exterior). Professor e Especialista passam a buscar em fontes públicas. A busca aceita várias fontes de uma vez, com filtros por região, tipo de conteúdo e instituição. Tabelas no chat ficam mais legíveis e podem ser baixadas como planilha (.xlsx) ou copiadas como CSV.
 
-**v1.0.60 (2026-10-20)** — Instalador e app mais leves: cerca de 240 MB a menos no disco e instalador do Windows cerca de 50 MB menor. Gemini passa a usar o SDK oficial atual do Google, com a mesma chave. No Windows, o instalador limita a pasta escolhida a 75 caracteres, porque caminhos mais longos travavam a atualização automática.
+**v1.0.60 (2026-10-20)** — Instalador e app mais leves: cerca de 240 MB a menos no disco e instalador do Windows cerca de 50 MB menor. Gemini passa a usar o SDK oficial atual do Google, com a mesma chave. No Windows, o instalador passa a limitar o comprimento do caminho da pasta escolhida, porque caminhos longos travavam a atualização automática.
 
 **v1.0.59 (2026-10-20)** — Base do aplicativo atualizada para o Electron 44, com as correções de segurança acumuladas do Chromium e do Node.js. Nada muda no uso: bases, conversas e chaves de API continuam onde estavam.
 
@@ -37,16 +78,14 @@ O histórico completo de todas as versões — formato [Keep a Changelog](https:
 
 **v1.0.49 (2026-08-10)** — Busca vetorial (embeddings via Ollama `nomic-embed-text`) como complemento ao BM25+FTS5+CrossEncoder no chat, ativa em Busca Ampla com download opcional de 1 clique.
 
-**v1.0.48 (2026-08-09)** — Tagline unificada para "Augment" em toda a arte do logo e textos, referenciando deliberadamente o conceito de Intelligence Augmentation de Douglas Engelbart.
-
-**v1.0.46–47 (2026-08-07/09)** — Correções de release (corrida entre builders Windows/macOS), tradução completa da Visão Geral, logo e README renovados.
+**v1.0.46–47 (2026-08-07/09)** — Correções de release (corrida entre os builds Windows e macOS) e tradução completa da Visão Geral.
 
 **v1.0.44–45 (2026-08-07)** — Player de áudio real e persistido para resumos do Modo Estudo, correções de scroll horizontal indevido no menu lateral.
 
 **v1.0.42–43 (2026-08-06/07)** — Modo Estudo completo (flashcards com SM-2, resumos, post-its), seleção de playlists e filtro de data na extração, suporte a modelos Ollama com raciocínio nativo (thinking), renomeação de "Agente" para "Assistente" em toda a interface.
 
-**v1.0.41 (2026-07-31)** — Instalador para macOS (Apple Silicon), busca em fontes públicas por área de conhecimento (arXiv, OpenAlex, FHIR e outras), leitor de página web avulsa, formalização como source-available (Elastic License 2.0).
+**v1.0.41 (2026-07-31)** — Instalador para macOS (Apple Silicon), busca em fontes públicas por área de conhecimento (arXiv, OpenAlex, FHIR e outras), leitor de página web avulsa, código publicado sob a Elastic License 2.0.
 
 **v1.0.38–40 (2026-07-24/27)** — Reconhecimento automático de documentos jurídicos, confiança graduada por sentença no chat, exposição do MCP Server na interface.
 
-Para o detalhe completo — incluindo correções internas de CI/infra — consulte o [CHANGELOG.md completo](https://github.com/ahaugusto/tusab/blob/main/CHANGELOG.md).
+Para o detalhe completo, incluindo correções internas de CI e infraestrutura, consulte o [CHANGELOG.md](https://github.com/criaugu/tusab/blob/main/CHANGELOG.md).

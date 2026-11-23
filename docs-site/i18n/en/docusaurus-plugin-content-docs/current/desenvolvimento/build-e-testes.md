@@ -1,63 +1,94 @@
 ---
 id: build-e-testes
-title: Production build and tests
+title: Build and tests
 sidebar_label: Build and tests
 slug: /desenvolvimento/build-e-testes
 ---
 
-# Production build and tests
+# Build and tests
 
-## Production build (Windows)
-
-```powershell
-# 1. Build the frontend
-cd web_interface
-npm run build
-cd ..
-
-# 2. Build the Windows installer
-cd electron
-npm run build
-```
-
-Output: `dist_electron/Tusab-Setup-X.X.X.exe`.
-
-**Prerequisite:** `electron/python_env/` needs to be populated with an embeddable Python 3.12 and its installed dependencies, and `electron/bin/yt-dlp.exe` needs to exist. These folders are large and gitignored — set them up once locally before building.
-
-## Production build (macOS)
-
-The macOS build (signed and notarized `.dmg`/`.zip`, Apple Silicon) runs via `electron-builder --mac` on GitHub Actions (`macos-latest`), with automated notarization via `@electron/notarize`. There's no documented local build — every macOS test goes through real CI, since no Mac hardware is available for development.
-
-Cross-building for ARM64 from an Intel host is supported (`pip install --platform macosx_14_0_arm64 ...`), avoiding the need for a dedicated ARM64 runner.
+Commands in `tusab-mcp/`.
 
 ## Tests
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests/ -v
+npm test
 ```
 
-```
-tests/
-  conftest.py               fixture: TUSAB_DATA_DIR points to a tempdir before any import
-  test_api.py                integration (FastAPI TestClient) — /neural/*, /queue/*, /agent/* routes
-  test_confiabilidade.py     atomic writes, concurrency, corrupted/empty index
-```
+Runs `node --test` on `test/*.test.js` with `test/_ambiente.js` loaded first (it forces `TUSAB_IDIOMA=pt`, so tests run in Portuguese on any system). Tests use no network: yt-dlp is replaced by `test/ytdlp-falso.mjs`.
 
-## Smoke tests
+| File | Covers |
+|---|---|
+| `servidor.test.js`, `estudo-mcp.test.js` | MCP server with a real MCP client: tools, prompts, study memory |
+| `painel.test.js` | Local server security (key, `Host`, `Origin`, CORS, CSP) and API routes |
+| `motor.test.js`, `legendas.test.js`, `atualizacao.test.js` | Extraction, splitting into excerpts, queue, automatic updates |
+| `documentos.test.js`, `originais.test.js`, `exportar.test.js` | Document reading, originals, `.tusab` and exports |
+| `fontes.test.js`, `fontes-api.test.js` | Public sources with simulated responses; the `/fontes` route checks the 11 areas and 70 sources |
+| `estudo.test.js` | Study format and SM-2 spaced repetition |
+| `idioma.test.js` | `en`/`es` dictionaries complete and with the same variables; prompts and tools changing language |
+| `extras.test.js` | "My prompts" and folders, image metadata removal, token savings, repository space used |
+
+## CI
+
+GitHub CI (`.github/workflows/ci.yml`) runs on every push and pull request to `main`, in two jobs:
+
+| Job | What it does |
+|---|---|
+| `Extensão` (MCP server) | In `tusab-mcp/`, on Windows and Linux (Node.js 22; macOS left CI on 2026-11-23, since without the desktop installer Linux covers Unix behavior): `npm ci`, `npm test` and `npx @anthropic-ai/mcpb@2.1.2 validate manifest.json` |
+| Screen | On Linux: interface unit tests (`npm run test:unit` in `web_interface/`), build of the screen in Vite's `extensao` mode (`npm run build:interface`) and an accessibility audit with pa11y-ci on the screen served by Tusab itself, in light and dark themes (see [Accessibility](/acessibilidade#pa11y-ci-scope)) |
+
+There are no Python tests or desktop app builds: that code is in the [`desktop-final`](https://github.com/criaugu/tusab/tree/desktop-final) tag.
+
+## Building the `.mcpb` package
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File ".claude\skills\run-tusab\smoke.ps1" -Suite full
+npm run pack
 ```
 
-Runs against a real backend on port 8001 — covers yt-dlp, status/repository/queue/assistant endpoints, key validation, path traversal blocking, and serving `index.html`. Configured as a pre-commit hook.
+In sequence:
 
-## Automated CI
+1. `npm run build:interface`: builds `web_interface/` in Vite's `extensao` mode into `tusab-mcp/interface/`;
+2. `node scripts/gerar-licencas.mjs`: copies `LICENSE` and `TRADEMARK.md` from the root and generates `THIRD_PARTY_NOTICES.txt` with the full license of every bundled library (MCP server and screen), because the built screen loses the license comments;
+3. `npx --yes @anthropic-ai/mcpb@2.1.2 pack . ../tusab.mcpb`: packs it.
 
-`.github/workflows/ci.yml` runs on every push/PR to `main`, with two jobs:
+The file is written to `tusab.mcpb`, at the repository root. `.mcpbignore` leaves out tests, scripts, `README.md`, source maps and parts of `pdfjs-dist` and `pdfkit` Tusab doesn't use (browser builds, viewer, optional native rendering component).
 
-- **`backend-tests`** — full `pytest` suite against a minimal `dist/` (doesn't build the whole frontend in this job).
-- **`frontend-build`** — production `vite build`, followed by an automated accessibility audit (`pa11y-ci`) against the Landing screen served via `vite preview` — see [Accessibility](/acessibilidade#pa11y-ci-scope) for the exact scope of this coverage.
+## Manifest texts in other languages
 
-## Minimum gate for any PR
+```powershell
+node scripts/gerar-recursos-manifesto.mjs
+```
 
-Full `pytest` suite + `smoke.ps1 -Suite full`, regardless of the change's target platform. A change intended only for macOS must not alter Windows behavior when the platform condition is false, and vice versa.
+Generates `mcpb-resources/en-US.json` and `es-ES.json` (name, description, tools and shortcuts that Claude Desktop shows on its extensions screen), from the texts in `src/nucleo/prompts.js` and the dictionaries. `manifest.json` stays in pt-BR (`default_locale`). Run it after changing tools or prompts.
+
+## License notices
+
+`node scripts/gerar-licencas.mjs` can also be run on its own. The MCP server's and the screen's libraries use permissive licenses (MIT, ISC, BSD, Apache-2.0, BlueOak); each one's text goes into `THIRD_PARTY_NOTICES.txt` inside the package.
+
+## Version
+
+The version number has a single source: `tusab-mcp/package.json`. The server (the `VERSAO` constant in `src/servidor.js`) and the screen read it from there. `manifest.json` repeats the number, and a test checks that both match.
+
+## Release
+
+The release is built by the `.github/workflows/release.yml` workflow when a `vX.Y.Z` tag is pushed to GitHub. It:
+
+1. checks that the tag, `tusab-mcp/package.json` and `tusab-mcp/manifest.json` have the same version, that `docs-site/docs/changelog.md` has the `**vX.Y.Z (...)**` entry and that both installation pages (pt and en) point to `releases/download/vX.Y.Z/tusab-X.Y.Z.mcpb`;
+2. runs `npm test` and `npm run pack` and renames the package to `tusab-X.Y.Z.mcpb`;
+3. signs the package when the certificate is configured in the repository secrets (without it, the package is unsigned);
+4. generates the `tusab-X.Y.Z.mcpb.sha256` checksum;
+5. publishes the release with both files and notes taken from the changelog entry, **without marking it as the latest**. That is why the download link on the installation pages carries the version number, never `/releases/latest`.
+
+### How to publish a version
+
+1. Bump the version in `tusab-mcp/package.json` and `tusab-mcp/manifest.json`.
+2. Write the version's changelog entry (`docs-site/docs/changelog.md` and its English version).
+3. Change the download link on both installation pages: `docs-site/docs/instalacao.md` and `docs-site/i18n/en/docusaurus-plugin-content-docs/current/instalacao.md`.
+4. Merge the PR into `main`.
+5. Create and push the tag:
+
+```bash
+git tag vX.Y.Z && git push origin vX.Y.Z
+```
+
+The discontinued desktop app's build and tests are recorded in [Desktop app — development](/desktop/desenvolvimento); its code is in the [`desktop-final`](https://github.com/criaugu/tusab/tree/desktop-final) tag.

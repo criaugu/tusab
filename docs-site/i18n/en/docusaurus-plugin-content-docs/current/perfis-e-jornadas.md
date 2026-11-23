@@ -1,72 +1,33 @@
 ---
 id: perfis-e-jornadas
-title: Profiles and user journeys
-sidebar_label: Profiles and journeys
+title: Who it is for
+sidebar_label: Who it is for
 slug: /perfis-e-jornadas
+description: How students, teachers, researchers and professionals use Tusab, and how the Prompt Library filters the requests for each of them.
 ---
 
-# Profiles and user journeys
+# Who it is for
 
-Tusab has four profiles with progressively more advanced features. The profile is chosen during onboarding and can be switched at any time from the profile menu in the header.
+Tusab serves those who study, teach, research or need to decide based on sources. Since version 2.0.0, everyone uses the **same, complete screen**: there is no profile choice anymore. What changes is the filter in the [Prompt Library](/biblioteca-de-prompts), which separates the requests by what you want to do.
 
-## Feature map by profile
+| What for | Who usually uses it | Example requests |
+|---|---|---|
+| **Study** | Students, exam candidates, people who learn from videos | Flashcards, Review today, Multiple-choice quiz, Study summary, Mind map, Pretest (before studying), Recall without looking, Explain it in my own words |
+| **Teach** | Teachers, course creators | Exam with answer key, Lesson plan, Backward unit design, Assessment rubric, Quick end-of-class check, Flipped lesson |
+| **Research** | Researchers, graduate students, journalists | Material review, Compare sources and contradictions, Gaps in the base, Research question (PICO), Source screening (PRISMA style), Synthesis matrix |
+| **Work and decisions** | Professionals, managers, consultants | Verifiable answer, Briefing note, Executive summary (pyramid), Pre-mortem of a decision, Competing hypotheses |
 
-| Feature | Student | Teacher | Researcher | Specialist |
-|---|:---:|:---:|:---:|:---:|
-| RAG chat with streaming and sources | ✅ | ✅ | ✅ | ✅ |
-| Repository (view + upload) | ✅ | ✅ | ✅ | ✅ |
-| Import / export `.tusab` base | ✅ | ✅ | ✅ | ✅ |
-| Configure AI provider / API key | ✅ | ✅ | ✅ | ✅ |
-| Broad Search | ✅ | ✅ | ✅ | ✅ |
-| Google Drive (sync) | ✅ | ✅ | ✅ | ✅ |
-| Extract YouTube channel / queue | — | ✅ | ✅ | ✅ |
-| Manage repository (delete/clear) | ✅ | ✅ | ✅ | ✅ |
-| Admin panel | ✅ | ✅ | ✅ | ✅ |
-| Overview (corpus analytics) | — | ✅ | ✅ | ✅ |
-| [Public source search](/funcionalidades/fontes-publicas) (70 sources) | — | ✅ | ✅ | ✅ |
-| System Monitor | — | — | — | ✅ |
-| Full reset | ✅ | ✅ | ✅ | ✅ |
-| Assistant's default persona | Didactic | Didactic | Technical | Objective |
+A request can be in more than one filter, and the **All** tab shows the whole list (including Video script and LinkedIn post). The **My prompts** tab keeps your own requests.
 
-## Student
+## Common journeys
 
-Imports ready-made bases (`.tusab`) shared by teachers or classmates and asks the chat questions. No need to configure an AI provider, manage extraction, or administer anything.
+- **Study a YouTube course.** Add the channel or playlist, ask for a Study summary and Flashcards, and use Review today in the following days. The answers lead to the exact minute of the class.
+- **Prepare a class.** Gather videos, PDFs and papers from public sources in a project and ask for a Lesson plan and an Exam with answer key. The AI cites where each question came from.
+- **Do a research review.** Search papers and theses in public sources, keep the ones that matter and ask for Source screening, Synthesis matrix and Gaps in the base.
+- **Decide based on documents.** Upload standards, reports and spreadsheets and ask for a Verifiable answer, a Briefing note or a Pre-mortem of a decision, with the page of each statement.
 
-**Typical flow:** receives the `.tusab` file → installs Tusab → picks the Student profile during onboarding → imports the base from the Home screen ("Import Base") → chats, receiving answers with video/timestamp or document source citations.
+The [MCP tools](/ferramentas-mcp) the AI uses are the same in every case.
 
-## Teacher
-
-Extracts YouTube channels, organizes teaching material into projects, and exports ready-made bases to share with the class.
-
-**Typical flow:** pastes the channel URL → selects sources (deselects Shorts, for example) → starts extraction (runs on the teacher's own IP, no intermediary server) → creates a project in the Repository → adds complementary PDFs → indexes the base → exports as `.tusab` and distributes it to students.
-
-Extraction is incremental: on a new run, only new videos are processed.
-
-Since v1.0.61, the Teacher can also search [public sources](/funcionalidades/fontes-publicas) — especially the **Education** area (theses from BDTD and CAPES, OasisBR articles, EduCAPES resources, Portuguese Wikibooks and Wikiversity, and ERIC).
-
-## Researcher
-
-Builds corpora from multiple sources for in-depth analysis, with fine-grained control over what goes into the base.
-
-**Differences from Teacher:**
-- **Technical** default persona in the Assistant (Teacher's is didactic)
-- Same [70 public sources across 11 areas](/funcionalidades/fontes-publicas) as the Teacher, notably case law (STF, TCU, TST), open data portals (federal agencies, states, cities and other countries) and health repositories (PAHO, WHO, Fiocruz)
-
-## Specialist
-
-Full access — includes system monitoring and administration. Aimed at business intelligence over your own collection: reports, meeting minutes, conference videos.
-
-**Differences from Researcher:**
-- **Monitor** panel — real-time system status (extraction ETA, resource usage)
-- Automatic recognition of legal documents (petitions, contracts, opinions)
-- Can hide the Study Mode card on the home screen — a persisted, reversible preference for those who don't use flashcards/summaries day to day
-
-**Full reset** (complete base wipe — a global hard reset, not per-project) is available to every profile, in the Admin tab.
-
-:::info Technical note
-Internally this profile's slug is `profissional` — kept for compatibility with existing installations' data. The label shown in the interface has been "Especialista"/"Specialist" since June 2026.
+:::note For former desktop app users
+The discontinued desktop app had four profiles (Student, Teacher, Researcher and Specialist) that showed different tabs. In today's Tusab, everyone sees the complete screen (internally, the `profissional` profile), and the separation became a filter in the Library. See [Desktop app](/desktop/visao-geral).
 :::
-
-## The universal moment: the first sourced answer
-
-Regardless of profile, the defining moment of the product is the same: you ask a question, the answer streams in, and at the end it cites the exact source's title, date, and link. Clicking the source opens the original video on YouTube or the corresponding local document.

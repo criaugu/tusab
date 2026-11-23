@@ -1,3 +1,11 @@
+import { MODO_EXTENSAO } from '../constants';
+
+// Extensão: o chat (e o histórico dele) é a IA do próprio usuário; Estudo chega na fase D.
+const ABAS_FORA_DA_EXTENSAO = new Set(['agente', 'historico']);
+// Recursos do desktop ainda não portados para a extensão (fases B e C) ou que não se aplicam.
+const REGRAS_EXTENSAO = {
+  config_api: false, drive: false,
+};
 import { useState, useCallback } from 'react';
 
 // ---------------------------------------------------------------------------
@@ -62,7 +70,7 @@ export const PERFIS_CONFIG = {
     // em tusab_engine/motor/fontes/ (9 áreas de domínio + "Buscadores gerais"
     // pros multidisciplinares: arXiv, OpenAlex, DataCite, DOAJ, Zenodo).
     // Compartilhado com o futuro vertical Tusab Saúde, não exclusivo dele.
-    // Ver agents/_historia.md.
+    // Ver histórico interno do projeto.
     fontes_publicas: true,
   },
   profissional: {
@@ -155,13 +163,22 @@ export function usePerfil() {
   }, []);
 
   // Se perfil não definido, fallback = profissional (não bloqueia nada antes do onboarding)
-  const regrasBase = PERFIS_CONFIG[perfil] ?? PERFIS_CONFIG.profissional;
-  const regras = { ...regrasBase, _perfil: perfil ?? 'profissional' };
+  // Extensão (19/11/2026): perfil único, o de acesso completo. A separação por público virou
+  // filtro na Biblioteca de Prompts ("Para quê"); a tela é a mesma para todos.
+  const perfilEfetivo = MODO_EXTENSAO ? 'profissional' : perfil;
+  const regrasBase = PERFIS_CONFIG[perfilEfetivo] ?? PERFIS_CONFIG.profissional;
+  const regras = { ...regrasBase, _perfil: perfilEfetivo ?? 'profissional' };
+  if (MODO_EXTENSAO) {
+    Object.assign(regras, REGRAS_EXTENSAO);
+    regras.abas = regras.abas.filter((a) => !ABAS_FORA_DA_EXTENSAO.has(a));
+    // Materiais (o que a IA guardou) acompanha a Biblioteca de Prompts.
+    if (regras.abas.includes('estudo')) regras.abas.push('materiais');
+  }
 
-  const perfilDefinido = perfil !== null;
+  const perfilDefinido = MODO_EXTENSAO || perfil !== null;
 
   return {
-    perfil,
+    perfil: perfilEfetivo,
     regras,
     setPerfil,
     perfilDefinido,

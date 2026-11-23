@@ -31,7 +31,7 @@ function ExtractionModal({ onClose, onConfirm, onConfirmFonte, darkMode, canalNo
   // "Buscadores gerais" pros multidisciplinares (arXiv, OpenAlex, DataCite,
   // DOAJ, Zenodo — arXiv originalmente inspirado no projeto open-source
   // OpenScience/synthetic-sciences; hoje compartilhado com o futuro vertical
-  // Tusab Saúde, não exclusivo dele — ver agents/_historia.md).
+  // Tusab Saúde, não exclusivo dele — ver histórico interno do projeto).
   const podeUsarFontesPublicas = !!regras.fontes_publicas && !modoFila;
   const podeEscolherFonte = podeUsarFontesPublicas;
   // sourceTypeInicial: quando o usuário já escolheu a fonte na tela principal
@@ -708,6 +708,14 @@ function ExtractionModal({ onClose, onConfirm, onConfirmFonte, darkMode, canalNo
                 <p className={`text-[10px] mt-1.5 leading-relaxed ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
                   {t('extraction.results_count_hint')}
                 </p>
+                <p className={`text-[10px] mt-1 leading-relaxed ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                  {t('extraction.results_count_why')}
+                </p>
+                {fonteMaxResults >= 50 && (
+                  <p role="status" className={`text-[10px] mt-1 leading-relaxed font-semibold ${darkMode ? 'text-amber-300' : 'text-amber-700'}`}>
+                    {t('extraction.results_count_more')}
+                  </p>
+                )}
                 {fontesEscolhidas.length > 1 && (
                   <p className={`text-[10px] mt-1 leading-relaxed font-semibold ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                     {t('extraction.results_count_per_source', { n: fontesEscolhidas.length, total: fonteMaxResults * fontesEscolhidas.length })}

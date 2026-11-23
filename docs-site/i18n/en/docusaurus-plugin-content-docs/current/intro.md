@@ -1,65 +1,52 @@
 ---
 id: intro
 title: What Tusab is
-sidebar_label: Introduction
+sidebar_label: What Tusab is
 slug: /intro
+description: Tusab is a study and research notebook inside your AI, a local connector that keeps your sources on your computer and gives the AI only the right excerpts, with citations.
 ---
 
 # What Tusab is
 
-**Tusab is a personal knowledge management (PKM) system with local AI.** Point it at what you want to learn — a YouTube channel, PDFs, documents, notes — and Tusab absorbs it all, indexes it, and answers your questions in natural language, always citing the exact source the answer came from.
+Tusab is your **study and research notebook inside your AI**. It is a **local connector**: it keeps your sources **on your computer** and gives the AI only the right excerpts, **with citations**: the video and the exact minute, or the document and the page.
 
-Runs entirely on your machine. Works offline with [Ollama](https://ollama.com). Zero cost in the default setup.
+It works in **Claude Desktop** and in other AI tools that accept local MCP servers (Claude Code, VS Code, Cursor, Gemini CLI, Codex). For AIs in the browser, Tusab copies the request with the excerpts from your base already inside.
 
-## The name
+## What it does
 
-Tusab (Ancient Egyptian: *s-bȝ-yt*) is the name of a literary genre from Ancient Egypt — instructional texts, where someone of great experience recorded what they learned for those who came after. The most famous example is the Maxims of Ptahhotep (c. 2400 BCE).
+- **Builds your base** in a folder on your computer, by project: transcripts of [YouTube](/funcionalidades/extracao-youtube) channels and videos, [documents](/funcionalidades/repositorio-multi-fonte) (PDF, Word, Excel, CSV, Markdown), web pages and results from [public sources](/funcionalidades/fontes-publicas) (papers, theses, legislation, open data).
+- **Answers the AI with the source.** When you ask, the AI searches the base and cites where each piece of information came from. It can also read a whole source in order and open the original file.
+- **Brings 41 ready-made requests** in the [Prompt Library](/biblioteca-de-prompts), 20 of them based on evidence-based study techniques, each with its reference and the suggested AI model. In Claude Desktop, they show up in the **+** button.
+- **Keeps what the AI produces.** Flashcards, summaries, quizzes, mind maps and documents stay in the **Materials** tab, open in a window (with diagrams drawn), and flashcards go into [spaced repetition](/funcionalidades/estudo).
+- **Has a [screen in the browser](/tela)**, on this computer only, to extract, organize projects, see reports and copy requests.
 
-The product does the same thing, in practice: you accumulate knowledge, Tusab organizes and indexes it, and when you have a question, it instructs you back from what you chose to teach it — never inventing, always citing the source.
+The one that talks, summarizes and creates the material is **the AI you already use**. Tusab takes care of the base: it extracts, indexes, finds the excerpt, cites the source and keeps what has to be remembered across conversations.
 
-## The core pipeline — IAC
+## The data stays on your computer
 
-| Stage | What it does |
-|-------|-----------|
-| **I — Index** | Extracts and indexes any source: YouTube, PDFs, DOCX, Markdown, pasted text, audio, images, WhatsApp, meeting transcripts |
-| **A — Augment** | RAG (Retrieval-Augmented Generation): retrieves the most relevant excerpts from your base and delivers them to the model as context |
-| **C — Chat** | Natural-language conversation, streaming responses, always citing title, date, and link of the original source |
+- YouTube extraction runs on your computer and your IP address, with [yt-dlp](https://github.com/yt-dlp/yt-dlp).
+- Files, transcripts and the index stay in the folder you choose at installation.
+- Only the **queried excerpts** go to the AI you chose.
+- **Nothing goes through a CriAugu server.** There is no account, login, telemetry or cloud sync.
 
-## Why it exists
+Which connections leave the computer, and where they go, is in [Privacy](/privacidade) and [Security](/seguranca).
 
-The central problem of personal knowledge management: you save a lot, but can't find it when you need it. Keyword search is poor, you don't remember where you stored something, and end up re-reading everything from scratch.
+## Where it works
 
-Tusab solves this with a mentor that only knows what you chose to teach it — which isn't a limitation, it's the guarantee that it won't hallucinate beyond what you indexed.
+| Where | How to install | Note |
+|---|---|---|
+| Claude Desktop (Windows and macOS) | [Open the `.mcpb` package](/instalacao) | Node.js comes with Claude; the ready-made requests show up in **+** |
+| Claude Code, VS Code, Cursor, Gemini CLI, Codex | [Configure it as an MCP server](/outras-ias) | Needs Node.js installed |
+| Claude.ai, ChatGPT, Gemini on the web, mobile apps | Does not install | Copy the request with the excerpts from the [Prompt Library](/biblioteca-de-prompts#ia-no-navegador) |
 
-## The four profiles
+## Name and format
 
-Tusab adapts to whoever is using it. The profile is chosen during onboarding and can be switched at any time.
+"Local connector" is what Claude calls this kind of add-on: it runs on your computer, not on a server on the internet. That is why it does not show up on claude.ai or on mobile. Technically, Tusab is a local [MCP](https://modelcontextprotocol.io) server in Node.js, distributed as an MCP Bundle (`.mcpb`). The details are in the [For developers](/ferramentas-mcp) guide.
 
-| Profile | Main use |
-|--------|---------------|
-| 🎓 **Student** | Imports ready-made bases (`.tusab`) shared by teachers. Query only — zero setup. |
-| 📚 **Teacher** | Extracts YouTube channels, indexes teaching material, exports bases to share with the class. |
-| 🔬 **Researcher** | Builds corpora from multiple sources, uses public-source search by knowledge area, accesses project analytics. |
-| 🧑‍💻 **Specialist** | Full access: system monitoring, administration, full reset, all advanced tools. |
+Before version 2.0.0, Tusab was a desktop app with its own chat, discontinued on 2026-11-19. Today's Tusab opens the bases created by the app: see [Desktop app](/desktop/visao-geral).
 
-What changes between profiles: visible tabs, the assistant's default persona, access to AI provider configuration, the extraction queue, Drive integration, and administrative tools.
+## Where to go next
 
-What does **not** change: RAG quality, local-first privacy, mandatory source citation, and zero cost with Ollama — those are product invariants, regardless of profile.
-
-## What sets it apart
-
-- **YouTube channel extraction at scale** — entire channels, hundreds of videos, via local yt-dlp
-- **Multi-source** — YouTube, PDF, DOCX, Markdown, free text, images (OCR), audio (local transcription), WhatsApp, meeting transcripts (Zoom/Teams/Otter)
-- **100% local** — data never leaves the machine; works offline with Ollama
-- **Mandatory source citation** — every answer cites title, date, and origin link
-- **Teacher → student flow** — export a ready `.tusab` base, the student imports it and starts chatting right away, no extraction needed
-- **BYOK** — Groq (free), OpenAI, Anthropic, Google Gemini as optional providers, alongside local Ollama
-- **MCP Server** — expose your knowledge base to Claude Code, Cursor, or any MCP client
-- **Windows and macOS (Apple Silicon)** — native installers for both systems
-
-## Next steps
-
-- [Installation](/instalacao) — download and install Tusab
-- [Profiles and user journeys](/perfis-e-jornadas) — find out which profile fits your use case
-- [Features](/funcionalidades/extracao-youtube) — see each feature in detail
-- [Technical architecture](/arquitetura/visao-geral) — for those who want to understand or contribute to the code
+1. [Install in Claude Desktop](/instalacao) or [in other AIs](/outras-ias).
+2. [First steps](/primeiros-passos): the first base, the first question and the precautions.
+3. [Prompt Library](/biblioteca-de-prompts): what to ask the AI.

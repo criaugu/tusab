@@ -7,7 +7,7 @@ slug: /acessibilidade
 
 # Accessibility
 
-Interface audited against **WCAG 2.1 level AA**.
+The Tusab screen (the React interface in `web_interface/`, the same one the discontinued desktop app used) is audited against **WCAG 2.1 level AA**.
 
 ## Compliance by area
 
@@ -18,7 +18,7 @@ Interface audited against **WCAG 2.1 level AA**.
 | `prefers-reduced-motion` | ✅ Compliant (respected globally) |
 | Modals with focus trap, `aria-modal`, background isolation | ✅ Compliant (`ModalWrapper.jsx`) |
 | Skip-nav link | ✅ Compliant |
-| `lang` on the HTML element | ✅ Compliant (`pt-BR`) |
+| `lang` on the HTML element | ✅ Compliant |
 | Text contrast (AA) | ✅ Compliant (audited via pa11y-ci on every PR) |
 | `aria-live` for dynamic content | ⚠️ Partial — still evolving |
 
@@ -33,23 +33,20 @@ Interface audited against **WCAG 2.1 level AA**.
 ## Keyboard shortcuts
 
 | Key | macOS alternative | Action |
-|-----|--------------------|--------|
-| `Shift + C` | `⌘ + C` | Open chat |
-| `Esc` | `Esc` | Close chat / collapse expanded chat / back to Home |
-| `<` / `>` (with chat open) | `<` / `>` | Expand / collapse the side chat |
+|-----|-------------------|--------|
 | `Shift + B` | `⌘ + B` | Repository tab |
 | `Shift + E` | `⌘ + E` | Extraction tab |
-| `Shift + A` | `⌘ + A` | Admin tab |
-| `Shift + I` | `⌘ + I` | Assistant tab |
-| `Shift + M` | — | Monitor tab |
+| `Shift + R` | — | Report (inside Extraction) |
+| `Shift + U` | `⌘ + U` | Prompt Library |
 | `Shift + V` | `⌘ + V` | Overview |
-| `Shift + H` | — | History |
-| `Shift + U` | `⌘ + U` | Study tab |
-| `Shift + R` | — | Report sub-tab (inside Extraction) |
+| `Shift + M` | — | Monitor |
+| `Shift + A` | `⌘ + A` | Admin |
 
-All `Shift` shortcuts are automatically disabled while a text field has focus, so they don't interfere with typing — on any system.
+All `Shift` shortcuts are turned off automatically while the focus is in a text field, so they do not interfere with typing, on any system.
 
-On macOS, most shortcuts also accept `⌘` (Cmd) as a native alternative — `Shift` still works the same way, `⌘` is just an added option. **Three exceptions stay `Shift`-only even on Mac**: Monitor, History and Report use letters (`M`, `H`, `R`) that collide with system-level or Electron menu shortcuts (Minimize, Hide app, Reload) — those intercept the key before the app can ever see it, so `⌘` could never work reliably for these three.
+On macOS, most shortcuts also accept `⌘` (Cmd), besides `Shift`. **Monitor and Report stay `Shift`-only**, even on a Mac: the letters `M` and `R` collide with system and browser shortcuts (Minimize, Reload), which grab the key before the screen does.
+
+The discontinued desktop app had extra shortcuts for the chat, the Assistant and the History, which do not exist on today's screen.
 
 ## WCAG 2.1 AA checklist — summary by principle
 
@@ -57,7 +54,7 @@ On macOS, most shortcuts also accept `⌘` (Cmd) as a native alternative — `Sh
 
 **Operable** — 100% keyboard-navigable, no focus trap outside modals, skip-nav present, focus order = DOM order, focus always visible (`BTN_FOCUS` + global CSS).
 
-**Understandable** — page language declared (`lang="pt-BR"`), i18n via `react-i18next`, context changes always triggered by an explicit user action, errors identified with a text message.
+**Understandable** — page language declared (`lang`), i18n via `react-i18next`, context changes always triggered by an explicit user action, errors identified with a text message.
 
 **Robust** — JSX compiled into valid HTML; most interactive components use the correct `role` (`switch`, `dialog`, `alert`, `status`).
 
@@ -70,8 +67,6 @@ On macOS, most shortcuts also accept `⌘` (Cmd) as a native alternative — `Sh
 
 ### pa11y-ci scope
 
-Today the automated audit covers only the **Landing screen** (light and dark mode) — it's the only screen reachable without prior state (no login, no real backend), which makes it deterministically testable in CI. The rest of the app (internal screens, modals, data-driven flows) remains covered by manual review via `/acessibilidade` and screen-reader testing, not by this automated gate.
+Today the automated audit covers only the **Landing screen** (light and dark themes), the first screen and the only one reachable without prior state, which makes it deterministically testable in CI. In CI it is served by Tusab itself, as in a real installation (`node tusab-mcp/src/cli.js painel --sem-navegador`, with an empty repository). The rest (internal screens, modals, data-driven flows) is covered by manual review and screen-reader testing, not by that automated gate.
 
 The contrast rule (`color-contrast`) is validated via **HTML_CodeSniffer**, not axe-core, in this specific configuration — the Landing's animated background (`<canvas>` from `CircuitBackground`) makes axe flag most text as "needs manual review" (it can't sample a background that keeps changing), which would reduce the gate to noise without this choice.
-
-The complete list of findings, with file and line, is kept in the repository at `Documentação do Produto/Acessibilidade e WCAG.md`, updated at every significant release.
