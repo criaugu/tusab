@@ -14,6 +14,11 @@
 # Assinatura (opcional até existir certificado): segredos MCPB_CERTIFICADO e MCPB_CHAVE (PEM,
 # certificado de assinatura de código) e, se a autoridade exigir, MCPB_INTERMEDIARIOS (PEM, um
 # ou mais certificados concatenados). Sem eles o pacote sai sem assinatura, como hoje.
+#
+# npm (@criaugu/tusab): a mesma etiqueta publica o pacote para as outras IAs. A primeira
+# publicação usa o segredo NPM_TOKEN (token do npm com permissão de publicar no escopo @criaugu,
+# criado pelo Augusto). Depois dela, ligar a publicação confiável no npmjs.com (pacote › Settings ›
+# Trusted publisher: GitHub Actions, criaugu/tusab, release.yml) e apagar o segredo.
 
 name: Release da extensão
 
@@ -23,6 +28,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write # publicação no npm sem senha guardada (trusted publishing) e com proveniência
 
 concurrency:
   group: release-${{ github.ref }}
@@ -38,6 +44,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
           cache-dependency-path: |
             web_interface/package-lock.json
@@ -127,3 +134,19 @@ jobs:
           V="${{ steps.versao.outputs.v }}"
           gh release create "$GITHUB_REF_NAME" "tusab-$V.mcpb" "tusab-$V.mcpb.sha256" \
             --title "Tusab $V" --notes-file notas.md --latest=false --verify-tag
+
+      # Mesmo pacote, para as outras IAs: a configuração vira "npx -y @criaugu/tusab@latest".
+      # Autenticação: publicação confiável do npm (OIDC, sem senha). Enquanto ela não estiver ligada
+      # no npmjs.com (o pacote precisa existir antes), usa o segredo NPM_TOKEN, se houver.
+      - name: Publicar no npm (@criaugu/tusab)
+        working-directory: tusab-mcp
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          V="${{ steps.versao.outputs.v }}"
+          if [ "$(npm view "@criaugu/tusab@$V" version 2>/dev/null)" = "$V" ]; then
+            echo "@criaugu/tusab@$V já está no npm."
+            exit 0
+          fi
+          npm install -g npm@11
+          npm publish --access public --provenance
