@@ -1,7 +1,7 @@
 # Copyright (c) 2026 CriAugu — CNPJ 65.131.075/0001-57
 # CI do Tusab (extensão de IA) a cada push/PR na main:
-# - Extensão: testes do servidor MCP (tusab-mcp) no Windows, no macOS e no Linux
-#   (paridade Windows/macOS é regra do produto; o Linux é o mais rápido para falhar cedo).
+# - Extensão: testes do servidor MCP (tusab-mcp) no Windows e no Linux. O macOS roda uma vez
+#   por semana, sem travar nada (macos-semanal.yml).
 # - Tela: build da interface em modo extensão e auditoria de acessibilidade (pa11y-ci)
 #   na tela servida pelo próprio plugin, tema claro e escuro.
 # O app desktop foi descontinuado na 2.0.0 (código preservado na etiqueta desktop-final).

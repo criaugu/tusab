@@ -1,0 +1,43 @@
+# Copyright (c) 2026 CriAugu — CNPJ 65.131.075/0001-57
+# Teste semanal do Tusab no macOS. Não trava merge nem release: só avisa se algo quebrou no Mac.
+# O macOS saiu do CI de cada PR em 23/11/2026 (sem o app desktop, o Linux e o Windows cobrem quase
+# tudo, e a fila de máquinas macOS do GitHub chegou a travar merges). O Tusab continua rodando no
+# Mac dentro do Claude Desktop, então este teste vigia o que é específico do Mac sem atrasar nada.
+# Se falhar, o GitHub manda e-mail para quem alterou este arquivo por último.
+# Rodar na hora: aba Actions › "macOS semanal" › Run workflow.
+
+name: macOS semanal
+
+on:
+  schedule:
+    - cron: '0 12 * * 1' # segunda-feira, 9h em Brasília
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    name: Servidor MCP (macOS)
+    runs-on: macos-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: tusab-mcp
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: tusab-mcp/package-lock.json
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Testes
+        run: npm test
+
+      - name: Manifesto do pacote (.mcpb)
+        run: npx --yes @anthropic-ai/mcpb@2.1.2 validate manifest.json
