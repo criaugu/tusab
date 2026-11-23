@@ -115,6 +115,12 @@ async function lerCorpo(req, limiteArquivo = LIMITE_ARQUIVO) {
   }
 }
 
+/** Porta estável para a tela de uma base (faixa 41000–48999, a partir do caminho da pasta). */
+export function portaPreferida(raiz = '') {
+  const h = crypto.createHash('sha256').update(path.resolve(String(raiz)).toLowerCase()).digest();
+  return 41000 + (h.readUInt16BE(0) % 8000);
+}
+
 const PAGINA_SEM_INTERFACE = `<!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>Tusab</title>
 <body style="font-family:system-ui;padding:2rem"><h1>Tusab</h1>
 <p>A interface ainda não foi gerada neste pacote. Rode <code>npm run build:interface</code> em tusab-mcp.</p></body></html>`;
@@ -151,10 +157,21 @@ export class Painel {
     });
     servidor.headersTimeout = 15_000;
     servidor.requestTimeout = 120_000;
-    await new Promise((resolve, reject) => {
-      servidor.once('error', reject);
-      servidor.listen(0, '127.0.0.1', resolve);
+    // Mesma porta para a mesma base, sessão após sessão: o navegador trata cada porta como um site
+    // diferente, e com porta nova a tela esquecia preferências e repetia a apresentação. Se a
+    // porta estiver ocupada (outro programa, ou outra base), cai numa porta livre qualquer.
+    // A chave continua nova a cada sessão: a porta fixa não abre a tela para ninguém.
+    const escutar = (porta) => new Promise((resolve, reject) => {
+      const falhou = (e) => reject(e);
+      servidor.once('error', falhou);
+      servidor.listen(porta, '127.0.0.1', () => { servidor.off('error', falhou); resolve(); });
     });
+    try {
+      await escutar(portaPreferida(this.tusab?.raiz));
+    } catch (e) {
+      if (e.code !== 'EADDRINUSE' && e.code !== 'EACCES') throw e;
+      await escutar(0);
+    }
     this.servidor = servidor;
     this.porta = servidor.address().port;
     return this.url;

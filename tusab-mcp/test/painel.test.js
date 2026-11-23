@@ -185,3 +185,23 @@ test('abrirNoNavegador só aceita o link do painel', () => {
   assert.throws(() => abrirNoNavegador('https://site-malicioso.exemplo'), /inválido/);
   assert.throws(() => abrirNoNavegador('http://127.0.0.1:1/?chave=a&x=" & calc'), /inválido/);
 });
+
+test('a tela usa a mesma porta para a mesma base; se ela estiver ocupada, usa outra', async () => {
+  const { Painel: P, portaPreferida } = await import('../src/painel.js');
+  const raiz = fs.mkdtempSync(path.join(os.tmpdir(), 'tusab-porta-'));
+  const preferida = portaPreferida(raiz);
+  assert.equal(portaPreferida(raiz), preferida);
+  assert.ok(preferida >= 41000 && preferida < 49000);
+  const a = new P({ raiz });
+  const b = new P({ raiz });
+  try {
+    await a.iniciar();
+    await b.iniciar();
+    assert.equal(a.porta, preferida);
+    assert.notEqual(b.porta, preferida);
+    assert.notEqual(a.chave, b.chave, 'a chave continua nova a cada sessão');
+  } finally {
+    a.fechar();
+    b.fechar();
+  }
+});
