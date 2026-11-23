@@ -43,16 +43,26 @@ Requests from the AI and from the screen go through the same engine: what the AI
 
 ## Automatic channel updates
 
-Each channel can have automatic updates turned on from the screen (setting in `management/{canal}_summary.json`). With the plugin open, the check runs a few seconds after startup and then every hour: it lists the videos in the tabs with yt-dlp (metadata only, `--flat-playlist`) and compares them with the CSV. If there's a new video, the channel goes to the engine, or to the queue if an extraction is running. With the AI tool closed, nothing runs.
+Each channel can have automatic updates turned on from the screen (setting in `management/{canal}_summary.json`). With Tusab running, the check runs a few seconds after startup and then every hour: it lists the videos in the tabs with yt-dlp (metadata only, `--flat-playlist`) and compares them with the CSV. If there's a new video, the channel goes to the engine, or to the queue if an extraction is running. With the AI tool closed, nothing runs.
 
 ## Single web page
 
 In the Repository, a page URL is read and its main content becomes a text in the project. Tusab checks the site's `robots.txt` (User-Agent `TusabBot/1.0`) and doesn't insist if the page disallows automated access. It doesn't run JavaScript: static pages only.
 
+## yt-dlp
+
+Tusab looks for yt-dlp in this order:
+
+1. the `TUSAB_YTDLP` environment variable (path to a yt-dlp of your choice);
+2. the copy in `data/bin/`;
+3. `yt-dlp` on the system PATH.
+
+If it finds none, it downloads the official binary from [github.com/yt-dlp/yt-dlp/releases/latest](https://github.com/yt-dlp/yt-dlp/releases/latest) into `data/bin/` and checks its SHA-256 sum against the one published by the project (the `SHA2-256SUMS` file). If the sum doesn't match, the download is discarded.
+
 ## Extraction security
 
 - Channel URL and playlist ID validated by regular expressions before the command is built.
 - yt-dlp is run with an argument list, never through a shell.
-- When the plugin downloads the yt-dlp binary, its SHA-256 sum is checked against the one published by the project.
+- When Tusab downloads the yt-dlp binary, its SHA-256 sum is checked against the one published by the project; if it doesn't match, the binary is discarded (see [yt-dlp](#yt-dlp)).
 
 See [Security](/seguranca).

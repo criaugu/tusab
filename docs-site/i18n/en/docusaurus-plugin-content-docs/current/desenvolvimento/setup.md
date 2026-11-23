@@ -11,7 +11,7 @@ slug: /desenvolvimento/setup
 
 - Node.js 18.17 or newer (the same minimum declared in `manifest.json`).
 - Git.
-- yt-dlp is optional: without it, the plugin downloads the official one on the first extraction.
+- yt-dlp is optional: without it, Tusab downloads the official one on the first extraction (see [YouTube extraction](/funcionalidades/extracao-youtube#yt-dlp)).
 
 ## Clone and install
 
@@ -24,7 +24,7 @@ cd web_interface
 npm install
 cd ..
 
-# Plugin
+# MCP server
 cd tusab-mcp
 npm install
 npm run build:interface     # generates tusab-mcp/interface/ (vite build --mode extensao)
@@ -32,7 +32,7 @@ npm run build:interface     # generates tusab-mcp/interface/ (vite build --mode 
 
 ## Running without an AI tool
 
-The command line uses the same engine as the plugin. Set the test folder first:
+The command line uses the same engine as the MCP server. Set the test folder first:
 
 ```powershell
 cd tusab-mcp
@@ -53,21 +53,21 @@ node src/cli.js medir-tokens questions.txt Project [output.csv]      # token sav
 npm start        # = node src/index.js, MCP server over stdio
 ```
 
-To use it in an AI tool during development, point its MCP configuration to `node <path>/tusab-mcp/src/index.js` with `TUSAB_REPOSITORIO` (see [Installation](/instalacao#other-mcp-compatible-tools-claude-code-vs-code-cursor)).
+To use it in an AI tool during development, point its MCP configuration to `node <path>/tusab-mcp/src/index.js` with `TUSAB_REPOSITORIO` (see [Other AI tools](/outras-ias)).
 
 ## Environment variables
 
 | Variable | Description |
 |---|---|
 | `TUSAB_REPOSITORIO` | Repository folder (root that contains `data/`). Default: `~/Tusab` |
-| `TUSAB_YTDLP` | yt-dlp to use. `test/ytdlp-falso.mjs` replaces yt-dlp with a simulated one (3 videos, one without subtitles), with no network |
+| `TUSAB_YTDLP` | Path to a yt-dlp to use instead of the downloaded one. In tests, `test/ytdlp-falso.mjs` replaces yt-dlp with a simulated one (3 videos, one without subtitles), with no network |
 | `YTDLP_FALSO_ATRASO` | With the simulated yt-dlp, a delay in milliseconds (e.g. `800`) to watch progress on the screen |
-| `TUSAB_IDIOMA` | Initial language (`pt`, `en`, `es`) |
+| `TUSAB_IDIOMA` | Initial language (`pt`, `en`, `es`), used before the screen sets one |
 | `TUSAB_SEM_BOAS_VINDAS` | `1` turns off opening the screen automatically on the first run in a folder |
 
-## Interface in extension mode
+## Interface in `extensao` mode
 
-The screen is `web_interface/` built with `vite build --mode extensao`, which reads `web_interface/.env.extensao` (`VITE_TUSAB_MODO=extensao`). In `web_interface/src/constants/index.js`, `MODO_EXTENSAO` becomes true and `API_BASE` becomes `/api`. Components that change in extension mode check `MODO_EXTENSAO`. After changing the interface, run `npm run build:interface` in `tusab-mcp/` again.
+The screen is `web_interface/` built with `vite build --mode extensao`, which reads `web_interface/.env.extensao` (`VITE_TUSAB_MODO=extensao`). In `web_interface/src/constants/index.js`, `MODO_EXTENSAO` becomes true and `API_BASE` becomes `/api`. Components that change in this mode check `MODO_EXTENSAO`. After changing the interface, run `npm run build:interface` in `tusab-mcp/` again.
 
 Without the built interface, the panel answers with a page asking you to run `npm run build:interface`.
 

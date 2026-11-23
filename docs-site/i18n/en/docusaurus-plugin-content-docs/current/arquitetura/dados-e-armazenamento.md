@@ -7,7 +7,7 @@ slug: /arquitetura/dados-e-armazenamento
 
 # Data and storage
 
-## Where the data lives
+## Where the data lives {#onde-os-dados-ficam}
 
 Everything lives in a **root** that contains the `data/` folder:
 
@@ -38,7 +38,7 @@ data/
     auto_update.json                      last channel check
     boas_vindas.json                      first screen opening marker
   temp/                                   temporary VTT subtitles
-  bin/                                    yt-dlp downloaded by the plugin
+  bin/                                    yt-dlp downloaded by Tusab
   tusab.sqlite                            search index (rebuildable)
 ```
 
@@ -57,7 +57,7 @@ These formats are the same as the desktop app's and stay in Portuguese (labels a
 - `data/tusab.sqlite`, with an FTS5 virtual table (`unicode61 remove_diacritics 2`) and ranking by `bm25()`.
 - **The `.txt` files are the source of truth.** The index can be rebuilt and is synced per file (modification time and size): one excerpt per block in transcripts, by paragraph in documents and texts.
 - The database is kept in memory and written atomically under a lock file, because more than one AI tool may open the same repository.
-- The desktop app had its own index (`data/agent_index/`, LanceDB), which the extension doesn't use.
+- The desktop app had its own index (`data/agent_index/`, LanceDB), which the current Tusab doesn't use.
 
 ## Project names
 
@@ -73,7 +73,7 @@ Files are written to a temporary file (`{file}.{pid}.{time}.tmp`) and renamed in
 |---|---|
 | `neural/` | Yes, paying attention to personal data in the documents and originals themselves (photos may carry location) |
 | `tusab.sqlite` | Not needed: it is rebuilt from `neural/` |
-| `config/` | No secrets (the extension stores no keys), but it is this computer's local configuration |
+| `config/` | No secrets (Tusab stores no keys), but it is this computer's local configuration |
 
 To share a project, prefer the `.tusab` file (see [Repository and documents](/funcionalidades/repositorio-multi-fonte#export-and-import)).
 

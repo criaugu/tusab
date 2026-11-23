@@ -1,13 +1,28 @@
-/* Página de entrada: título, uma frase e três botões. */
+/* Página de entrada: hero preto, depois seções alternadas (como funciona, recursos, onde funciona,
+   privacidade, chamada final). Cores vêm das variáveis do Infima, então os dois temas funcionam. */
 
 .heroBanner {
-  padding: 4rem 0;
+  padding: 4.5rem 0 4rem;
+  text-align: left;
+}
+
+.heroLema {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
 }
 
 .heroDescription {
-  max-width: 640px;
-  margin: 0 0 1.5rem;
+  max-width: 660px;
+  margin: 0 0 1.75rem;
   opacity: 0.85;
+  font-size: 1.1rem;
+}
+
+.heroFatos {
+  margin: 1.5rem 0 0;
+  font-size: 0.9rem;
+  opacity: 0.75;
 }
 
 .buttons {
@@ -16,16 +31,89 @@
   gap: 0.75rem;
 }
 
-.summary {
-  padding: 2.5rem 0 3rem;
+.secao {
+  padding: 3.5rem 0;
 }
 
-.summary ul {
+.secaoAlternada {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.secao h2 {
+  margin-bottom: 1.5rem;
+}
+
+.passos,
+.grade,
+.lista {
+  padding: 0;
+  margin: 0;
+}
+
+.passos,
+.grade {
+  list-style: none;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.passo,
+.cartao {
+  margin: 0;
+  padding: 1.25rem 1.25rem 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  background: var(--ifm-background-color);
+}
+
+.passo h3,
+.cartao h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0.75rem;
+  border-radius: 50%;
+  font-weight: 700;
+  background: var(--ifm-color-emphasis-900);
+  color: var(--ifm-background-color);
+}
+
+.lista {
+  padding-left: 1.25rem;
   max-width: 720px;
+  margin-bottom: 1rem;
+}
+
+.lista li {
+  margin-bottom: 0.4rem;
+}
+
+.chamada {
+  text-align: center;
+}
+
+.chamada .buttons {
+  justify-content: center;
 }
 
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2.5rem 1rem;
+  }
+
+  .heroLema {
+    font-size: 1.25rem;
+  }
+
+  .secao {
+    padding: 2.5rem 0;
   }
 }

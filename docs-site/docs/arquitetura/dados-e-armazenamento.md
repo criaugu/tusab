@@ -7,7 +7,7 @@ slug: /arquitetura/dados-e-armazenamento
 
 # Dados e armazenamento
 
-## Onde os dados ficam
+## Onde os dados ficam {#onde-os-dados-ficam}
 
 Tudo fica numa **raiz** que contém a pasta `data/`:
 
@@ -38,7 +38,7 @@ data/
     auto_update.json                      última verificação de canais
     boas_vindas.json                      marca da primeira abertura da tela
   temp/                                   legendas VTT temporárias
-  bin/                                    yt-dlp baixado pelo plugin
+  bin/                                    yt-dlp baixado pelo Tusab
   tusab.sqlite                            índice de busca (reconstruível)
 ```
 
@@ -57,7 +57,7 @@ Esses formatos são os mesmos do app desktop e ficam em português (rótulos e s
 - `data/tusab.sqlite`, com uma tabela virtual FTS5 (`unicode61 remove_diacritics 2`) e ordenação por `bm25()`.
 - **Os `.txt` são a fonte da verdade.** O índice é reconstruível e é sincronizado por arquivo (data de modificação e tamanho): um trecho por bloco nas transcrições, por parágrafo nos documentos e textos.
 - O banco é mantido em memória e gravado de forma atômica sob um arquivo de trava, porque mais de uma ferramenta de IA pode abrir o mesmo repositório.
-- O app desktop tinha índice próprio (`data/agent_index/`, LanceDB), que a extensão não usa.
+- O app desktop tinha índice próprio (`data/agent_index/`, LanceDB), que o Tusab atual não usa.
 
 ## Nomes de projeto
 
@@ -73,7 +73,7 @@ Arquivos são gravados num temporário (`{arquivo}.{pid}.{hora}.tmp`) e renomead
 |---|---|
 | `neural/` | Sim, com atenção a dados pessoais nos próprios documentos e originais (fotos podem ter localização) |
 | `tusab.sqlite` | Não precisa: é reconstruído a partir de `neural/` |
-| `config/` | Não há segredos (a extensão não guarda chaves), mas é configuração local deste computador |
+| `config/` | Não há segredos (o Tusab não guarda chaves), mas é configuração local deste computador |
 
 Para compartilhar um projeto, prefira o arquivo `.tusab` (ver [Repositório e documentos](/funcionalidades/repositorio-multi-fonte#exportar-e-importar)).
 

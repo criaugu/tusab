@@ -1,7 +1,7 @@
 ---
 id: privacidade
 title: Privacidade
-sidebar_label: Privacidade
+sidebar_label: Privacidade (detalhes técnicos)
 slug: /privacidade
 ---
 
@@ -9,7 +9,7 @@ slug: /privacidade
 
 O Tusab guarda a base de conhecimento **no computador do usuário**. A CriAugu não opera servidor que receba conteúdo, conversas, bases ou dados de uso do Tusab.
 
-Esta página descreve tecnicamente o que fica no computador e o que sai dele. A política de privacidade formal (LGPD, Lei nº 13.709/2018, e GDPR) é publicada em [tusab.solutions](https://tusab.solutions).
+Esta página descreve tecnicamente o que fica no computador e o que sai dele. A política formal (LGPD, Lei nº 13.709/2018, e GDPR) é a [Política de Privacidade](/politica-de-privacidade).
 
 ## O que fica só no computador
 
@@ -50,11 +50,11 @@ O que a ferramenta de IA faz com os trechos recebidos (armazenamento, uso, país
 | Correção | Editar os arquivos ou usar a tela |
 | Exclusão | Tela (excluir, limpar, reset total) ou o sistema de arquivos; excluir um documento apaga também o original |
 | Portabilidade | Formatos abertos (`.txt`, `.json`, `.csv`) e o `.tusab` (zip) |
-| Interromper o tratamento | Remover a extensão da ferramenta de IA; nada roda com ela fechada |
+| Interromper o tratamento | Remover o Tusab da ferramenta de IA; nada roda com ela fechada |
 
 Contato: **tusab@tusab.solutions**
 
-## App desktop
+## App desktop {#app-desktop}
 
 No [app desktop](/desktop/visao-geral), descontinuado em 19/11/2026 (vale para as versões 1.0.x ainda instaladas), além do acima:
 

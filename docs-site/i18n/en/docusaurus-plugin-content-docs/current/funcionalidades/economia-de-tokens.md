@@ -12,7 +12,7 @@ Tusab measures how much the AI received from Tusab (excerpts only) compared to w
 ## How the estimate is made
 
 - **Local estimate of ~4 characters per token** (`CARACTERES_POR_TOKEN = 4`). An exact count would require sending the text to the AI service, which Tusab doesn't do. The real number varies with the model and the language.
-- On each call to `tusab_buscar`, `tusab_ler_fonte` and `tusab_ler_original` (PDF pages), the plugin adds up:
+- On each call to `tusab_buscar`, `tusab_ler_fonte` and `tusab_ler_original` (PDF pages), Tusab adds up:
   - **sent:** estimated tokens of the response the tool returned;
   - **without Tusab:** estimated tokens of the full text of the sources the excerpts came from.
 

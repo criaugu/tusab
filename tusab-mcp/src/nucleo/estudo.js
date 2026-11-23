@@ -776,7 +776,7 @@ export function pedidoGeracaoEstudo(corpo, { indice = null } = {}) {
     gerar_pela_ia: true,
     tipo,
     pedido,
-    message: t('Na extensão, quem gera é a sua IA. Peça à sua IA: ‘{pedido}’. O resultado aparece aqui no Estudo.', { pedido }),
+    message: t('No Tusab, quem gera é a sua IA. Peça à sua IA: ‘{pedido}’. O resultado aparece aqui no Estudo.', { pedido }),
   };
 }
 
@@ -837,7 +837,7 @@ export function pedidoGeracaoDigest(raiz, projeto) {
     gerar_pela_ia: true,
     pedido,
     arquivos_novos: novos.length,
-    message: t('Na extensão, quem gera é a sua IA. Peça à sua IA: ‘{pedido}’ ({length} arquivo(s) novo(s)).', { pedido, length: novos.length }),
+    message: t('No Tusab, quem gera é a sua IA. Peça à sua IA: ‘{pedido}’ ({length} arquivo(s) novo(s)).', { pedido, length: novos.length }),
   };
 }
 

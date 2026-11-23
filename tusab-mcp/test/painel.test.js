@@ -174,7 +174,7 @@ test('rotas do chat respondem de forma neutra; o resto, 404 claro', async () => 
   assert.equal((await api('/agent/qualquer')).json.indisponivel_na_extensao, true);
   const r = await api('/export/historico', { metodo: 'POST' });
   assert.equal(r.status, 404);
-  assert.match(r.json.message, /não disponível na extensão/);
+  assert.match(r.json.message, /não disponível no Tusab/);
 });
 
 test('abrir pasta só aceita pastas conhecidas do repositório', async () => {

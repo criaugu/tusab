@@ -326,37 +326,136 @@
     "message": "Tags",
     "description": "The title of the tag list page"
   },
-  "homepage.hero.description": {
-    "message": "Local MCP extension for AI tools such as Claude Desktop: stores and indexes YouTube videos, documents and public sources on the user's computer and hands the AI only the queried excerpts, citing the video and minute or the page."
+  "homepage.meta.title": {
+    "message": "Study and research notebook for Claude and other AIs"
   },
   "homepage.meta.description": {
-    "message": "Technical documentation for Tusab, a local MCP extension that keeps the knowledge base on the user's computer and hands the AI only the queried excerpts, with citations."
+    "message": "Tusab, a local connector (MCP) for Claude and other AIs: your sources stay on your computer, and the AI gets only the right excerpts, citing the video and minute or the page."
+  },
+  "homepage.hero.tagline": {
+    "message": "Your study and research notebook inside your AI."
+  },
+  "homepage.hero.description": {
+    "message": "A local connector for Claude and other AIs: it keeps YouTube videos, documents and public sources on your computer and gives the AI only the right excerpts, citing the video and minute or the page."
   },
   "homepage.hero.install": {
+    "message": "Install in Claude Desktop"
+  },
+  "homepage.hero.otherAis": {
+    "message": "Use in other AIs"
+  },
+  "homepage.hero.firstSteps": {
+    "message": "First steps"
+  },
+  "homepage.hero.facts": {
+    "message": "Windows and macOS · no account, no login · your files stay on your computer"
+  },
+  "homepage.steps.heading": {
+    "message": "How it works"
+  },
+  "homepage.steps.1.title": {
+    "message": "Build the base"
+  },
+  "homepage.steps.1.text": {
+    "message": "YouTube channels and videos, PDFs, Word, spreadsheets, web pages and searches in public sources (papers, theses, laws, open data). All in a folder on your computer, organized by project."
+  },
+  "homepage.steps.2.title": {
+    "message": "Ask your AI"
+  },
+  "homepage.steps.2.text": {
+    "message": "The AI searches your base and answers citing the source: the video and the exact minute, or the document and the page. It gets only the excerpts it looked up, not the whole base."
+  },
+  "homepage.steps.3.title": {
+    "message": "Study and keep"
+  },
+  "homepage.steps.3.text": {
+    "message": "Flashcards, quiz, summary, mind map, lesson plan. The AI builds them from your base, Tusab keeps them and schedules the spaced repetition. Everything stays in the Materials tab."
+  },
+  "homepage.features.heading": {
+    "message": "What you can do"
+  },
+  "homepage.features.youtube.title": {
+    "message": "YouTube to the exact minute"
+  },
+  "homepage.features.youtube.text": {
+    "message": "Whole channels, playlists or single videos. Subtitles are downloaded on your computer, with a queue, pause and automatic channel updates."
+  },
+  "homepage.features.docs.title": {
+    "message": "Documents and originals"
+  },
+  "homepage.features.docs.text": {
+    "message": "PDF, Word, Excel, CSV, Markdown and web pages. The AI cites the page and can open the original, images included, without location metadata."
+  },
+  "homepage.features.public.title": {
+    "message": "Public sources by field"
+  },
+  "homepage.features.public.text": {
+    "message": "Papers, theses, legislation, case law, open data and archives, from health to law, searched straight from the source and kept in the base."
+  },
+  "homepage.features.prompts.title": {
+    "message": "41 ready-made requests"
+  },
+  "homepage.features.prompts.text": {
+    "message": "Summaries, quizzes, flashcards, exams, lesson plans, source comparison and 20 evidence-based study techniques, each with its reference and the suggested AI model."
+  },
+  "homepage.features.materials.title": {
+    "message": "Materials and spaced repetition"
+  },
+  "homepage.features.materials.text": {
+    "message": "What the AI produces is kept in Tusab and opens in a window: flashcards to flip, documents with tables and drawn diagrams. Exports to PDF."
+  },
+  "homepage.features.screen.title": {
+    "message": "A screen to stay organized"
+  },
+  "homepage.features.screen.text": {
+    "message": "In the browser, on this computer only: extract, organize projects, see reports and copy requests. In Portuguese, English and Spanish, with light and dark themes."
+  },
+  "homepage.where.heading": {
+    "message": "Where it works"
+  },
+  "homepage.where.desktop.title": {
+    "message": "Claude Desktop"
+  },
+  "homepage.where.desktop.text": {
+    "message": "One-file installation: open the .mcpb package and choose the base folder. Node.js already comes with Claude. The ready-made requests show up in the + button."
+  },
+  "homepage.where.others.title": {
+    "message": "Claude Code, VS Code, Cursor, Gemini CLI, Codex"
+  },
+  "homepage.where.others.text": {
+    "message": "Any tool that accepts local MCP servers. Needs Node.js installed; the configuration takes three values."
+  },
+  "homepage.where.web.title": {
+    "message": "AIs in the browser"
+  },
+  "homepage.where.web.text": {
+    "message": "Claude.ai, ChatGPT and Gemini on the web cannot reach your computer. For them, Tusab copies the request with the excerpts from your base already inside."
+  },
+  "homepage.privacy.heading": {
+    "message": "Private by default"
+  },
+  "homepage.privacy.1": {
+    "message": "Files, transcripts and the index stay in a folder on your computer."
+  },
+  "homepage.privacy.2": {
+    "message": "The AI gets only the excerpts it looked up, and only the AI you chose."
+  },
+  "homepage.privacy.3": {
+    "message": "Nothing goes through a CriAugu server: no account, login, telemetry or cloud sync."
+  },
+  "homepage.privacy.4": {
+    "message": "The code is open to read on GitHub."
+  },
+  "homepage.privacy.link": {
+    "message": "What leaves the computer, and where it goes"
+  },
+  "homepage.cta.heading": {
+    "message": "Start with your next question"
+  },
+  "homepage.cta.install": {
     "message": "Install"
   },
-  "homepage.hero.docs": {
-    "message": "Documentation"
-  },
-  "homepage.hero.github": {
-    "message": "GitHub"
-  },
-  "homepage.summary.tools": {
-    "message": "15 MCP tools"
-  },
-  "homepage.summary.toolsText": {
-    "message": "to search, read sources and originals, add content and save study material."
-  },
-  "homepage.summary.screen": {
-    "message": "Local screen"
-  },
-  "homepage.summary.screenText": {
-    "message": "on 127.0.0.1, with a per-session key, to extract channels and organize the repository."
-  },
-  "homepage.summary.architecture": {
-    "message": "Architecture"
-  },
-  "homepage.summary.architectureText": {
-    "message": "Node.js server over stdio, SQLite FTS5 index, data in local folders."
+  "homepage.cta.docs": {
+    "message": "Read the guide"
   }
 }

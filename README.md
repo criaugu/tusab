@@ -1,10 +1,10 @@
 # Tusab
 
-Extensão para ferramentas de IA (como o Claude Desktop) que mantém a base de conhecimento do usuário **no computador dele** e entrega à IA só os trechos certos, **com citação**: o vídeo e o minuto, ou a página do PDF.
+Caderno de estudo e pesquisa para o Claude e outras IAs. É um **conector local** (servidor MCP) que mantém a base de conhecimento do usuário **no computador dele** e entrega à IA só os trechos certos, **com citação**: o vídeo e o minuto, ou a página do PDF.
 
 Tecnicamente, é um servidor [MCP](https://modelcontextprotocol.io) local em Node.js (`tusab-mcp/`, versão 2.0.0). A ferramenta de IA inicia o processo no próprio computador; ele extrai transcrições do YouTube, lê documentos e busca em fontes públicas, indexa tudo numa pasta local (SQLite FTS5), responde à IA por 15 ferramentas MCP e serve uma tela no navegador em `http://127.0.0.1:<porta>`. Nada passa por servidor da CriAugu: só os trechos consultados vão para a IA que o usuário escolheu.
 
-**Documentação:** https://criaugu.github.io/tusab/
+**Documentação:** https://tusab.solutions/
 
 ## O que faz
 
@@ -34,9 +34,15 @@ npm install
 npm run pack          # gera ../tusab.mcpb
 ```
 
-### Outras ferramentas MCP (Claude Code, VS Code, Cursor…)
+### Outras ferramentas de IA (Claude Code, VS Code, Cursor, Gemini CLI, Codex…)
 
-Depois de `npm install` e `npm run build:interface` em `tusab-mcp/`:
+Precisam do **Node.js 18.17 ou mais novo** (confira com `node --version`; baixe a versão LTS em [nodejs.org](https://nodejs.org/)). O jeito mais simples é abrir o próprio `.mcpb` numa pasta, que já traz tudo pronto:
+
+```powershell
+npx --yes @anthropic-ai/mcpb@2.1.2 unpack tusab-2.0.0.mcpb "$HOME\tusab-servidor"
+```
+
+E apontar a ferramenta para `src/index.js` dessa pasta (ou, a partir do código, depois de `npm install` e `npm run build:interface` em `tusab-mcp/`):
 
 ```json
 {
@@ -50,13 +56,13 @@ Depois de `npm install` e `npm run build:interface` em `tusab-mcp/`:
 }
 ```
 
-Detalhes em [Instalação](https://criaugu.github.io/tusab/instalacao).
+Passo a passo por ferramenta, o que funciona em cada uma e os cuidados (uma IA por vez na mesma base) em [Usar em outras IAs](https://tusab.solutions/outras-ias).
 
 ## Estrutura do repositório
 
 ```
 tusab/
-  tusab-mcp/          a extensão: servidor MCP em Node.js
+  tusab-mcp/          o conector local: servidor MCP em Node.js
     src/                servidor.js (MCP), painel.js (tela local), api.js, cli.js
     src/nucleo/         motor de extração, índice, documentos, originais, prompts, idiomas, estudo
     src/fontes/         as 70 fontes públicas
@@ -71,7 +77,7 @@ tusab/
   .github/workflows/  CI (testes no Windows, macOS e Linux; acessibilidade) e release do .mcpb
 ```
 
-## Desenvolvimento e testes (extensão)
+## Desenvolvimento e testes
 
 ```powershell
 cd tusab-mcp
@@ -90,7 +96,7 @@ node scripts/gerar-licencas.mjs              # THIRD_PARTY_NOTICES.txt do pacote
 node scripts/gerar-recursos-manifesto.mjs    # mcpb-resources/en-US.json e es-ES.json
 ```
 
-`TUSAB_YTDLP=test/ytdlp-falso.mjs` troca o yt-dlp por um simulado. Mais em [Desenvolvimento](https://criaugu.github.io/tusab/desenvolvimento/setup).
+`TUSAB_YTDLP=test/ytdlp-falso.mjs` troca o yt-dlp por um simulado. Mais em [Desenvolvimento](https://tusab.solutions/desenvolvimento/setup).
 
 ## Publicar uma versão
 

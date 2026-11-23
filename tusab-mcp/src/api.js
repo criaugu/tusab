@@ -373,5 +373,5 @@ export async function atenderApi(tusab, metodo, caminho, query, lerCorpo) {
 
   if (NEUTRAS[rota]) return ok(NEUTRAS[rota]());
   if (metodo === 'GET' && caminho.startsWith('/agent/')) return ok({ indisponivel_na_extensao: true });
-  throw new ErroHttp(404, t('Recurso não disponível na extensão.'));
+  throw new ErroHttp(404, t('Recurso não disponível no Tusab.'));
 }
