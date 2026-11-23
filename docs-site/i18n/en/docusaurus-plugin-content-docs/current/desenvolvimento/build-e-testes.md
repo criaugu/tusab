@@ -34,7 +34,7 @@ GitHub CI (`.github/workflows/ci.yml`) runs on every push and pull request to `m
 
 | Job | What it does |
 |---|---|
-| `Extensão` (MCP server) | In `tusab-mcp/`, on Windows, macOS and Linux (Node.js 22): `npm ci`, `npm test` and `npx @anthropic-ai/mcpb@2.1.2 validate manifest.json` |
+| `Extensão` (MCP server) | In `tusab-mcp/`, on Windows and Linux (Node.js 22; macOS left CI on 2026-11-23, since without the desktop installer Linux covers Unix behavior): `npm ci`, `npm test` and `npx @anthropic-ai/mcpb@2.1.2 validate manifest.json` |
 | Screen | On Linux: interface unit tests (`npm run test:unit` in `web_interface/`), build of the screen in Vite's `extensao` mode (`npm run build:interface`) and an accessibility audit with pa11y-ci on the screen served by Tusab itself, in light and dark themes (see [Accessibility](/acessibilidade#pa11y-ci-scope)) |
 
 There are no Python tests or desktop app builds: that code is in the [`desktop-final`](https://github.com/criaugu/tusab/tree/desktop-final) tag.
