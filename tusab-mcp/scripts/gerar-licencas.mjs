@@ -71,7 +71,7 @@ function textoDaLicenca(dir, pkg) {
 
 const secoes = [['Plugin (servidor local do Tusab)', arvore(plugin)], ['Tela do Tusab (interface)', arvore(tela)]];
 const linhas = [
-  'AVISOS DE TERCEIROS — Tusab (extensão)',
+  'AVISOS DE TERCEIROS — Tusab (conector local)',
   '',
   'O Tusab é distribuído sob a Elastic License 2.0 (ver LICENSE). Ele usa as bibliotecas abaixo, sem',
   'modificação, nos termos das licenças de cada uma, reproduzidas aqui por inteiro. Também usa o yt-dlp',

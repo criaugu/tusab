@@ -1,7 +1,7 @@
 # Documentação do Tusab (docs-site)
 
 Site de documentação técnica do Tusab, construído com [Docusaurus](https://docusaurus.io/) e publicado em
-https://criaugu.github.io/tusab/. A publicação é automática no GitHub Pages a cada push na `main` que altere esta pasta
+https://tusab.solutions/. A publicação é automática no GitHub Pages a cada push na `main` que altere esta pasta
 (`.github/workflows/deploy-docs.yml`).
 
 ## Rodar localmente

@@ -7,7 +7,7 @@ slug: /design-system
 
 # Design System
 
-The design system applies to the React interface in `web_interface/src/`, which builds the extension screen (and built the discontinued desktop app's). The source of truth is **the code**, not Figma or this document: a divergence between them is a documentation error to fix. The detailed version lives in `docs/design-system/design-system.md` in the repository.
+The design system applies to the React interface in `web_interface/src/`, which builds the Tusab screen (and built the discontinued desktop app's). The source of truth is **the code**, not Figma or this document: a divergence between them is a documentation error to fix. The detailed version lives in `docs/design-system/design-system.md` in the repository.
 
 ## Principles
 
@@ -31,7 +31,7 @@ Dark surfaces use white at reduced opacity (`bg-white/4` to `bg-white/10`) inste
 
 ## Typography
 
-Families: **Inter** (sans, body) and **JetBrains Mono** (mono — versions, IDs, model names). In extension mode, Google fonts aren't loaded (CSP `'self'`), and the screen uses the system font.
+Families: **Inter** (sans, body) and **JetBrains Mono** (mono — versions, IDs, model names). In the screen built in Vite's `extensao` mode, Google fonts aren't loaded (CSP `'self'`), and the screen uses the system font.
 
 Real scale: `text-xs` (12px) is the standard body size; `text-[10px]` for support/caption text; `text-sm` (14px) only for main section headings. The scale has six steps — don't introduce intermediate sizes outside it.
 

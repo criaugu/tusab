@@ -34,8 +34,8 @@ O CI do GitHub (`.github/workflows/ci.yml`) roda a cada push e pull request na `
 
 | Job | O que faz |
 |---|---|
-| Extensão | Em `tusab-mcp/`, no Windows, no macOS e no Linux (Node.js 22): `npm ci`, `npm test` e `npx @anthropic-ai/mcpb@2.1.2 validate manifest.json` |
-| Tela | No Linux: testes de unidade da interface (`npm run test:unit` em `web_interface/`), build da tela em modo extensão (`npm run build:interface`) e auditoria de acessibilidade com pa11y-ci na tela servida pelo próprio plugin, nos temas claro e escuro (ver [Acessibilidade](/acessibilidade#escopo-do-pa11y-ci)) |
+| `Extensão` (servidor MCP) | Em `tusab-mcp/`, no Windows, no macOS e no Linux (Node.js 22): `npm ci`, `npm test` e `npx @anthropic-ai/mcpb@2.1.2 validate manifest.json` |
+| Tela | No Linux: testes de unidade da interface (`npm run test:unit` em `web_interface/`), build da tela no modo `extensao` do Vite (`npm run build:interface`) e auditoria de acessibilidade com pa11y-ci na tela servida pelo próprio Tusab, nos temas claro e escuro (ver [Acessibilidade](/acessibilidade#escopo-do-pa11y-ci)) |
 
 Não há testes em Python nem build do app desktop: esse código está na etiqueta [`desktop-final`](https://github.com/criaugu/tusab/tree/desktop-final).
 
@@ -47,11 +47,11 @@ npm run pack
 
 Em sequência:
 
-1. `npm run build:interface`: compila `web_interface/` em modo extensão para `tusab-mcp/interface/`;
-2. `node scripts/gerar-licencas.mjs`: copia `LICENSE` e `TRADEMARK.md` da raiz e gera `THIRD_PARTY_NOTICES.txt` com a licença completa de cada biblioteca embutida (plugin e tela), porque a tela compilada perde os comentários de licença;
+1. `npm run build:interface`: compila `web_interface/` no modo `extensao` do Vite para `tusab-mcp/interface/`;
+2. `node scripts/gerar-licencas.mjs`: copia `LICENSE` e `TRADEMARK.md` da raiz e gera `THIRD_PARTY_NOTICES.txt` com a licença completa de cada biblioteca embutida (servidor MCP e tela), porque a tela compilada perde os comentários de licença;
 3. `npx --yes @anthropic-ai/mcpb@2.1.2 pack . ../tusab.mcpb`: empacota.
 
-O arquivo sai em `tusab.mcpb`, na raiz do repositório. `.mcpbignore` deixa de fora testes, scripts, `README.md`, mapas de código e partes do `pdfjs-dist` e do `pdfkit` que o plugin não usa (versões para navegador, visualizador, componente nativo opcional de desenho).
+O arquivo sai em `tusab.mcpb`, na raiz do repositório. `.mcpbignore` deixa de fora testes, scripts, `README.md`, mapas de código e partes do `pdfjs-dist` e do `pdfkit` que o Tusab não usa (versões para navegador, visualizador, componente nativo opcional de desenho).
 
 ## Textos do manifesto em outros idiomas
 
@@ -63,7 +63,7 @@ Gera `mcpb-resources/en-US.json` e `es-ES.json` (nome, descrição, ferramentas 
 
 ## Avisos de licença
 
-`node scripts/gerar-licencas.mjs` também pode ser rodado sozinho. As bibliotecas do plugin e da tela têm licenças permissivas (MIT, ISC, BSD, Apache-2.0, BlueOak); o texto de cada uma vai em `THIRD_PARTY_NOTICES.txt` dentro do pacote.
+`node scripts/gerar-licencas.mjs` também pode ser rodado sozinho. As bibliotecas do servidor MCP e da tela têm licenças permissivas (MIT, ISC, BSD, Apache-2.0, BlueOak); o texto de cada uma vai em `THIRD_PARTY_NOTICES.txt` dentro do pacote.
 
 ## Versão
 

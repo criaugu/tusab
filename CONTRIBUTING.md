@@ -15,5 +15,5 @@ ainda não existem — isso pode mudar no futuro, mas não é o estado atual.
 ## Como ajudar mesmo assim
 
 - **Bugs e sugestões**: abra uma [issue](https://github.com/criaugu/tusab/issues) — é lida e usada para priorizar o roadmap.
-- **Dúvidas técnicas sobre a arquitetura**: a [documentação técnica](https://criaugu.github.io/tusab/) descreve a arquitetura, as decisões técnicas e onde fica cada parte do código.
+- **Dúvidas técnicas sobre a arquitetura**: a [documentação técnica](https://tusab.solutions/) descreve a arquitetura, as decisões técnicas e onde fica cada parte do código.
 - **Forks**: são bem-vindos nos termos do [LICENSE](LICENSE) — só não use o nome/marca "Tusab" (ver [TRADEMARK.md](TRADEMARK.md)).

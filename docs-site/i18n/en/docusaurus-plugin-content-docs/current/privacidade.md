@@ -1,7 +1,7 @@
 ---
 id: privacidade
 title: Privacy
-sidebar_label: Privacy
+sidebar_label: Privacy (technical details)
 slug: /privacidade
 ---
 
@@ -9,7 +9,7 @@ slug: /privacidade
 
 Tusab keeps the knowledge base **on the user's computer**. CriAugu runs no server that receives Tusab content, conversations, bases or usage data.
 
-This page describes technically what stays on the computer and what leaves it. The formal privacy policy (Brazil's LGPD, Law No. 13,709/2018, and the GDPR) is published at [tusab.solutions](https://tusab.solutions).
+This page describes technically what stays on the computer and what leaves it. The formal policy (Brazil's LGPD, Law No. 13,709/2018, and the GDPR) is the [Privacy Policy](/politica-de-privacidade).
 
 ## What stays only on the computer
 
@@ -50,11 +50,11 @@ What the AI tool does with the excerpts it receives (storage, use, server locati
 | Correction | Edit the files or use the screen |
 | Deletion | Screen (delete, clear, full reset) or the file system; deleting a document also deletes its original |
 | Portability | Open formats (`.txt`, `.json`, `.csv`) and `.tusab` (zip) |
-| Stopping processing | Remove the extension from the AI tool; nothing runs while it's closed |
+| Stopping processing | Remove Tusab from the AI tool; nothing runs while it's closed |
 
 Contact: **tusab@tusab.solutions**
 
-## Desktop app
+## Desktop app {#app-desktop}
 
 In the [desktop app](/desktop/visao-geral), discontinued on 2026-11-19 (this applies to 1.0.x versions still installed), in addition to the above:
 

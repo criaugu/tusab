@@ -11,14 +11,15 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Tusab',
-  tagline: 'Extensão MCP local: base de conhecimento no computador do usuário, consultada pela IA com citação da fonte.',
+  tagline:
+    'Caderno de estudo e pesquisa para o Claude e outras IAs. Conector local (MCP): as fontes ficam no seu computador, e a IA recebe só os trechos certos, com citação.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://criaugu.github.io',
+  url: 'https://tusab.solutions',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/tusab/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   organizationName: 'criaugu', // GitHub org/user name.
@@ -77,9 +78,15 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
+            sidebarId: 'guia',
             position: 'left',
-            label: 'Documentação',
+            label: 'Guia',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'tecnico',
+            position: 'left',
+            label: 'Para desenvolvedores',
           },
           {
             type: 'localeDropdown',
@@ -101,13 +108,31 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Documentação',
+            title: 'Guia',
             items: [
-              {label: 'Introdução', to: '/intro'},
+              {label: 'O que é o Tusab', to: '/intro'},
               {label: 'Instalação', to: '/instalacao'},
-              {label: 'Ferramentas MCP', to: '/ferramentas-mcp'},
-              {label: 'Arquitetura', to: '/arquitetura/visao-geral'},
+              {label: 'Outras IAs', to: '/outras-ias'},
+              {label: 'Primeiros passos', to: '/primeiros-passos'},
+              {label: 'Biblioteca de Prompts', to: '/biblioteca-de-prompts'},
+            ],
+          },
+          {
+            title: 'Confiança',
+            items: [
+              {label: 'Política de Privacidade', to: '/politica-de-privacidade'},
+              {label: 'Termos e Condições', to: '/termos-e-condicoes'},
               {label: 'Segurança', to: '/seguranca'},
+              {label: 'Acessibilidade', to: '/acessibilidade'},
+              {label: 'Ferramentas MCP', to: '/ferramentas-mcp'},
+            ],
+          },
+          {
+            title: 'Contato',
+            items: [
+              {label: 'tusab@tusab.solutions', href: 'mailto:tusab@tusab.solutions'},
+              {label: 'WhatsApp', href: 'https://wa.me/5561992684947?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20o%20Tusab.'},
+              {label: 'LinkedIn', href: 'https://www.linkedin.com/in/augustoalvesbrasil/'},
             ],
           },
           {
@@ -117,7 +142,7 @@ const config = {
               {label: 'Changelog completo', href: 'https://github.com/criaugu/tusab/blob/main/CHANGELOG.md'},
               {label: 'Issues', href: 'https://github.com/criaugu/tusab/issues'},
               {label: 'Licença (Elastic License 2.0)', href: 'https://github.com/criaugu/tusab/blob/main/LICENSE'},
-              {label: 'Releases (app desktop)', href: 'https://github.com/criaugu/tusab/releases/latest'},
+              {label: 'Releases', href: 'https://github.com/criaugu/tusab/releases'},
             ],
           },
         ],

@@ -7,13 +7,15 @@ slug: /changelog
 
 # Changelog
 
-Resumo técnico das versões. A partir da 2.0.0 o Tusab é só a extensão de IA; a numeração continua a do produto (o app desktop parou na 1.0.64). O histórico completo do desktop, no formato [Keep a Changelog](https://keepachangelog.com), está em [`CHANGELOG.md`](https://github.com/criaugu/tusab/blob/main/CHANGELOG.md).
+Resumo técnico das versões. A partir da 2.0.0 o Tusab é só o conector local (servidor MCP); a numeração continua a do produto (o app desktop parou na 1.0.64). O histórico completo do desktop, no formato [Keep a Changelog](https://keepachangelog.com), está em [`CHANGELOG.md`](https://github.com/criaugu/tusab/blob/main/CHANGELOG.md).
 
-## Extensão (`tusab-mcp/`)
+## Tusab (`tusab-mcp/`)
 
-**v2.0.0 (2026-11-19)** — O Tusab passa a ser só a extensão de IA; o app desktop é descontinuado.
+**v2.0.0 (2026-11-19)** — O Tusab passa a ser só o conector local para o Claude e outras IAs; o app desktop é descontinuado.
 
-- Primeira versão da extensão publicada nas [releases](https://github.com/criaugu/tusab/releases) como `tusab-2.0.0.mcpb`, com soma SHA-256 ao lado. A release é gerada pelo GitHub Actions a partir da etiqueta: testes, tela compilada, avisos de licença e pacote.
+- Nome da categoria: o Tusab passa a se apresentar como **conector local** (antes, "extensão"), o nome que o Claude Desktop usa em **+ › Conectores**. Nada muda na instalação.
+- Site de documentação reorganizado em dois guias (Guia e Para desenvolvedores), com página inicial nova e as páginas [Usar em outras IAs](https://tusab.solutions/outras-ias), [Primeiros passos](https://tusab.solutions/primeiros-passos) (com os cuidados) e [Para quem é](https://tusab.solutions/perfis-e-jornadas).
+- Primeira versão do conector local publicada nas [releases](https://github.com/criaugu/tusab/releases) como `tusab-2.0.0.mcpb`, com soma SHA-256 ao lado. A release é gerada pelo GitHub Actions a partir da etiqueta: testes, tela compilada, avisos de licença e pacote.
 - Ícone quadrado no pacote (versões para tema claro e escuro), feito a partir do logo.
 - Aba **Materiais**: o que a IA guarda no Tusab abre numa janela da tela (flashcards com revisão espaçada, resumos, post-its e documentos). Novo tipo `documento` em `tusab_salvar_estudo` (Markdown, até 60.000 caracteres), e os prompts que produzem documentos (quiz, mapa mental, plano de aula, prova, nota técnica…) pedem para guardá-los.
 - Conexão com a IA: todo prompt começa com uma checagem (sem as ferramentas do Tusab, a IA avisa em vez de responder de memória), e o aviso de "copiado" mostra se o Tusab está conectado e confirma quando a IA consultou a base (`GET /api/conexao`).

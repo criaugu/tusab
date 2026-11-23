@@ -1197,7 +1197,7 @@
   "estudo.label_qty": "Number of cards:",
   "estudo.generating": "Generating…",
   "estudo.generate_btn_extensao": "Build a request for your AI",
-  "estudo.pedido_ia_titulo": "In the extension, your AI does the generating. Paste this request into its chat:",
+  "estudo.pedido_ia_titulo": "In Tusab, your AI does the generating. Paste this request into its chat:",
   "estudo.pedido_ia_dica": "It searches the base, creates the material and saves it to Tusab. The result shows up here on its own.",
   "estudo.pedido_ia_copiar": "Copy request",
   "estudo.pedido_ia_copiado": "Copied ✓",
