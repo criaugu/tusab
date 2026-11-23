@@ -30,7 +30,7 @@ The screen link carries the key in the URL (`?chave=`) and must not be shared; i
 
 - Every tool that returns content from the base includes the notice that **the text is data from the sources, not instructions**.
 - The MCP server instructions ask the AI never to follow orders that appear inside the excerpts.
-- These measures reduce the risk, but don't isolate: no model treats delimiters or notices as a guaranteed barrier. The structural protection is that Tusab **puts no secrets in what it hands to the AI** (the extension stores no API keys or tokens).
+- These measures reduce the risk, but don't isolate: no model treats delimiters or notices as a guaranteed barrier. The structural protection is that Tusab **puts no secrets in what it hands to the AI** (it stores no API keys or tokens).
 - Tools that change the base or access the internet are marked as such (`readOnlyHint: false`, `openWorldHint: true`), and the instructions ask the AI to add content only when the user asks.
 
 ## Files and paths

@@ -33,8 +33,8 @@ tusab-mcp  (Node process on the user's computer)
 
 - **Start:** the AI tool runs `node src/index.js`. Before any module loads, `console.log`, `console.info` and `console.debug` are redirected to stderr, because stdout is reserved for the MCP protocol.
 - **Screen:** the HTTP server only starts when requested (tool `tusab_abrir_painel`, prompt `abrir_tusab` or the automatic opening on the first run in a folder).
-- **End:** when the AI tool closes, the process's stdin ends; the plugin closes the panel and exits. The screen stops working with it.
-- **Automatic channel updates:** with the plugin open, the check for new videos runs a few seconds after startup and then every hour (only for channels with the option on).
+- **End:** when the AI tool closes, the process's stdin ends; Tusab closes the panel and exits. The screen stops working with it.
+- **Automatic channel updates:** with Tusab running, the check for new videos runs a few seconds after startup and then every hour (only for channels with the option on).
 
 ## Search index
 
@@ -69,7 +69,7 @@ The root is the folder chosen at installation (`TUSAB_REPOSITORIO` variable; equ
     auto_update.json                       last channel check
     boas_vindas.json                       first-opening marker
   temp/                                    temporary subtitles
-  bin/                                     yt-dlp downloaded by the plugin
+  bin/                                     yt-dlp downloaded by Tusab
   tusab.sqlite                             search index
 ```
 
@@ -82,7 +82,7 @@ The file formats (`.txt` blocks, CSV columns and statuses, manifests, flashcards
 | `src/index.js` | Entry point; protects stdout and starts the server |
 | `src/servidor.js` | MCP server over stdio: tools, prompts, instructions for the AI |
 | `src/painel.js` | Local HTTP server for the screen, with the security protections |
-| `src/api.js` | `/api/*` routes with the same contracts as the desktop API; features that don't exist in the extension answer neutrally |
+| `src/api.js` | `/api/*` routes with the same contracts as the desktop API; desktop features that don't exist here answer neutrally |
 | `src/cli.js` | Command line with the same engine (without the AI) |
 | `src/nucleo/motor.js`, `ytdlp.js`, `legendas.js` | YouTube extraction (port of the Python engine) |
 | `src/nucleo/indice.js` | SQLite FTS5 index |
@@ -101,7 +101,7 @@ The file formats (`.txt` blocks, CSV columns and statuses, manifests, flashcards
 
 ## The screen (`web_interface/`)
 
-The screen is the React 19 + Vite + Tailwind CSS 3 + Framer Motion + Lucide React + react-i18next interface from `web_interface/`, built in extension mode:
+The screen is the React 19 + Vite + Tailwind CSS 3 + Framer Motion + Lucide React + react-i18next interface from `web_interface/`, built in Vite's `extensao` mode:
 
 | Item | Detail |
 |---|---|

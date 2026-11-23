@@ -6,7 +6,7 @@ Esta lista cobre as dependências diretas. O pacote `.mcpb` leva o texto
 completo de todas as licenças, incluindo as dependências transitivas, em
 `THIRD_PARTY_NOTICES.txt` (gerado por `tusab-mcp/scripts/gerar-licencas.mjs`).
 
-## Extensão (`tusab-mcp/`)
+## Servidor MCP (`tusab-mcp/`)
 
 | Biblioteca | Licença | Uso no Tusab |
 |---|---|---|

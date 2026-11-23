@@ -43,16 +43,26 @@ Pedidos da IA e da tela passam pelo mesmo motor: o que a IA pede aparece na tela
 
 ## Atualização automática de canais
 
-Cada canal pode ter a atualização automática ligada na tela (configuração em `management/{canal}_summary.json`). Com o plugin aberto, a verificação roda alguns segundos depois do início e depois a cada hora: lista os vídeos das abas com o yt-dlp (só metadados, `--flat-playlist`) e compara com o CSV. Havendo vídeo novo, o canal vai para o motor, ou para a fila se houver extração em andamento. Com a ferramenta de IA fechada, nada roda.
+Cada canal pode ter a atualização automática ligada na tela (configuração em `management/{canal}_summary.json`). Com o Tusab em execução, a verificação roda alguns segundos depois do início e depois a cada hora: lista os vídeos das abas com o yt-dlp (só metadados, `--flat-playlist`) e compara com o CSV. Havendo vídeo novo, o canal vai para o motor, ou para a fila se houver extração em andamento. Com a ferramenta de IA fechada, nada roda.
 
 ## Página web avulsa
 
 No Repositório, uma URL de página é lida e o conteúdo principal vira um texto do projeto. O Tusab consulta o `robots.txt` do site (User-Agent `TusabBot/1.0`) e não insiste se a página não permitir acesso automatizado. Não executa JavaScript: só páginas estáticas.
 
+## yt-dlp
+
+O Tusab procura o yt-dlp nesta ordem:
+
+1. a variável de ambiente `TUSAB_YTDLP` (caminho de um yt-dlp à escolha);
+2. a cópia em `data/bin/`;
+3. o `yt-dlp` do PATH do sistema.
+
+Se não achar nenhum, baixa o binário oficial de [github.com/yt-dlp/yt-dlp/releases/latest](https://github.com/yt-dlp/yt-dlp/releases/latest) para `data/bin/` e confere a soma SHA-256 com a publicada pelo projeto (arquivo `SHA2-256SUMS`). Se a soma não conferir, o download é descartado.
+
 ## Segurança da extração
 
 - URL do canal e ID de playlist validados por expressão regular antes de compor o comando.
 - O yt-dlp é executado com lista de argumentos, nunca por shell.
-- O binário do yt-dlp, quando baixado pelo plugin, tem a soma SHA-256 conferida com a publicada pelo projeto.
+- O binário do yt-dlp, quando baixado pelo Tusab, tem a soma SHA-256 conferida com a publicada pelo projeto; se não conferir, é descartado (ver [yt-dlp](#yt-dlp)).
 
 Ver [Segurança](/seguranca).

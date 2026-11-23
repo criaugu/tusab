@@ -11,7 +11,7 @@ slug: /desenvolvimento/setup
 
 - Node.js 18.17 ou mais novo (o mesmo mínimo declarado no `manifest.json`).
 - Git.
-- yt-dlp é opcional: sem ele, o plugin baixa o oficial na primeira extração.
+- yt-dlp é opcional: sem ele, o Tusab baixa o oficial na primeira extração (ver [Extração do YouTube](/funcionalidades/extracao-youtube#yt-dlp)).
 
 ## Clonar e instalar
 
@@ -24,7 +24,7 @@ cd web_interface
 npm install
 cd ..
 
-# Plugin
+# Servidor MCP
 cd tusab-mcp
 npm install
 npm run build:interface     # gera tusab-mcp/interface/ (vite build --mode extensao)
@@ -32,7 +32,7 @@ npm run build:interface     # gera tusab-mcp/interface/ (vite build --mode exten
 
 ## Rodar sem ferramenta de IA
 
-A linha de comando usa o mesmo motor do plugin. Defina antes a pasta de teste:
+A linha de comando usa o mesmo motor do servidor MCP. Defina antes a pasta de teste:
 
 ```powershell
 cd tusab-mcp
@@ -53,21 +53,21 @@ node src/cli.js medir-tokens perguntas.txt Projeto [saida.csv]     # teste de ec
 npm start        # = node src/index.js, servidor MCP por stdio
 ```
 
-Para usar numa ferramenta de IA durante o desenvolvimento, aponte a configuração MCP dela para `node <caminho>/tusab-mcp/src/index.js` com `TUSAB_REPOSITORIO` (ver [Instalação](/instalacao#outras-ferramentas-de-ia-claude-code-vs-code-cursor-gemini-cli-codex)).
+Para usar numa ferramenta de IA durante o desenvolvimento, aponte a configuração MCP dela para `node <caminho>/tusab-mcp/src/index.js` com `TUSAB_REPOSITORIO` (ver [Outras ferramentas de IA](/outras-ias)).
 
 ## Variáveis de ambiente
 
 | Variável | Descrição |
 |---|---|
 | `TUSAB_REPOSITORIO` | Pasta do repositório (raiz que contém `data/`). Padrão: `~/Tusab` |
-| `TUSAB_YTDLP` | yt-dlp a usar. `test/ytdlp-falso.mjs` troca o yt-dlp por um simulado (3 vídeos, um sem legenda), sem rede |
+| `TUSAB_YTDLP` | Caminho de um yt-dlp a usar no lugar do baixado. Nos testes, `test/ytdlp-falso.mjs` troca o yt-dlp por um simulado (3 vídeos, um sem legenda), sem rede |
 | `YTDLP_FALSO_ATRASO` | Com o yt-dlp simulado, atraso em milissegundos (ex.: `800`) para ver o progresso na tela |
-| `TUSAB_IDIOMA` | Idioma inicial (`pt`, `en`, `es`) |
+| `TUSAB_IDIOMA` | Idioma inicial (`pt`, `en`, `es`), usado antes de a tela definir um |
 | `TUSAB_SEM_BOAS_VINDAS` | `1` desliga a abertura automática da tela na primeira execução numa pasta |
 
-## Interface em modo extensão
+## Interface no modo `extensao`
 
-A tela é `web_interface/` compilada com `vite build --mode extensao`, que lê `web_interface/.env.extensao` (`VITE_TUSAB_MODO=extensao`). Em `web_interface/src/constants/index.js`, `MODO_EXTENSAO` passa a ser verdadeiro e `API_BASE` vira `/api`. Componentes que mudam no modo extensão testam `MODO_EXTENSAO`. Depois de mudar a interface, rode de novo `npm run build:interface` em `tusab-mcp/`.
+A tela é `web_interface/` compilada com `vite build --mode extensao`, que lê `web_interface/.env.extensao` (`VITE_TUSAB_MODO=extensao`). Em `web_interface/src/constants/index.js`, `MODO_EXTENSAO` passa a ser verdadeiro e `API_BASE` vira `/api`. Componentes que mudam nesse modo testam `MODO_EXTENSAO`. Depois de mudar a interface, rode de novo `npm run build:interface` em `tusab-mcp/`.
 
 Sem a interface compilada, o painel responde com uma página que pede para rodar `npm run build:interface`.
 

@@ -1,8 +1,8 @@
-# Tusab — extensão para ferramentas de IA (plugin MCP)
+# Tusab — conector local (servidor MCP) para o Claude e outras IAs
 
-> "Desktop", neste arquivo, é o antigo app Tusab (Electron + Python), descontinuado em 19/11/2026; o código dele está na etiqueta `desktop-final`. A extensão manteve o formato em disco dele, por isso as bases antigas abrem aqui.
+> "Desktop", neste arquivo, é o antigo app Tusab (Electron + Python), descontinuado em 19/11/2026; o código dele está na etiqueta `desktop-final`. O conector local manteve o formato em disco dele, por isso as bases antigas abrem aqui.
 
-O Tusab dentro da IA que o usuário já usa (Claude Desktop, Claude Code, VS Code, Cursor…). O plugin:
+O Tusab dentro da IA que o usuário já usa (Claude Desktop, Claude Code, VS Code, Cursor…). O servidor:
 
 - **serve a interface do Tusab desktop** no navegador, em `http://127.0.0.1:<porta>`, com o mesmo design,
   extração, repositório, relatórios e visão geral. O build vem de `../web_interface` em modo extensão;
@@ -88,7 +88,7 @@ npm run pack                  # build da interface + ../tusab.mcpb
 - **Claude Code, VS Code e Cursor (stdio):**
   `{ "command": "node", "args": ["<caminho>/tusab-mcp/src/index.js"], "env": { "TUSAB_REPOSITORIO": "<pasta>" } }`
 
-## O que a extensão tem (v2.0.0)
+## O que o conector local tem (v2.0.0)
 
 - **Extração do YouTube:** canal, playlist ou vídeo, com fila, pausa e atualização automática de canais (`src/nucleo/motor.js`, `atualizacao.js`).
 - **Documentos:** PDF, Word, Excel, CSV, TXT/Markdown, FHIR e página web (respeita o robots.txt). Também reconhece WhatsApp, reuniões e documentos jurídicos (`documentos.js`, `repositorio.js`).
@@ -102,4 +102,4 @@ npm run pack                  # build da interface + ../tusab.mcpb
 - **Biblioteca de Prompts:** busca, "Meus prompts" em pastas (renomear ou desfazer pasta), aviso de "copiado" com atalho para o app do Claude ou para a IA no navegador, e a janela "Economia de tokens" com o teste em 3 passos.
 - **Memória de estudo:** a IA gera; o Tusab guarda os flashcards e faz a revisão espaçada (SM-2 igual ao desktop) (`estudo.js`).
 
-**Fora da extensão:** chat, geração de cards/quizzes, configuração de LLM, Ollama, Drive e telemetria. A conversa é na IA do usuário.
+**Fora do Tusab:** chat, geração de cards/quizzes, configuração de LLM, Ollama, Drive e telemetria. A conversa é na IA do usuário.

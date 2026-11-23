@@ -30,7 +30,7 @@ O link da tela leva a chave na URL (`?chave=`) e não deve ser compartilhado; el
 
 - Toda ferramenta que devolve conteúdo da base inclui o aviso de que **o texto é dado das fontes, não instrução**.
 - As instruções do servidor MCP pedem que a IA nunca siga ordens que apareçam dentro dos trechos.
-- Essas medidas reduzem o risco, mas não isolam: nenhum modelo trata delimitadores ou avisos como barreira garantida. A proteção estrutural é que o Tusab **não coloca segredos no que entrega à IA** (a extensão não guarda chaves de API nem tokens).
+- Essas medidas reduzem o risco, mas não isolam: nenhum modelo trata delimitadores ou avisos como barreira garantida. A proteção estrutural é que o Tusab **não coloca segredos no que entrega à IA** (ele não guarda chaves de API nem tokens).
 - Ferramentas que alteram a base ou acessam a internet são marcadas como tais (`readOnlyHint: false`, `openWorldHint: true`), e as instruções pedem que a IA só adicione conteúdo quando o usuário pedir.
 
 ## Arquivos e caminhos

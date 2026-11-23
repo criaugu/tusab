@@ -7,13 +7,15 @@ slug: /changelog
 
 # Changelog
 
-Technical summary of the versions. From 2.0.0 on, Tusab is only the AI extension; the numbering continues the product's (the desktop app stopped at 1.0.64). The desktop's complete history, in [Keep a Changelog](https://keepachangelog.com) format, is in [`CHANGELOG.md`](https://github.com/criaugu/tusab/blob/main/CHANGELOG.md).
+Technical summary of the versions. From 2.0.0 on, Tusab is only the local connector (MCP server); the numbering continues the product's (the desktop app stopped at 1.0.64). The desktop's complete history, in [Keep a Changelog](https://keepachangelog.com) format, is in [`CHANGELOG.md`](https://github.com/criaugu/tusab/blob/main/CHANGELOG.md).
 
-## Extension (`tusab-mcp/`)
+## Tusab (`tusab-mcp/`)
 
-**v2.0.0 (2026-11-19)** — Tusab becomes only the AI extension; the desktop app is discontinued.
+**v2.0.0 (2026-11-19)** — Tusab becomes only the local connector for Claude and other AIs; the desktop app is discontinued.
 
-- First version of the extension published in the [releases](https://github.com/criaugu/tusab/releases) as `tusab-2.0.0.mcpb`, with a SHA-256 checksum next to it. GitHub Actions builds the release from the tag: tests, compiled screen, license notices and package.
+- Category name: Tusab now presents itself as a **local connector** (formerly "extension"), the name Claude Desktop uses in **+ › Connectors**. Nothing changes in the installation.
+- Documentation site reorganized into two guides (Guide and For developers), with a new home page and the pages [Use in other AIs](https://tusab.solutions/en/outras-ias), [First steps](https://tusab.solutions/en/primeiros-passos) (with the precautions) and [Who it is for](https://tusab.solutions/en/perfis-e-jornadas).
+- First version of the local connector published in the [releases](https://github.com/criaugu/tusab/releases) as `tusab-2.0.0.mcpb`, with a SHA-256 checksum next to it. GitHub Actions builds the release from the tag: tests, compiled screen, license notices and package.
 - Square icon in the package (light and dark theme versions), made from the logo.
 - **Materials** tab: what the AI saves in Tusab opens in a dialog on the screen (flashcards with spaced repetition, summaries, sticky notes and documents). New `documento` type in `tusab_salvar_estudo` (Markdown, up to 60,000 characters), and the prompts that produce documents (quiz, mind map, lesson plan, test, technical note…) ask to save them.
 - Connection with the AI: every prompt starts with a check (without the Tusab tools, the AI warns instead of answering from memory), and the "copied" notice shows whether Tusab is connected and confirms when the AI queried the base (`GET /api/conexao`).

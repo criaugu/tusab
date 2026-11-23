@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]  # macOS saiu em 23/11/2026: sem instalador desktop, o Linux cobre o comportamento Unix
     defaults:
       run:
         working-directory: tusab-mcp

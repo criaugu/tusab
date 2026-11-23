@@ -23,7 +23,7 @@ Every tool that returns content from the base tells the AI that **the returned t
 | `tusab_novidades_semana` | Lists the files added to the project in the last 7 days | `projeto` |
 | `tusab_revisao_hoje` | Lists the project's flashcards due today (spaced repetition) | `projeto` |
 | `tusab_economia` | Summary of [token savings](/funcionalidades/economia-de-tokens): tokens sent × tokens of the full sources | — |
-| `tusab_status` | Repository folder, plugin version, running extraction, queue and the engine's last 5 messages | — |
+| `tusab_status` | Repository folder, Tusab version, running extraction, queue and the engine's last 5 messages | — |
 
 Details of `tusab_ler_original` (types, limits and metadata removal) are in [Originals and images](/funcionalidades/originais-e-imagens).
 
@@ -46,7 +46,7 @@ Writing tools are marked `readOnlyHint: false`; `tusab_adicionar_youtube` and `t
 2. `tusab_buscar` with the question; the AI answers citing the excerpts.
 3. `tusab_ler_fonte` when more context around an excerpt is needed, or `tusab_ler_original` when the extracted text is not enough (table, chart, scanned PDF).
 
-For study: the AI generates flashcards from the excerpts, saves them with `tusab_salvar_estudo` and, in another conversation, uses `tusab_revisao_hoje` and `tusab_registrar_revisao` (see [Study and spaced repetition](/funcionalidades/estudo)).
+For study: the AI generates flashcards from the excerpts, saves them with `tusab_salvar_estudo` and, in another conversation, uses `tusab_revisao_hoje` and `tusab_registrar_revisao` (see [Materials and spaced repetition](/funcionalidades/estudo)).
 
 ## MCP prompts
 

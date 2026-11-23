@@ -114,7 +114,7 @@ jobs:
             echo
             echo "## Instalar"
             echo
-            echo "Baixe \`tusab-$V.mcpb\` abaixo e abra o arquivo com o Claude Desktop instalado. Passo a passo: https://criaugu.github.io/tusab/instalacao"
+            echo "Baixe \`tusab-$V.mcpb\` abaixo e abra o arquivo com o Claude Desktop instalado. Passo a passo: https://tusab.solutions/instalacao"
             echo
             echo "SHA-256 (\`tusab-$V.mcpb\`): \`$(cut -d' ' -f1 "tusab-$V.mcpb.sha256")\`"
           } >> notas.md
