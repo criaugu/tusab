@@ -33,8 +33,8 @@ tusab-mcp  (processo Node no computador do usuário)
 
 - **Início:** a ferramenta de IA executa `node src/index.js`. Antes de carregar qualquer módulo, `console.log`, `console.info` e `console.debug` passam a escrever no stderr, porque o stdout é exclusivo do protocolo MCP.
 - **Tela:** o servidor HTTP só sobe quando é pedido (ferramenta `tusab_abrir_painel`, prompt `abrir_tusab` ou a abertura automática da primeira vez numa pasta).
-- **Fim:** quando a ferramenta de IA fecha, o stdin do processo termina; o plugin fecha o painel e encerra. A tela deixa de funcionar junto.
-- **Atualização automática de canais:** com o plugin aberto, a verificação de vídeos novos roda alguns segundos depois do início e depois a cada hora (só para canais com a opção ligada).
+- **Fim:** quando a ferramenta de IA fecha, o stdin do processo termina; o Tusab fecha o painel e encerra. A tela deixa de funcionar junto.
+- **Atualização automática de canais:** com o Tusab em execução, a verificação de vídeos novos roda alguns segundos depois do início e depois a cada hora (só para canais com a opção ligada).
 
 ## Índice de busca
 
@@ -69,7 +69,7 @@ A raiz é a pasta escolhida na instalação (variável `TUSAB_REPOSITORIO`; equi
     auto_update.json                       última verificação de canais
     boas_vindas.json                       marca da primeira abertura
   temp/                                    legendas temporárias
-  bin/                                     yt-dlp baixado pelo plugin
+  bin/                                     yt-dlp baixado pelo Tusab
   tusab.sqlite                             índice de busca
 ```
 
@@ -82,7 +82,7 @@ O formato dos arquivos (blocos dos `.txt`, colunas e status do CSV, manifestos, 
 | `src/index.js` | Ponto de entrada; protege o stdout e inicia o servidor |
 | `src/servidor.js` | Servidor MCP por stdio: ferramentas, prompts, instruções para a IA |
 | `src/painel.js` | Servidor HTTP local da tela, com as proteções de segurança |
-| `src/api.js` | Rotas `/api/*` com os mesmos contratos da API do desktop; recursos que não existem na extensão respondem de forma neutra |
+| `src/api.js` | Rotas `/api/*` com os mesmos contratos da API do desktop; recursos do desktop que não existem aqui respondem de forma neutra |
 | `src/cli.js` | Linha de comando com o mesmo motor (sem a IA) |
 | `src/nucleo/motor.js`, `ytdlp.js`, `legendas.js` | Extração do YouTube (porte do motor Python) |
 | `src/nucleo/indice.js` | Índice SQLite FTS5 |
@@ -101,7 +101,7 @@ O formato dos arquivos (blocos dos `.txt`, colunas e status do CSV, manifestos, 
 
 ## A tela (`web_interface/`)
 
-A tela é a interface React 19 + Vite + Tailwind CSS 3 + Framer Motion + Lucide React + react-i18next de `web_interface/`, compilada em modo extensão:
+A tela é a interface React 19 + Vite + Tailwind CSS 3 + Framer Motion + Lucide React + react-i18next de `web_interface/`, compilada no modo `extensao` do Vite:
 
 | Item | Detalhe |
 |---|---|

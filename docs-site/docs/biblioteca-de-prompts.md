@@ -27,7 +27,7 @@ Uma única lista (`tusab-mcp/src/nucleo/prompts.js`) alimenta dois lugares:
 
 Quantidades padrão: 8 no quiz, 7 dias no plano de estudo, 10 na prova e nas citações, 9 nos exercícios. O valor informado fica entre 1 e 50. O tema é cortado em 200 caracteres e o nome do projeto em 120.
 
-Além deles, o atalho `abrir_tusab` ("Abrir o Tusab") abre a tela. No "+" do Claude aparecem, portanto, **22 atalhos**.
+Além deles, o atalho `abrir_tusab` ("Abrir o Tusab") abre a tela. Somados às 20 técnicas da seção seguinte, o "+" do Claude mostra, portanto, **42 atalhos**: 21 prompts prontos, 20 técnicas e o de abrir a tela.
 
 ## Técnicas com evidência (20 prompts)
 
@@ -58,16 +58,16 @@ Desde a 2.0.0, a Biblioteca tem 20 prompts baseados em técnicas de aprendizagem
 
 ## Filtros e modelo sugerido
 
-- **Para quê:** as abas da Biblioteca filtram por público — Estudar, Ensinar, Pesquisar e Trabalho e decisões (campo `publicos`; um prompt pode estar em mais de uma) — além de Todos e Meus prompts. A extensão tem **perfil único** (o de acesso completo): a separação que antes era feita por perfil virou filtro.
+- **Para quê:** as abas da Biblioteca filtram por público — Estudar, Ensinar, Pesquisar e Trabalho e decisões (campo `publicos`; um prompt pode estar em mais de uma) — além de Todos e Meus prompts. O Tusab tem **perfil único** (o de acesso completo): a separação que antes era feita por perfil virou filtro.
 - **Modelo sugerido:** cada prompt tem um nível (campo `nivel`), mostrado como selo com ícone e texto: **Rápido · Haiku** (`leve`), **Intermediário · Sonnet** (`equilibrado`) e **Mais capaz · Opus** (`avancado`). É uma sugestão de custo-benefício pela natureza da tarefa (pontos centrais × várias fontes e raciocínio longo); quem escolhe o modelo é o usuário, na própria ferramenta de IA.
 
-## IA no navegador
+## IA no navegador {#ia-no-navegador}
 
 Uma IA no navegador (Claude.ai, ChatGPT, Gemini) não alcança o servidor local do Tusab. No aviso de "copiado", **Abrir no navegador** copia o pedido de novo na versão para o navegador (`POST /api/prompts/montar` com `navegador: true`): o pedido vai com até 12 trechos da base dentro (os da busca pelo tema; sem tema, ou com poucos resultados, um panorama com os primeiros trechos de cada fonte), até 1.500 caracteres por trecho e 24.000 no total, e com regras para usar só esses trechos e citá-los como [n]. Prompts que dependem das ferramentas (Revisar hoje, Digest da semana) não têm essa versão.
 
-## Regras fixas acrescentadas pelo plugin
+## Regras fixas acrescentadas pelo Tusab
 
-Ao montar o texto final, o plugin acrescenta ao pedido as regras de busca e citação, no idioma da tela:
+Ao montar o texto final, o Tusab acrescenta ao pedido as regras de busca e citação, no idioma da tela:
 
 > Pesquise a base do Tusab no projeto "\{projeto\}" com tusab_buscar (e tusab_ler_fonte quando precisar de contexto). Use só o que estiver nos trechos; se faltar informação, diga o que faltou. Cite cada afirmação com o título da fonte e, em vídeo, o minuto com o link (▶ MM:SS); em PDF, a página indicada no trecho ([Página N]) — se o trecho não indicar a página, não invente.
 
@@ -91,6 +91,6 @@ O usuário cria prompts próprios na tela, do zero ou com "Duplicar e editar" a 
 
 - Busca por nome, descrição, texto ou pasta, sem diferença de acento.
 - Cada cartão tem **Copiar** e **Ajustar** (prévia editável). Se o navegador negar a cópia automática, a prévia abre para copiar à mão.
-- **Aviso de copiado:** depois de copiar, um aviso oferece abrir o app do Claude (endereço `claude://`) ou uma IA no navegador (Claude.ai, ChatGPT ou Gemini; a escolha fica lembrada no navegador). O aviso lembra que, no navegador, a IA não acessa o Tusab deste computador: o pedido copiado funciona como texto, mas as ferramentas MCP só existem na ferramenta de IA onde a extensão está instalada.
+- **Aviso de copiado:** depois de copiar, um aviso oferece abrir o app do Claude (endereço `claude://`) ou uma IA no navegador (Claude.ai, ChatGPT ou Gemini; a escolha fica lembrada no navegador). O aviso lembra que, no navegador, a IA não acessa o Tusab deste computador: o pedido copiado funciona como texto, mas as ferramentas MCP só existem na ferramenta de IA onde o Tusab está instalado.
 - No Repositório, o botão **Pedir à IA** de cada projeto copia pedidos frequentes já preenchidos com o projeto, ou abre a Biblioteca nesse projeto.
 - O botão **Economia de tokens** da Biblioteca abre a janela descrita em [Economia de tokens](/funcionalidades/economia-de-tokens).

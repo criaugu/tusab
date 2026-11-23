@@ -12,7 +12,7 @@ O Tusab mede quanto a IA recebeu do Tusab (só os trechos) em comparação com o
 ## Como a estimativa é feita
 
 - **Estimativa local de ~4 caracteres por token** (`CARACTERES_POR_TOKEN = 4`). A contagem exata exigiria enviar o texto ao serviço da IA, o que o Tusab não faz. O número real varia com o modelo e o idioma.
-- A cada chamada de `tusab_buscar`, `tusab_ler_fonte` e `tusab_ler_original` (páginas de PDF), o plugin soma:
+- A cada chamada de `tusab_buscar`, `tusab_ler_fonte` e `tusab_ler_original` (páginas de PDF), o Tusab soma:
   - **enviados:** tokens estimados da resposta que a ferramenta devolveu;
   - **sem o Tusab:** tokens estimados do texto completo das fontes de onde vieram os trechos.
 

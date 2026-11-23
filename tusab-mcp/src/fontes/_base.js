@@ -40,7 +40,7 @@ export const HEADERS_NAVEGADOR = {
 
 // Onde o Python não mandava cabeçalho (o requests usava "python-requests/x"),
 // a extensão se identifica de forma genérica — nunca com dado do usuário.
-export const USER_AGENT_PADRAO = 'Tusab/0.2 (+https://criaugu.github.io/tusab/)';
+export const USER_AGENT_PADRAO = 'Tusab/0.2 (+https://tusab.solutions/)';
 
 /** max(1, min(int(n), MAX_RESULTADOS_PERMITIDO)) */
 export function limitarMax(n) {

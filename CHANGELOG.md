@@ -1,7 +1,7 @@
 ﻿# Changelog — Tusab
 © 2026 CriAugu — CNPJ 65.131.075/0001-57
 
-> **App desktop descontinuado em 19/11/2026.** Este arquivo é o histórico do desktop (1.0.x) e não recebe mais entradas. O código está na etiqueta `desktop-final`. As versões da extensão de IA (2.0.0 em diante) estão em [docs-site/docs/changelog.md](docs-site/docs/changelog.md) e em https://criaugu.github.io/tusab/changelog.
+> **App desktop descontinuado em 19/11/2026.** Este arquivo é o histórico do desktop (1.0.x) e não recebe mais entradas. O código está na etiqueta `desktop-final`. As versões da extensão de IA (2.0.0 em diante) estão em [docs-site/docs/changelog.md](docs-site/docs/changelog.md) e em https://tusab.solutions/changelog.
 
 Todas as mudanças relevantes do projeto são documentadas aqui.
 Formato baseado em [Keep a Changelog](https://keepachangelog.com).

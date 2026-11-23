@@ -1,23 +1,11 @@
 {
-  "link.title.Documentação": {
-    "message": "Documentation",
-    "description": "The title of the footer links column with title=Documentação in the footer"
-  },
   "link.title.Projeto": {
     "message": "Project",
     "description": "The title of the footer links column with title=Projeto in the footer"
   },
-  "link.item.label.Introdução": {
-    "message": "Introduction",
-    "description": "The label of footer link with label=Introdução linking to /intro"
-  },
   "link.item.label.Instalação": {
     "message": "Installation",
     "description": "The label of footer link with label=Instalação linking to /instalacao"
-  },
-  "link.item.label.Arquitetura": {
-    "message": "Architecture",
-    "description": "The label of footer link with label=Arquitetura linking to /arquitetura/visao-geral"
   },
   "link.item.label.Segurança": {
     "message": "Security",
@@ -47,8 +35,60 @@
     "message": "MCP tools",
     "description": "The label of footer link with label=Ferramentas MCP linking to /ferramentas-mcp"
   },
-  "link.item.label.Releases (app desktop)": {
-    "message": "Releases (desktop app)",
-    "description": "The label of footer link with label=Releases (app desktop) linking to https://github.com/criaugu/tusab/releases/latest"
+  "link.title.Guia": {
+    "message": "Guide",
+    "description": "Footer label link.title.Guia"
+  },
+  "link.title.Confiança": {
+    "message": "Trust",
+    "description": "Footer label link.title.Confiança"
+  },
+  "link.item.label.O que é o Tusab": {
+    "message": "What Tusab is",
+    "description": "Footer label link.item.label.O que é o Tusab"
+  },
+  "link.item.label.Outras IAs": {
+    "message": "Other AIs",
+    "description": "Footer label link.item.label.Outras IAs"
+  },
+  "link.item.label.Primeiros passos": {
+    "message": "First steps",
+    "description": "Footer label link.item.label.Primeiros passos"
+  },
+  "link.item.label.Biblioteca de Prompts": {
+    "message": "Prompt Library",
+    "description": "Footer label link.item.label.Biblioteca de Prompts"
+  },
+  "link.item.label.Acessibilidade": {
+    "message": "Accessibility",
+    "description": "Footer label link.item.label.Acessibilidade"
+  },
+  "link.item.label.Releases": {
+    "message": "Releases",
+    "description": "Footer label link.item.label.Releases"
+  },
+  "link.title.Contato": {
+    "message": "Contact",
+    "description": "Footer label link.title.Contato"
+  },
+  "link.item.label.Política de Privacidade": {
+    "message": "Privacy Policy",
+    "description": "Footer label link.item.label.Política de Privacidade"
+  },
+  "link.item.label.Termos e Condições": {
+    "message": "Terms and Conditions",
+    "description": "Footer label link.item.label.Termos e Condições"
+  },
+  "link.item.label.WhatsApp": {
+    "message": "WhatsApp",
+    "description": "Footer label link.item.label.WhatsApp"
+  },
+  "link.item.label.LinkedIn": {
+    "message": "LinkedIn",
+    "description": "Footer label link.item.label.LinkedIn"
+  },
+  "link.item.label.tusab@tusab.solutions": {
+    "message": "tusab@tusab.solutions",
+    "description": "Footer label link.item.label.tusab@tusab.solutions"
   }
 }

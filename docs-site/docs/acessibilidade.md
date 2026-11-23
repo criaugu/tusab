@@ -32,26 +32,21 @@ A tela do Tusab (a interface React de `web_interface/`, a mesma que o app deskto
 
 ## Atalhos de teclado
 
-Na tela da extensão, os atalhos de chat, Assistente e Histórico não se aplicam (essas telas não existem nela), e `Shift + U` leva à Biblioteca de Prompts.
-
 | Tecla | Alternativa no macOS | Ação |
 |-------|----------------------|------|
-| `Shift + C` | `⌘ + C` | Abrir chat |
-| `Esc` | `Esc` | Fechar chat / colapsar chat expandido / voltar à Home |
-| `<` / `>` (com chat aberto) | `<` / `>` | Expandir / recolher chat lateral |
 | `Shift + B` | `⌘ + B` | Aba Repositório |
 | `Shift + E` | `⌘ + E` | Aba Extração |
-| `Shift + A` | `⌘ + A` | Aba Admin |
-| `Shift + I` | `⌘ + I` | Aba Assistente |
-| `Shift + M` | — | Aba Monitor |
+| `Shift + R` | — | Relatório (dentro de Extração) |
+| `Shift + U` | `⌘ + U` | Biblioteca de Prompts |
 | `Shift + V` | `⌘ + V` | Visão Geral |
-| `Shift + H` | — | Histórico |
-| `Shift + U` | `⌘ + U` | Aba Estudo |
-| `Shift + R` | — | Sub-aba Relatório (dentro de Extração) |
+| `Shift + M` | — | Monitor |
+| `Shift + A` | `⌘ + A` | Admin |
 
-Todos os atalhos com `Shift` são desativados automaticamente enquanto o foco está num campo de texto, para não interferir com a digitação — em qualquer sistema.
+Todos os atalhos com `Shift` são desativados automaticamente enquanto o foco está num campo de texto, para não interferir com a digitação, em qualquer sistema.
 
-No macOS, a maioria dos atalhos também aceita `⌘` (Cmd) como alternativa nativa — `Shift` continua funcionando igual, `⌘` é só uma opção a mais. **Três exceções ficam só em `Shift + tecla`, mesmo no Mac**: Monitor, Histórico e Relatório usam letras (`M`, `H`, `R`) que colidem com atalhos do próprio sistema operacional ou do navegador (no app desktop, do menu do Electron) (Minimizar, Ocultar app, Recarregar) — esses interceptam a tecla antes que o app consiga reconhecer o atalho, então usar `⌘` nesses três casos nunca funcionaria de forma confiável.
+No macOS, a maioria dos atalhos também aceita `⌘` (Cmd), além do `Shift`. **Monitor e Relatório ficam só com `Shift`**, mesmo no Mac: as letras `M` e `R` colidem com atalhos do sistema e do navegador (Minimizar, Recarregar), que pegam a tecla antes da tela.
+
+O app desktop, descontinuado, tinha atalhos a mais para o chat, o Assistente e o Histórico, que não existem na tela atual.
 
 ## Checklist WCAG 2.1 AA — resumo por princípio
 
@@ -72,6 +67,6 @@ No macOS, a maioria dos atalhos também aceita `⌘` (Cmd) como alternativa nati
 
 ### Escopo do pa11y-ci
 
-Hoje a auditoria automatizada cobre só a **tela de Landing** (temas claro e escuro), a primeira tela e a única alcançável sem estado prévio, o que a torna testável de forma determinística em CI. No CI, ela é servida pelo próprio plugin, como na extensão instalada (`node tusab-mcp/src/cli.js painel --sem-navegador`, com um repositório vazio). O restante (telas internas, modais, fluxos com dados) é coberto por revisão manual e por testes com leitor de tela, não por esse gate automatizado.
+Hoje a auditoria automatizada cobre só a **tela de Landing** (temas claro e escuro), a primeira tela e a única alcançável sem estado prévio, o que a torna testável de forma determinística em CI. No CI, ela é servida pelo próprio Tusab, como numa instalação de verdade (`node tusab-mcp/src/cli.js painel --sem-navegador`, com um repositório vazio). O restante (telas internas, modais, fluxos com dados) é coberto por revisão manual e por testes com leitor de tela, não por esse gate automatizado.
 
 A regra de contraste (`color-contrast`) é validada via **HTML_CodeSniffer**, não via axe-core, nesta configuração específica — o fundo animado da Landing (`<canvas>` do `CircuitBackground`) faz o axe sinalizar a maioria dos textos como "precisa de revisão manual" (não consegue amostrar um fundo que muda), o que reduziria o gate a ruído sem essa escolha.

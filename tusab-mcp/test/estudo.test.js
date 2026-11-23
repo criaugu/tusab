@@ -574,7 +574,7 @@ test('geração e TTS respondem no formato que a interface já trata', () => {
   const fc = pedidoGeracaoEstudo({ projeto_nome: 'Biologia', tipo: 'flashcards', n_cards: 10, tema: 'capitalismo' });
   assert.equal(fc.error, true);
   assert.equal(fc.gerar_pela_ia, true);
-  assert.equal(fc.message, 'Na extensão, quem gera é a sua IA. Peça à sua IA: ‘crie 10 flashcards sobre capitalismo do projeto Biologia’. O resultado aparece aqui no Estudo.');
+  assert.equal(fc.message, 'No Tusab, quem gera é a sua IA. Peça à sua IA: ‘crie 10 flashcards sobre capitalismo do projeto Biologia’. O resultado aparece aqui no Estudo.');
   assert.equal(pedidoGeracaoEstudo({ projeto_nome: 'Biologia', tipo: 'resumo' }).pedido, 'crie um resumo de estudo do projeto Biologia');
   assert.equal(pedidoGeracaoEstudo({ projeto_nome: 'Biologia', tipo: 'postits', n_cards: 15 }).pedido, 'crie 15 post-its do projeto Biologia');
   assert.equal(pedidoGeracaoEstudo({ canal_nome: 'Biologia', tipo: 'ambos', n_cards: 5 }).pedido, 'crie 5 flashcards e um resumo de estudo do projeto Biologia');

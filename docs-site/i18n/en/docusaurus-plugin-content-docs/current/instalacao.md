@@ -1,82 +1,56 @@
 ---
 id: instalacao
-title: Installation
-sidebar_label: Installation
+title: Install in Claude Desktop
+sidebar_label: Install in Claude Desktop
 slug: /instalacao
+description: How to install Tusab, a local connector, in Claude Desktop for Windows and macOS with the .mcpb package.
 ---
 
-# Installation
+# Install in Claude Desktop
 
-Tusab is installed as an extension (local MCP server) in the AI tool. Systems declared in the manifest: Windows (`win32`) and macOS (`darwin`).
+In Claude Desktop, Tusab installs from a single file, the `.mcpb` package. It works on **Windows** and **macOS**. There is nothing else to install: Node.js, which Tusab runs on, already comes with Claude Desktop.
 
-:::note Desktop app discontinued
-The desktop app (`.exe` and `.dmg` installers) was discontinued on 2026-11-19. Its documentation stays in the [Desktop app](/desktop/visao-geral) section as a record.
+Using another tool (Claude Code, VS Code, Cursor, Gemini CLI, Codex)? See [Other AIs](/outras-ias).
+
+:::info Where Tusab shows up
+Tusab is a **local connector**: it runs in Claude's **desktop app**, on your computer. It does not show up on claude.ai or in the mobile app.
 :::
 
-## Claude Desktop: `.mcpb` package
+## 1. Download {#1-baixar}
 
 <a className="button button--primary button--lg" href="https://github.com/criaugu/tusab/releases/download/v2.0.0/tusab-2.0.0.mcpb">Download Tusab 2.0.0 (.mcpb)</a>
 
-SHA-256 checksum: the `tusab-2.0.0.mcpb.sha256` file, in the same [release](https://github.com/criaugu/tusab/releases/tag/v2.0.0), holds the package's checksum. To verify, compare it with the output of `Get-FileHash .\tusab-2.0.0.mcpb -Algorithm SHA256` (Windows, PowerShell) or `shasum -a 256 tusab-2.0.0.mcpb` (macOS).
+Always download from the [releases page of the official repository](https://github.com/criaugu/tusab/releases).
 
-The extension is distributed as an [MCP Bundle](https://github.com/modelcontextprotocol/mcpb) package (`.mcpb`). The package carries the server code, the dependencies, the prebuilt screen and the license texts. Node.js comes with Claude Desktop itself, so there is nothing else to install.
+**Check the file (optional, recommended).** The same release has a `tusab-2.0.0.mcpb.sha256` file with the package checksum. Compare it with the one your computer calculates:
 
-1. Open the `tusab-2.0.0.mcpb` file with Claude Desktop installed; it shows the extension installation screen.
-2. When Claude Desktop asks for the repository folder (field "Pasta do repositório"), choose a folder. Tusab creates `data/` inside it. To open a base created by the desktop app, choose the app's data folder (see [Data and storage](/arquitetura/dados-e-armazenamento#where-the-data-lives)).
-3. On the first run in a folder, the plugin opens the Tusab screen in the browser once (marker in `data/config/boas_vindas.json`).
+- Windows (PowerShell): `Get-FileHash .\tusab-2.0.0.mcpb -Algorithm SHA256`
+- macOS (Terminal): `shasum -a 256 tusab-2.0.0.mcpb`
 
-The chosen folder is passed to the server through the `TUSAB_REPOSITORIO` environment variable (field `user_config.repositorio` in `manifest.json`). Without that variable, the server uses `~/Tusab`.
+If the checksums differ, do not install it; download it again.
 
-## Building the `.mcpb` from source
+## 2. Install
 
-An alternative to the download above. The generated package is named `tusab.mcpb` and installs the same way.
+1. With Claude Desktop installed, **open the `tusab-2.0.0.mcpb` file** (double-click). Alternatively, in Claude Desktop go to **Settings › Extensions** and install the file from there. "Extensions" is the name of Claude's screen for local connectors.
+2. Claude Desktop shows what Tusab is and warns that it runs with your user's permissions. Confirm the installation.
+3. When it asks for the **Repository folder**, choose where your base will live (for example, `Documents\Tusab`). Tusab creates a `data/` folder inside it. Former desktop app users can choose the app's data folder to open the old base (see [Data and storage](/arquitetura/dados-e-armazenamento#onde-os-dados-ficam)).
+4. The first time, Tusab opens the [screen](/tela) in the browser with a short introduction.
 
-Prerequisite: Node.js 18.17 or newer.
+## 3. Turn it on in the conversation
 
-```powershell
-git clone https://github.com/criaugu/tusab.git
-cd tusab/web_interface
-npm install          # the extension screen is built from here
-cd ../tusab-mcp
-npm install
-npm run pack         # builds the screen, generates the license notices and creates ../tusab.mcpb
-```
+In a Claude Desktop conversation, click **+ › Connectors** and check that the **Tusab** connector is on. With it on:
 
-The file is written to the repository root (`tusab.mcpb`). `npm run pack` uses `@anthropic-ai/mcpb@2.1.2` through `npx`.
+- the ready-made requests show up in **+ › Tusab** (41 requests and the **Open Tusab** shortcut);
+- the AI can search your base and cite the sources.
 
-## Other MCP-compatible tools (Claude Code, VS Code, Cursor…)
+If the AI answers that Tusab is not connected, this is the missing step.
 
-Any MCP client that starts servers over **stdio** can run the plugin straight from source, after `npm install` in `tusab-mcp/` and `npm run build:interface` (for the screen to work):
+## Update
 
-```json
-{
-  "mcpServers": {
-    "tusab": {
-      "command": "node",
-      "args": ["<path>/tusab/tusab-mcp/src/index.js"],
-      "env": { "TUSAB_REPOSITORIO": "<repository folder>" }
-    }
-  }
-}
-```
+Download the new version's package and open it as in the installation. Your base stays in the folder you chose and is not deleted.
 
-The exact configuration file format depends on each tool; what matters is the command (`node`), the argument (`src/index.js`) and the `TUSAB_REPOSITORIO` variable.
+## Next step
 
-## yt-dlp
+[First steps](/primeiros-passos): build the first base, ask the first question and learn the precautions (for example, one AI at a time on the same base).
 
-The plugin looks for yt-dlp in this order: the `TUSAB_YTDLP` variable, a copy in `data/bin/`, `yt-dlp` on the `PATH`. If none is found, it downloads the official binary from `github.com/yt-dlp/yt-dlp/releases/latest` and checks the published SHA-256 sum (`SHA2-256SUMS`); if it doesn't match, the download is discarded.
-
-## Environment variables
-
-| Variable | Use |
-|---|---|
-| `TUSAB_REPOSITORIO` | Repository folder (the root that contains `data/`). Default: `~/Tusab` |
-| `TUSAB_YTDLP` | Path to a yt-dlp to use instead of the downloaded one |
-| `TUSAB_IDIOMA` | Initial language (`pt`, `en` or `es`) before the screen sets one |
-| `TUSAB_SEM_BOAS_VINDAS` | `1` turns off opening the screen automatically on the first run |
-
-## First steps
-
-1. Ask the AI to open Tusab (or use the **Open Tusab** shortcut in Claude Desktop's "+" menu).
-2. On the screen, choose language, theme and profile, and add a YouTube channel, documents or a public source search. The AI can also add a channel with `tusab_adicionar_youtube`.
-3. Ask in the conversation: the AI searches the base with `tusab_buscar` and cites video and minute, or document and page.
+Those who want to build the package from source will find the steps in [Build and tests](/desenvolvimento/build-e-testes). The environment variables are in [Development setup](/desenvolvimento/setup).

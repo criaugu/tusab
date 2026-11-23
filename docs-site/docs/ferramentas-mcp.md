@@ -23,7 +23,7 @@ Toda ferramenta que devolve conteúdo da base avisa a IA de que **o texto retorn
 | `tusab_novidades_semana` | Lista os arquivos que entraram no projeto nos últimos 7 dias | `projeto` |
 | `tusab_revisao_hoje` | Lista os flashcards do projeto que vencem hoje (revisão espaçada) | `projeto` |
 | `tusab_economia` | Resumo da [economia de tokens](/funcionalidades/economia-de-tokens): tokens enviados × tokens das fontes inteiras | — |
-| `tusab_status` | Pasta do repositório, versão do plugin, extração em andamento, fila e as últimas 5 mensagens do motor | — |
+| `tusab_status` | Pasta do repositório, versão do Tusab, extração em andamento, fila e as últimas 5 mensagens do motor | — |
 
 Detalhes de `tusab_ler_original` (tipos, limites e remoção de metadados) em [Originais e imagens](/funcionalidades/originais-e-imagens).
 
@@ -46,7 +46,7 @@ As ferramentas de escrita marcam `readOnlyHint: false`; `tusab_adicionar_youtube
 2. `tusab_buscar` com a pergunta; a IA responde citando os trechos.
 3. `tusab_ler_fonte` quando precisa de mais contexto ao redor de um trecho, ou `tusab_ler_original` quando o texto extraído não basta (tabela, gráfico, PDF digitalizado).
 
-Para estudo: a IA gera os flashcards a partir dos trechos, grava com `tusab_salvar_estudo` e, em outra conversa, usa `tusab_revisao_hoje` e `tusab_registrar_revisao` (ver [Estudo e revisão espaçada](/funcionalidades/estudo)).
+Para estudo: a IA gera os flashcards a partir dos trechos, grava com `tusab_salvar_estudo` e, em outra conversa, usa `tusab_revisao_hoje` e `tusab_registrar_revisao` (ver [Materiais e revisão espaçada](/funcionalidades/estudo)).
 
 ## Prompts MCP
 

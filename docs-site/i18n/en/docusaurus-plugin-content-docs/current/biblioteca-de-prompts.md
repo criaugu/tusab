@@ -27,7 +27,7 @@ A single list (`tusab-mcp/src/nucleo/prompts.js`) feeds two places:
 
 Default quantities: 8 in the quiz, 7 days in the study plan, 10 in the exam and the quotes, 9 in the exercises. The value given is kept between 1 and 50. The topic is cut at 200 characters and the project name at 120.
 
-Besides these, the `abrir_tusab` shortcut ("Open Tusab") opens the screen. Claude's "+" menu therefore shows **22 shortcuts**.
+Besides these, the `abrir_tusab` shortcut ("Open Tusab") opens the screen. Adding the 20 techniques in the next section, Claude's "+" menu therefore shows **42 shortcuts**: 21 built-in prompts, 20 techniques and the one that opens the screen.
 
 ## Evidence-based techniques (20 prompts)
 
@@ -58,16 +58,16 @@ Since 2.0.0, the Library has 20 prompts based on learning, teaching, research an
 
 ## Filters and suggested model
 
-- **What for:** the Library tabs filter by audience — Study, Teach, Research and Work and decisions (field `publicos`; a prompt can be in more than one) — plus All and My prompts. The extension has a **single profile** (the full-access one): what used to be split by profile became a filter.
+- **What for:** the Library tabs filter by audience — Study, Teach, Research and Work and decisions (field `publicos`; a prompt can be in more than one) — plus All and My prompts. Tusab has a **single profile** (the full-access one): what used to be split by profile became a filter.
 - **Suggested model:** each prompt has a level (field `nivel`), shown as a badge with icon and text: **Fast · Haiku** (`leve`), **Balanced · Sonnet** (`equilibrado`) and **Most capable · Opus** (`avancado`). It is a cost-benefit suggestion based on the kind of task (central points × several sources and long reasoning); the user chooses the model in the AI tool.
 
-## Browser AI
+## Browser AI {#ia-no-navegador}
 
 A browser AI (Claude.ai, ChatGPT, Gemini) cannot reach Tusab's local server. In the "copied" notice, **Open in browser** copies the request again in its browser version (`POST /api/prompts/montar` with `navegador: true`): the request carries up to 12 excerpts from the base (those found for the topic; with no topic or few results, an overview with the first excerpts of each source), up to 1,500 characters per excerpt and 24,000 in total, with rules to use only those excerpts and cite them as [n]. Prompts that depend on the tools (Review today, Weekly digest) have no browser version.
 
-## Fixed rules added by the plugin
+## Fixed rules added by Tusab
 
-When building the final text, the plugin appends the search and citation rules to the request, in the screen's language:
+When building the final text, Tusab appends the search and citation rules to the request, in the screen's language:
 
 > Search the Tusab base in the project "\{projeto\}" with tusab_buscar (and tusab_ler_fonte when you need more context). Use only what is in the excerpts; if information is missing, say what is missing. Cite every statement with the source title and, for videos, the minute with the link (▶ MM:SS); for PDFs, the page marked in the excerpt ([Página N]) — if the excerpt does not show the page, do not make it up.
 
@@ -91,6 +91,6 @@ The user creates their own prompts on the screen, from scratch or with "Duplicat
 
 - Search by name, description, text or folder, accent-insensitive.
 - Each card has **Copy** and **Adjust** (editable preview). If the browser denies automatic copying, the preview opens for copying by hand.
-- **Copied notice:** after copying, a notice offers to open the Claude app (`claude://` address) or an AI in the browser (Claude.ai, ChatGPT or Gemini; the choice is remembered in the browser). The notice points out that, in the browser, the AI can't reach Tusab on this computer: the copied request works as text, but the MCP tools only exist in the AI tool where the extension is installed.
+- **Copied notice:** after copying, a notice offers to open the Claude app (`claude://` address) or an AI in the browser (Claude.ai, ChatGPT or Gemini; the choice is remembered in the browser). The notice points out that, in the browser, the AI can't reach Tusab on this computer: the copied request works as text, but the MCP tools only exist in the AI tool where Tusab is installed.
 - In the Repository, each project's **Ask the AI** button copies frequent requests already filled in with the project, or opens the Library on that project.
 - The Library's **Token savings** button opens the window described in [Token savings](/funcionalidades/economia-de-tokens).

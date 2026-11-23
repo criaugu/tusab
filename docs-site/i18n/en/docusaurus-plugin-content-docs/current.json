@@ -3,20 +3,32 @@
     "message": "Next",
     "description": "The label for version current"
   },
-  "sidebar.tutorialSidebar.category.Funcionalidades": {
-    "message": "Features",
-    "description": "The label for category 'Funcionalidades' in sidebar 'tutorialSidebar'"
+  "sidebar.guia.category.Começar": {
+    "message": "Get started",
+    "description": "The label for category 'Começar' in sidebar 'guia'"
   },
-  "sidebar.tutorialSidebar.category.Arquitetura técnica": {
-    "message": "Technical architecture",
-    "description": "The label for category 'Arquitetura técnica' in sidebar 'tutorialSidebar'"
+  "sidebar.guia.category.Montar a base": {
+    "message": "Build the base",
+    "description": "The label for category 'Montar a base' in sidebar 'guia'"
   },
-  "sidebar.tutorialSidebar.category.Desenvolvimento": {
+  "sidebar.guia.category.Estudar e pesquisar": {
+    "message": "Study and research",
+    "description": "The label for category 'Estudar e pesquisar' in sidebar 'guia'"
+  },
+  "sidebar.guia.category.Privacidade e segurança": {
+    "message": "Privacy and security",
+    "description": "The label for category 'Privacidade e segurança' in sidebar 'guia'"
+  },
+  "sidebar.tecnico.category.Arquitetura": {
+    "message": "Architecture",
+    "description": "The label for category 'Arquitetura' in sidebar 'tecnico'"
+  },
+  "sidebar.tecnico.category.Desenvolvimento": {
     "message": "Development",
-    "description": "The label for category 'Desenvolvimento' in sidebar 'tutorialSidebar'"
+    "description": "The label for category 'Desenvolvimento' in sidebar 'tecnico'"
   },
-  "sidebar.tutorialSidebar.category.App desktop (descontinuado)": {
+  "sidebar.tecnico.category.App desktop (descontinuado)": {
     "message": "Desktop app (discontinued)",
-    "description": "The label for category 'App desktop (descontinuado)' in sidebar 'tutorialSidebar'"
+    "description": "The label for category 'App desktop (descontinuado)' in sidebar 'tecnico'"
   }
 }

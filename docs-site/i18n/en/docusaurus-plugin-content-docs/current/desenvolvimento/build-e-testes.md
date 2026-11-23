@@ -34,8 +34,8 @@ GitHub CI (`.github/workflows/ci.yml`) runs on every push and pull request to `m
 
 | Job | What it does |
 |---|---|
-| Extension | In `tusab-mcp/`, on Windows, macOS and Linux (Node.js 22): `npm ci`, `npm test` and `npx @anthropic-ai/mcpb@2.1.2 validate manifest.json` |
-| Screen | On Linux: interface unit tests (`npm run test:unit` in `web_interface/`), build of the screen in extension mode (`npm run build:interface`) and an accessibility audit with pa11y-ci on the screen served by the plugin itself, in light and dark themes (see [Accessibility](/acessibilidade#pa11y-ci-scope)) |
+| `Extensão` (MCP server) | In `tusab-mcp/`, on Windows and Linux (Node.js 22; macOS left CI on 2026-11-23, since without the desktop installer Linux covers Unix behavior): `npm ci`, `npm test` and `npx @anthropic-ai/mcpb@2.1.2 validate manifest.json` |
+| Screen | On Linux: interface unit tests (`npm run test:unit` in `web_interface/`), build of the screen in Vite's `extensao` mode (`npm run build:interface`) and an accessibility audit with pa11y-ci on the screen served by Tusab itself, in light and dark themes (see [Accessibility](/acessibilidade#pa11y-ci-scope)) |
 
 There are no Python tests or desktop app builds: that code is in the [`desktop-final`](https://github.com/criaugu/tusab/tree/desktop-final) tag.
 
@@ -47,11 +47,11 @@ npm run pack
 
 In sequence:
 
-1. `npm run build:interface`: builds `web_interface/` in extension mode into `tusab-mcp/interface/`;
-2. `node scripts/gerar-licencas.mjs`: copies `LICENSE` and `TRADEMARK.md` from the root and generates `THIRD_PARTY_NOTICES.txt` with the full license of every bundled library (plugin and screen), because the built screen loses the license comments;
+1. `npm run build:interface`: builds `web_interface/` in Vite's `extensao` mode into `tusab-mcp/interface/`;
+2. `node scripts/gerar-licencas.mjs`: copies `LICENSE` and `TRADEMARK.md` from the root and generates `THIRD_PARTY_NOTICES.txt` with the full license of every bundled library (MCP server and screen), because the built screen loses the license comments;
 3. `npx --yes @anthropic-ai/mcpb@2.1.2 pack . ../tusab.mcpb`: packs it.
 
-The file is written to `tusab.mcpb`, at the repository root. `.mcpbignore` leaves out tests, scripts, `README.md`, source maps and parts of `pdfjs-dist` and `pdfkit` the plugin doesn't use (browser builds, viewer, optional native rendering component).
+The file is written to `tusab.mcpb`, at the repository root. `.mcpbignore` leaves out tests, scripts, `README.md`, source maps and parts of `pdfjs-dist` and `pdfkit` Tusab doesn't use (browser builds, viewer, optional native rendering component).
 
 ## Manifest texts in other languages
 
@@ -63,7 +63,7 @@ Generates `mcpb-resources/en-US.json` and `es-ES.json` (name, description, tools
 
 ## License notices
 
-`node scripts/gerar-licencas.mjs` can also be run on its own. The plugin's and the screen's libraries use permissive licenses (MIT, ISC, BSD, Apache-2.0, BlueOak); each one's text goes into `THIRD_PARTY_NOTICES.txt` inside the package.
+`node scripts/gerar-licencas.mjs` can also be run on its own. The MCP server's and the screen's libraries use permissive licenses (MIT, ISC, BSD, Apache-2.0, BlueOak); each one's text goes into `THIRD_PARTY_NOTICES.txt` inside the package.
 
 ## Version
 
