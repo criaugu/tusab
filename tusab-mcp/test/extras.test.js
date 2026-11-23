@@ -181,7 +181,7 @@ test('Stack Overflow: o documento guarda autor, link e a licença CC BY-SA da é
 test('conexão MCP: a tela sabe se a IA está conectada e quando ela consultou o Tusab', async () => {
   const raiz = temp('conexao');
   const tusab = await Tusab.abrir(raiz);
-  assert.deepEqual(tusab.estadoConexao(), { mcp: false, cliente: null, desde: null, ultima_ferramenta: null });
+  assert.deepEqual(tusab.estadoConexao(), { mcp: false, cliente: null, desde: null, clientes: [], ultima_ferramenta: null });
 
   const painel = new Painel(tusab);
   const servidor = criarServidor(tusab, { painel });

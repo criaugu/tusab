@@ -120,4 +120,4 @@ After configuring, restart the tool and ask "open Tusab" or "list my Tusab proje
 | Installation | Open the `.mcpb` | Steps 1 to 3 |
 | Node.js | Comes with Claude Desktop | Must be installed (18.17 or newer) |
 
-Before using it, read the [precautions](/primeiros-passos#cuidados), above all the first one: **one AI at a time on the same base**.
+Before using it, read the [precautions](/primeiros-passos#cuidados). Several AIs can use the same base at the same time: the first one to open takes care of it, and the others pass their requests along.

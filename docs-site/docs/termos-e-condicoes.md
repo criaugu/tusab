@@ -49,7 +49,7 @@ O Tusab é um conector local (servidor MCP) que funciona dentro de ferramentas d
 
 **O seu computador.** O Tusab roda com as permissões do seu usuário. Instale só a partir do [repositório oficial](https://github.com/criaugu/tusab/releases), confira a soma SHA-256 e proteja o computador com senha.
 
-**Uma IA por vez.** Não use duas ferramentas de IA ao mesmo tempo na mesma pasta de base (veja os [cuidados](/primeiros-passos#cuidados)). Isso pode corromper a base.
+**Cópias de segurança.** O Tusab coordena o acesso quando várias ferramentas de IA usam a mesma pasta, mas não protege contra falhas do disco, exclusões ou programas de sincronização em nuvem que alterem os arquivos. Mantenha cópias da sua pasta de base.
 
 ## 4. Componentes de terceiros
 

@@ -45,8 +45,8 @@ A IA gera o material a partir da base, guarda no Tusab e devolve o link **Abrir 
 
 ## Cuidados {#cuidados}
 
-- **Uma IA por vez na mesma base.** Cada ferramenta de IA liga o seu próprio Tusab. Se duas estiverem abertas ao mesmo tempo usando a mesma pasta (por exemplo, Claude Desktop e Claude Code), as duas gravam o mesmo índice e os mesmos arquivos, e a base pode se corromper. Feche uma antes de abrir a outra, ou use uma pasta de base diferente para cada uma.
-- **A tela funciona enquanto a IA estiver aberta.** O Tusab é iniciado pela ferramenta de IA e fecha junto com ela. Quando a IA fecha, a tela no navegador para de responder.
+- **Várias IAs na mesma base, sem risco.** Pode usar o Tusab em mais de uma ferramenta de IA ao mesmo tempo (por exemplo, Claude Desktop e Cursor) com a mesma pasta. A primeira que abrir cuida da base; as outras repassam os pedidos a ela, então todas veem a mesma base e nada se corrompe. Se a primeira fechar, outra assume sozinha em poucos segundos.
+- **A tela funciona enquanto alguma IA com o Tusab estiver aberta.** O Tusab é iniciado pelas ferramentas de IA e fecha junto com a última delas. Se a IA que cuida da base fechar, outra assume e o endereço da tela muda: peça "abra o Tusab" de novo.
 - **O link "Abrir no Tusab" vale só naquela sessão.** O endereço da tela muda cada vez que a IA inicia o Tusab, então um link antigo não abre. Para ver um material depois, peça "abra o Tusab" e use a aba Materiais.
 - **O link da tela não deve ser compartilhado.** Ele leva a chave da sessão. Só funciona neste computador, mas trate-o como uma senha temporária.
 - **Instale só do repositório oficial.** O Tusab roda com as permissões do seu usuário (o Claude Desktop avisa isso na instalação). Baixe o pacote das [releases](https://github.com/criaugu/tusab/releases) e confira a soma SHA-256.

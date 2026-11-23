@@ -26,31 +26,53 @@ export class Tusab {
     this.atualizacao = new Atualizacao(raiz, motor);
     // Fontes públicas (fase C): resultados vão para documents/ e entram no índice; log no mesmo painel do motor.
     this.fontes = new ServicoFontes(raiz, { aoSalvar: () => this.sincronizar(), aoLogar: (linha) => motor.log(linha) });
-    // Conexão com a ferramenta de IA (MCP): quem conectou e a última ferramenta que a IA usou.
-    // A tela mostra isso para o usuário saber se a IA está mesmo lendo a base dele.
-    this.conexao = { cliente: null, desde: null, ultimaFerramenta: null };
+    // Ferramentas de IA conectadas (MCP) e a última ferramenta usada. A tela mostra isso para o
+    // usuário saber se a IA está mesmo lendo a base dele. Pode haver mais de uma IA: as outras
+    // chegam como mensageiras do Tusab principal (ver coordenacao.js) e renovam o "estou aqui".
+    this.clientes = new Map(); // id → { nome, versao, desde, remoto, visto }
+    this.ultimaFerramenta = null;
   }
 
-  /** A ferramenta de IA terminou a inicialização MCP (clientInfo: { name, version }). */
-  conectarMcp(clientInfo) {
-    this.conexao.cliente = { nome: String(clientInfo?.name || ''), versao: String(clientInfo?.version || '') };
-    this.conexao.desde = Date.now();
+  /** Uma ferramenta de IA terminou a inicialização MCP (clientInfo: { name, version }). */
+  conectarMcp(clientInfo, { id = 'local', remoto = false } = {}) {
+    const anterior = this.clientes.get(id);
+    this.clientes.set(id, {
+      nome: String(clientInfo?.name || ''),
+      versao: String(clientInfo?.version || ''),
+      desde: anterior?.desde ?? Date.now(),
+      remoto,
+      visto: Date.now(),
+    });
   }
 
-  desconectarMcp() {
-    this.conexao.cliente = null;
-    this.conexao.desde = null;
+  desconectarMcp(id = 'local') {
+    this.clientes.delete(id);
+  }
+
+  /** Mensageiro avisou que continua conectado. */
+  renovarCliente(id) {
+    const c = this.clientes.get(id);
+    if (c) c.visto = Date.now();
   }
 
   /** A IA chamou uma ferramenta do Tusab. */
   registrarUsoMcp(ferramenta) {
-    this.conexao.ultimaFerramenta = { nome: ferramenta, em: Date.now() };
+    this.ultimaFerramenta = { nome: ferramenta, em: Date.now() };
   }
 
-  /** GET /api/conexao */
+  /** GET /api/conexao — "cliente" é a primeira IA conectada; "clientes", todas. */
   estadoConexao() {
-    const { cliente, desde, ultimaFerramenta } = this.conexao;
-    return { mcp: Boolean(cliente), cliente, desde, ultima_ferramenta: ultimaFerramenta };
+    const prazo = Date.now() - 20_000;
+    for (const [id, c] of this.clientes) if (c.remoto && c.visto < prazo) this.clientes.delete(id);
+    const lista = [...this.clientes.values()].sort((a, b) => a.desde - b.desde);
+    const primeiro = lista[0];
+    return {
+      mcp: lista.length > 0,
+      cliente: primeiro ? { nome: primeiro.nome, versao: primeiro.versao } : null,
+      desde: primeiro?.desde ?? null,
+      clientes: lista.map(({ nome, versao, desde }) => ({ nome, versao, desde })),
+      ultima_ferramenta: this.ultimaFerramenta,
+    };
   }
 
   static async abrir(raiz, opcoes = {}) {

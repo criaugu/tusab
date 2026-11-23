@@ -32,8 +32,10 @@ tusab-mcp  (processo Node no computador do usuário)
 ## Ciclo de vida do processo
 
 - **Início:** a ferramenta de IA executa `node src/index.js`. Antes de carregar qualquer módulo, `console.log`, `console.info` e `console.debug` passam a escrever no stderr, porque o stdout é exclusivo do protocolo MCP.
-- **Tela:** o servidor HTTP só sobe quando é pedido (ferramenta `tusab_abrir_painel`, prompt `abrir_tusab` ou a abertura automática da primeira vez numa pasta).
-- **Fim:** quando a ferramenta de IA fecha, o stdin do processo termina; o Tusab fecha o painel e encerra. A tela deixa de funcionar junto.
+- **Principal e mensageiros** (`src/coordenacao.js`): cada ferramenta de IA inicia o seu processo. O primeiro numa pasta cria `data/config/principal.json` com abertura exclusiva e vira o **principal**: só ele abre o índice, o motor e a tela, e publica ali o PID, a porta e a chave da tela. Os seguintes viram **mensageiros**: expõem as mesmas ferramentas e prompts à sua IA, mas cada chamada vai ao principal por `POST /api/coordenacao/ferramenta` (mesma chave da tela), que confere os argumentos de novo e executa. Os mensageiros avisam qual IA está conectada (`/api/coordenacao/cliente`), e a tela mostra todas.
+- **Troca de principal:** os mensageiros conferem a cada 3 s se o processo principal ainda existe. Se ele fechou (ou a conexão é recusada no meio de uma chamada), disputam a eleição de novo; o vencedor abre a base e a tela, e os outros passam a segui-lo. Um registro de processo morto ou corrompido é descartado.
+- **Tela:** no principal, o servidor HTTP sobe logo no início (os mensageiros precisam do endereço). A tela abre no navegador quando é pedida (ferramenta `tusab_abrir_painel`, prompt `abrir_tusab` ou a abertura automática da primeira vez numa pasta).
+- **Fim:** quando a ferramenta de IA fecha, o stdin do processo termina. O principal fecha a tela, apaga `principal.json` e encerra; um mensageiro avisa o principal e encerra.
 - **Atualização automática de canais:** com o Tusab em execução, a verificação de vídeos novos roda alguns segundos depois do início e depois a cada hora (só para canais com a opção ligada).
 
 ## Índice de busca

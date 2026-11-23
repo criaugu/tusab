@@ -51,6 +51,6 @@ Download the new version's package and open it as in the installation. Your base
 
 ## Next step
 
-[First steps](/primeiros-passos): build the first base, ask the first question and learn the precautions (for example, one AI at a time on the same base).
+[First steps](/primeiros-passos): build the first base, ask the first question and learn the precautions.
 
 Those who want to build the package from source will find the steps in [Build and tests](/desenvolvimento/build-e-testes). The environment variables are in [Development setup](/desenvolvimento/setup).

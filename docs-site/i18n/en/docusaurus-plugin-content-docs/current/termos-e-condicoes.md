@@ -49,7 +49,7 @@ It is forbidden to:
 
 **Your computer.** Tusab runs with your user's permissions. Install only from the [official repository](https://github.com/criaugu/tusab/releases), check the SHA-256 checksum and protect the computer with a password.
 
-**One AI at a time.** Do not use two AI tools at the same time on the same base folder (see the [precautions](/primeiros-passos#cuidados)). It can corrupt the base.
+**Backups.** Tusab coordinates access when several AI tools use the same folder, but it does not protect against disk failures, deletions or cloud sync programs that change the files. Keep copies of your base folder.
 
 ## 4. Third-party components
 

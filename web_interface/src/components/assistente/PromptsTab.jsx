@@ -73,13 +73,16 @@ const nomeCliente = (c) => NOME_CLIENTE[c?.nome] || c?.nome || '';
  * → { carregado, mcp, cliente, consultou: nome da ferramenta | null }
  */
 function useConexaoDesde(desde) {
-  const [estado, setEstado] = useState({ carregado: false, mcp: false, cliente: null, consultou: null });
+  const [estado, setEstado] = useState({ carregado: false, mcp: false, cliente: null, clientes: [], consultou: null });
   useEffect(() => {
     let vivo = true;
     const ler = () => axios.get(`${API_BASE}/conexao`).then((r) => {
       if (!vivo) return;
       const uf = r.data?.ultima_ferramenta;
-      setEstado({ carregado: true, mcp: Boolean(r.data?.mcp), cliente: r.data?.cliente || null, consultou: uf && uf.em >= desde ? uf.nome : null });
+      const cliente = r.data?.cliente || null;
+      // Várias IAs na mesma base (Tusab principal + mensageiros): a tela mostra todas.
+      const clientes = Array.isArray(r.data?.clientes) ? r.data.clientes : (cliente ? [cliente] : []);
+      setEstado({ carregado: true, mcp: Boolean(r.data?.mcp), cliente, clientes, consultou: uf && uf.em >= desde ? uf.nome : null });
     }).catch(() => { if (vivo) setEstado((e) => ({ ...e, carregado: true })); });
     ler();
     const id = setInterval(ler, 2000);
@@ -172,9 +175,11 @@ export function AvisoCopiado({ darkMode, onFechar, pedido = null }) {
 
 /** Linha de estado da conexão no aviso de "copiado". */
 function EstadoConexao({ conexao, darkMode }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   if (!conexao.carregado) return null;
-  const cliente = nomeCliente(conexao.cliente);
+  const nomes = [...new Set((conexao.clientes?.length ? conexao.clientes : [conexao.cliente]).map(nomeCliente).filter(Boolean))];
+  let cliente = nomes[0] || '';
+  try { if (nomes.length > 1) cliente = new Intl.ListFormat(i18n.language, { type: 'conjunction' }).format(nomes); } catch { cliente = nomes.join(', '); }
   let Icone = Loader2, cor = darkMode ? 'text-slate-300' : 'text-slate-600', texto, girando = true;
   if (!conexao.mcp) {
     Icone = AlertTriangle; girando = false; cor = darkMode ? 'text-amber-300' : 'text-amber-700';

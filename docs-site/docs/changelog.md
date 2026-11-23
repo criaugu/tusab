@@ -13,6 +13,7 @@ Resumo técnico das versões. A partir da 2.0.0 o Tusab é só o conector local 
 
 **v2.0.0 (2026-11-19)** — O Tusab passa a ser só o conector local para o Claude e outras IAs; o app desktop é descontinuado.
 
+- Várias IAs na mesma base ao mesmo tempo: a primeira ferramenta de IA que abre o Tusab numa pasta vira a principal (só ela lê e grava a base); as outras repassam as ferramentas a ela pela API local e assumem sozinhas se ela fechar. A tela mostra todas as IAs conectadas. Antes, duas IAs abertas na mesma pasta podiam corromper a base.
 - Nome da categoria: o Tusab passa a se apresentar como **conector local** (antes, "extensão"), o nome que o Claude Desktop usa em **+ › Conectores**. Nada muda na instalação.
 - Site de documentação reorganizado em dois guias (Guia e Para desenvolvedores), com página inicial nova e as páginas [Usar em outras IAs](https://tusab.solutions/outras-ias), [Primeiros passos](https://tusab.solutions/primeiros-passos) (com os cuidados) e [Para quem é](https://tusab.solutions/perfis-e-jornadas).
 - Primeira versão do conector local publicada nas [releases](https://github.com/criaugu/tusab/releases) como `tusab-2.0.0.mcpb`, com soma SHA-256 ao lado. A release é gerada pelo GitHub Actions a partir da etiqueta: testes, tela compilada, avisos de licença e pacote.

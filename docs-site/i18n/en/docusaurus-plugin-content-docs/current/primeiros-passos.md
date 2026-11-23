@@ -45,8 +45,8 @@ The AI builds the material from the base, saves it in Tusab and returns the **Op
 
 ## Precautions {#cuidados}
 
-- **One AI at a time on the same base.** Each AI tool starts its own Tusab. If two are open at the same time using the same folder (for example, Claude Desktop and Claude Code), both write the same index and files, and the base can get corrupted. Close one before opening the other, or use a different base folder for each.
-- **The screen works while the AI is open.** Tusab is started by the AI tool and closes with it. When the AI closes, the screen in the browser stops responding.
+- **Several AIs on the same base, safely.** You can use Tusab in more than one AI tool at the same time (for example, Claude Desktop and Cursor) with the same folder. The first one to open takes care of the base; the others pass their requests to it, so all of them see the same base and nothing gets corrupted. If the first one closes, another takes over by itself in a few seconds.
+- **The screen works while any AI with Tusab is open.** Tusab is started by the AI tools and closes with the last of them. If the AI taking care of the base closes, another takes over and the screen address changes: ask "open Tusab" again.
 - **The "Open in Tusab" link only works in that session.** The screen's address changes each time the AI starts Tusab, so an old link does not open. To see a material later, ask "open Tusab" and use the Materials tab.
 - **Do not share the screen's link.** It carries the session key. It only works on this computer, but treat it as a temporary password.
 - **Install only from the official repository.** Tusab runs with your user's permissions (Claude Desktop warns about this during installation). Download the package from the [releases](https://github.com/criaugu/tusab/releases) and check the SHA-256 checksum.

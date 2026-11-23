@@ -127,6 +127,8 @@ export class Painel {
     this.chave = crypto.randomBytes(32).toString('base64url');
     this.servidor = null;
     this.porta = null;
+    // Rotas internas em /api/coordenacao/... (só no Tusab principal; ver coordenacao.js e servidor.js).
+    this.rotasInternas = null;
   }
 
   get origem() {
@@ -181,6 +183,11 @@ export class Painel {
     if (!['GET', 'POST', 'DELETE'].includes(req.method)) throw new ErroHttp(405, t('Método não permitido.'));
 
     const caminho = url.pathname.slice(4) || '/';
+    if (caminho.startsWith('/coordenacao/')) {
+      const r = this.rotasInternas ? await this.rotasInternas(req.method, caminho, await lerCorpo(req)) : null;
+      if (!r) throw new ErroHttp(404, t('Não encontrado.'));
+      return responder(res, 200, r);
+    }
     const r = await atenderApi(this.tusab, req.method, caminho, url.searchParams,
       // Base .tusab recebida pode ser grande (limite próprio do formato); documento, até 50 MB.
       () => lerCorpo(req, caminho === '/import/base-compartilhavel' ? TAMANHO_MAX_TUSAB : LIMITE_ARQUIVO));

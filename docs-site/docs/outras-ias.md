@@ -63,7 +63,7 @@ Todas pedem os mesmos três dados:
 |---|---|
 | Comando | `node` |
 | Argumento | o caminho completo de `src/index.js` na pasta do passo 2 |
-| Variável `TUSAB_REPOSITORIO` | a pasta da sua base (a mesma escolhida no Claude Desktop, para usar a mesma base) |
+| Variável `TUSAB_REPOSITORIO` | a pasta da sua base (a mesma escolhida no Claude Desktop, para usar a mesma base; pode deixar as duas IAs abertas ao mesmo tempo) |
 
 Nos exemplos abaixo, troque `augusto` pelo seu usuário e as pastas pelas suas. Em arquivos JSON, no Windows, a barra invertida vai dobrada (`\\`).
 
@@ -120,4 +120,4 @@ Depois de configurar, reinicie a ferramenta e peça "abra o Tusab" ou "liste os 
 | Instalação | Abrir o `.mcpb` | Passos 1 a 3 |
 | Node.js | Vem com o Claude Desktop | Precisa estar instalado (18.17 ou mais novo) |
 
-Antes de usar, leia os [cuidados](/primeiros-passos#cuidados), principalmente o primeiro: **uma IA por vez na mesma base**.
+Antes de usar, leia os [cuidados](/primeiros-passos#cuidados). Várias IAs podem usar a mesma base ao mesmo tempo: a primeira que abrir cuida dela, e as outras repassam os pedidos.
