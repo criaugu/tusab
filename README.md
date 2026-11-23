@@ -56,7 +56,7 @@ E apontar a ferramenta para `src/index.js` dessa pasta (ou, a partir do código,
 }
 ```
 
-Passo a passo por ferramenta, o que funciona em cada uma e os cuidados (uma IA por vez na mesma base) em [Usar em outras IAs](https://tusab.solutions/outras-ias).
+Passo a passo por ferramenta, o que funciona em cada uma e os cuidados em [Usar em outras IAs](https://tusab.solutions/outras-ias).
 
 ## Estrutura do repositório
 

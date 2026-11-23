@@ -51,6 +51,6 @@ Baixe o pacote da versão nova e abra como na instalação. A base fica na pasta
 
 ## Próximo passo
 
-[Primeiros passos](/primeiros-passos): montar a primeira base, fazer a primeira pergunta e conhecer os cuidados (por exemplo, usar uma IA por vez na mesma base).
+[Primeiros passos](/primeiros-passos): montar a primeira base, fazer a primeira pergunta e conhecer os cuidados.
 
 Quem quer gerar o pacote a partir do código encontra o passo a passo em [Build e testes](/desenvolvimento/build-e-testes). As variáveis de ambiente estão em [Setup de desenvolvimento](/desenvolvimento/setup).

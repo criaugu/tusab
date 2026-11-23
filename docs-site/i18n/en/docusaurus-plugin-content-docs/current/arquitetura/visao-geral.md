@@ -32,8 +32,10 @@ tusab-mcp  (Node process on the user's computer)
 ## Process lifecycle
 
 - **Start:** the AI tool runs `node src/index.js`. Before any module loads, `console.log`, `console.info` and `console.debug` are redirected to stderr, because stdout is reserved for the MCP protocol.
-- **Screen:** the HTTP server only starts when requested (tool `tusab_abrir_painel`, prompt `abrir_tusab` or the automatic opening on the first run in a folder).
-- **End:** when the AI tool closes, the process's stdin ends; Tusab closes the panel and exits. The screen stops working with it.
+- **Main and messengers** (`src/coordenacao.js`): each AI tool starts its own process. The first one in a folder creates `data/config/principal.json` with exclusive open and becomes the **main** process: only it opens the index, the engine and the screen, and it publishes there its PID, the port and the screen key. The following ones become **messengers**: they expose the same tools and prompts to their AI, but each call goes to the main process through `POST /api/coordenacao/ferramenta` (same key as the screen), which checks the arguments again and runs it. Messengers report which AI is connected (`/api/coordenacao/cliente`), and the screen shows all of them.
+- **Main handover:** messengers check every 3 s whether the main process still exists. If it closed (or the connection is refused in the middle of a call), they run the election again; the winner opens the base and the screen, and the others follow it. A record of a dead process or a corrupted record is discarded.
+- **Screen:** in the main process, the HTTP server starts right away (messengers need the address). The screen opens in the browser when requested (tool `tusab_abrir_painel`, prompt `abrir_tusab` or the automatic opening on the first run in a folder).
+- **End:** when the AI tool closes, the process's stdin ends. The main process closes the screen, deletes `principal.json` and exits; a messenger notifies the main process and exits.
 - **Automatic channel updates:** with Tusab running, the check for new videos runs a few seconds after startup and then every hour (only for channels with the option on).
 
 ## Search index

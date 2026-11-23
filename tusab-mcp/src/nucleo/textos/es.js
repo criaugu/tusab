@@ -499,4 +499,8 @@ export default {
   'Câmara dos Deputados': 'Cámara de Diputados',
   'BVS Ministério da Saúde': 'BVS Ministerio de Salud de Brasil',
   'Ministério da Saúde': 'Ministerio de Salud de Brasil',
+  // Varias IA en la misma base (coordenacao.js)
+  'Esta ferramenta não existe no Tusab principal (versão {principal}; a desta IA é {sua}). Atualize o Tusab nas duas ferramentas de IA.': 'Esta herramienta no existe en el Tusab principal (versión {principal}; la de esta IA es {sua}). Actualiza Tusab en las dos herramientas de IA.',
+  'Argumentos inválidos: {detalhe}': 'Argumentos no válidos: {detalhe}',
+  'O Tusab de outra ferramenta de IA está fechando. Tente de novo em alguns segundos.': 'El Tusab de otra herramienta de IA se está cerrando. Inténtalo de nuevo en unos segundos.',
 };

@@ -12,6 +12,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import { Painel, abrirNoNavegador } from './painel.js';
+import { Coordenacao, SemPrincipal } from './coordenacao.js';
 import { pastaRepositorio } from './nucleo/caminhos.js';
 import { arquivosNovosDaSemana, filaRevisao, revisarCard, salvarArtefato } from './nucleo/estudo.js';
 import { PROMPTS, exibir, montarPrompt, promptsDoUsuario } from './nucleo/prompts.js';
@@ -65,7 +66,12 @@ function resumoStatus(motor) {
   return linhas.join('\n');
 }
 
-export function criarServidor(tusab, { painel = new Painel(tusab, { versao: VERSAO }) } = {}) {
+/**
+ * Servidor MCP do Tusab. Com `encaminhar`, as ferramentas não rodam aqui: cada chamada vai para
+ * encaminhar(nome, argumentos), que a leva ao processo principal (ver iniciar e coordenacao.js).
+ * Sempre expõe executarFerramenta(nome, argumentos), usada pelo principal para atender os mensageiros.
+ */
+export function criarServidor(tusab, { painel = new Painel(tusab, { versao: VERSAO }), encaminhar = null } = {}) {
   const { indice, motor } = tusab;
   const servidor = new McpServer({ name: 'tusab', title: 'Tusab', version: VERSAO }, { instructions: INSTRUCOES });
   servidor.server.oninitialized = () => tusab.conectarMcp(servidor.server.getClientVersion());
@@ -78,11 +84,27 @@ export function criarServidor(tusab, { painel = new Painel(tusab, { versao: VERS
     return { title: t(config.title), description: (lng !== 'pt' && DESCRICOES[nome]?.[lng]) || config.description };
   };
   // Cada chamada fica registrada (nome e hora) para a tela confirmar que a IA consultou o Tusab.
+  const executores = new Map(); // nome → { executar, esquema }
   const registrar = (nome, config, fn) => {
     const comRegistro = (...args) => { tusab.registrarUsoMcp(nome); return fn(...args); };
-    const reg = servidor.registerTool(nome, { ...config, ...noIdioma(nome, config) }, comRegistro);
+    executores.set(nome, { executar: comRegistro, esquema: z.object(config.inputSchema || {}) });
+    const atender = encaminhar ? (argumentos) => encaminhar(nome, argumentos) : comRegistro;
+    const reg = servidor.registerTool(nome, { ...config, ...noIdioma(nome, config) }, atender);
     textosFerramenta.set(reg, { nome, config });
     return reg;
+  };
+  // Pedido de um mensageiro: os argumentos são conferidos aqui de novo (o mensageiro pode ser
+  // de outra versão do Tusab) antes de executar.
+  servidor.executarFerramenta = async (nome, argumentos, versaoDeQuemPede = VERSAO) => {
+    const ferramenta = executores.get(nome);
+    if (!ferramenta) {
+      return erro(t('Esta ferramenta não existe no Tusab principal (versão {principal}; a desta IA é {sua}). Atualize o Tusab nas duas ferramentas de IA.', {
+        principal: VERSAO, sua: versaoDeQuemPede,
+      }));
+    }
+    const conferido = ferramenta.esquema.safeParse(argumentos ?? {});
+    if (!conferido.success) return erro(t('Argumentos inválidos: {detalhe}', { detalhe: conferido.error.issues.map((i) => i.message).join('; ') }));
+    return ferramenta.executar(conferido.data, {});
   };
 
   registrar('tusab_buscar', {
@@ -530,18 +552,114 @@ async function boasVindas(tusab, painel) {
   }
 }
 
+/**
+ * Rotas internas do principal (em /api/coordenacao/...), usadas pelos mensageiros: executar uma
+ * ferramenta e avisar qual IA está conectada do lado deles. Exigem a mesma chave da tela.
+ */
+export function rotasCoordenacao(tusab, executor) {
+  return async (metodo, caminho, corpo) => {
+    if (metodo !== 'POST') return null;
+    if (caminho === '/coordenacao/ferramenta') {
+      if (corpo?.de) tusab.renovarCliente(corpo.de);
+      return executor.executarFerramenta(String(corpo?.nome || ''), corpo?.argumentos, corpo?.versao);
+    }
+    if (caminho === '/coordenacao/cliente') {
+      const id = String(corpo?.de || '');
+      if (!id) return { ok: false };
+      if (corpo.evento === 'desconectar') tusab.desconectarMcp(id);
+      else if (corpo.evento === 'renovar') tusab.renovarCliente(id);
+      else tusab.conectarMcp(corpo.cliente, { id, remoto: true });
+      return { ok: true };
+    }
+    return null;
+  };
+}
+
+/**
+ * Processo iniciado pela ferramenta de IA. Se for o primeiro nesta pasta, vira o principal
+ * (abre a base, a tela e o agendamento); se já houver um, vira mensageiro e repassa as
+ * ferramentas ao principal. Se o principal fechar, este processo assume. Ver coordenacao.js.
+ */
 export async function iniciar() {
   const raiz = pastaRepositorio();
-  const tusab = await Tusab.abrir(raiz);
-  const painel = new Painel(tusab, { versao: VERSAO });
-  const servidor = criarServidor(tusab, { painel });
+  const coordenacao = new Coordenacao(raiz, VERSAO);
+  let local = null; // { tusab, painel, executor } quando este processo é o principal
+  let clienteInfo = null;
+  let promovendo = null;
+
+  // Fachada do MCP: atende a IA deste processo; as ferramentas vão para quem é o principal.
+  const fachada = {
+    raiz,
+    registrarUsoMcp() { /* quem registra é o principal, ao executar */ },
+    conectarMcp(info) {
+      clienteInfo = info;
+      if (local) local.tusab.conectarMcp(info, { id: coordenacao.id });
+      else coordenacao.avisar('conectar', info);
+    },
+    desconectarMcp() {
+      clienteInfo = null;
+      if (local) local.tusab.desconectarMcp(coordenacao.id);
+      else coordenacao.avisar('desconectar');
+    },
+  };
+
+  const tornarPrincipal = async () => {
+    const tusab = await Tusab.abrir(raiz);
+    const painel = new Painel(tusab, { versao: VERSAO });
+    const executor = criarServidor(tusab, { painel });
+    // Prompts criados na tela aparecem no "+" da IA deste processo (a fachada).
+    tusab.aoMudarPrompts = () => fachada.aoMudarPrompts?.();
+    painel.rotasInternas = rotasCoordenacao(tusab, executor);
+    await painel.iniciar();
+    coordenacao.publicar({ porta: painel.porta, chave: painel.chave });
+    if (clienteInfo) tusab.conectarMcp(clienteInfo, { id: coordenacao.id });
+    tusab.atualizacao.iniciarAgendamento();
+    local = { tusab, painel, executor };
+    process.stderr.write(`[tusab] ${VERSAO} principal · repositório: ${raiz}\n`);
+    return local;
+  };
+
+  const seguirOuAssumir = async () => {
+    if (local) return;
+    promovendo ??= (async () => {
+      if (await coordenacao.eleger()) await tornarPrincipal();
+      else {
+        process.stderr.write(`[tusab] ${VERSAO} mensageiro do principal ${coordenacao.principal.versao} (pid ${coordenacao.principal.pid})\n`);
+        if (clienteInfo) coordenacao.avisar('conectar', clienteInfo);
+        coordenacao.vigiar(seguirOuAssumir, () => coordenacao.avisar('renovar'));
+      }
+    })().finally(() => { promovendo = null; });
+    return promovendo;
+  };
+
+  const encaminhar = async (nome, argumentos) => {
+    for (let tentativa = 0; tentativa < 3; tentativa++) {
+      if (local) return local.executor.executarFerramenta(nome, argumentos);
+      try {
+        return await coordenacao.ferramenta(nome, argumentos);
+      } catch (e) {
+        if (!(e instanceof SemPrincipal)) return erro(e.message);
+        await seguirOuAssumir(); // o principal fechou: assume ou segue o novo
+      }
+    }
+    return erro(t('O Tusab de outra ferramenta de IA está fechando. Tente de novo em alguns segundos.'));
+  };
+
+  await seguirOuAssumir();
+  const servidor = criarServidor(fachada, { painel: null, encaminhar });
   await servidor.connect(new StdioServerTransport());
-  // Quando a ferramenta de IA fecha, o stdin acaba: o painel não pode ficar aberto sozinho.
-  process.stdin.once('end', () => {
-    painel.fechar();
+
+  // Quando a ferramenta de IA fecha, o stdin acaba: a tela não pode ficar aberta sozinha, e a
+  // base fica livre para outro processo assumir.
+  process.stdin.once('end', async () => {
+    coordenacao.pararVigia();
+    if (local) {
+      local.painel.fechar();
+      coordenacao.sair();
+    } else {
+      await coordenacao.avisar('desconectar');
+    }
     process.exit(0);
   });
-  process.stderr.write(`[tusab] plugin ${VERSAO} pronto · repositório: ${raiz}\n`);
-  tusab.atualizacao.iniciarAgendamento();
-  await boasVindas(tusab, painel);
+  if (local) await boasVindas(local.tusab, local.painel);
 }

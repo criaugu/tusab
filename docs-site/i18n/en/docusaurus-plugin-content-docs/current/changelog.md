@@ -13,6 +13,7 @@ Technical summary of the versions. From 2.0.0 on, Tusab is only the local connec
 
 **v2.0.0 (2026-11-19)** — Tusab becomes only the local connector for Claude and other AIs; the desktop app is discontinued.
 
+- Several AIs on the same base at the same time: the first AI tool that opens Tusab in a folder becomes the main one (only it reads and writes the base); the others pass their tools to it through the local API and take over by themselves if it closes. The screen shows all connected AIs. Before, two AIs open on the same folder could corrupt the base.
 - Category name: Tusab now presents itself as a **local connector** (formerly "extension"), the name Claude Desktop uses in **+ › Connectors**. Nothing changes in the installation.
 - Documentation site reorganized into two guides (Guide and For developers), with a new home page and the pages [Use in other AIs](https://tusab.solutions/en/outras-ias), [First steps](https://tusab.solutions/en/primeiros-passos) (with the precautions) and [Who it is for](https://tusab.solutions/en/perfis-e-jornadas).
 - First version of the local connector published in the [releases](https://github.com/criaugu/tusab/releases) as `tusab-2.0.0.mcpb`, with a SHA-256 checksum next to it. GitHub Actions builds the release from the tag: tests, compiled screen, license notices and package.

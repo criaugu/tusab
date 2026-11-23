@@ -498,4 +498,8 @@ export default {
   'Dicionário multilíngue livre — etimologia, pronúncia e definições reais por idioma.': 'Free multilingual dictionary — etymology, pronunciation and real definitions by language.',
   'BVS Ministério da Saúde': 'BVS — Brazilian Ministry of Health',
   'Ministério da Saúde': 'Brazilian Ministry of Health',
+  // Várias IAs na mesma base (coordenacao.js)
+  'Esta ferramenta não existe no Tusab principal (versão {principal}; a desta IA é {sua}). Atualize o Tusab nas duas ferramentas de IA.': 'This tool does not exist in the main Tusab (version {principal}; this AI has {sua}). Update Tusab in both AI tools.',
+  'Argumentos inválidos: {detalhe}': 'Invalid arguments: {detalhe}',
+  'O Tusab de outra ferramenta de IA está fechando. Tente de novo em alguns segundos.': 'The Tusab of another AI tool is closing. Try again in a few seconds.',
 };
