@@ -118,7 +118,10 @@ export const saveAutoUpdateConfig = (canal_prefixo, enabled, frequencia, fontes,
   axios.post(`${API_BASE}/auto-update/config`, { canal_prefixo, projeto_prefixo, enabled, frequencia, fontes, canal_url });
 
 /** Gets auto-update config for a channel */
-export const getAutoUpdateConfig = (canal_prefixo, projeto_prefixo = '') => axios.get(`${API_BASE}/auto-update/config/${canal_prefixo}?projeto_prefixo=${projeto_prefixo}`);
+export const getAutoUpdateConfig = (canal_prefixo, projeto_prefixo = '') => axios.get(`${API_BASE}/auto-update/config/${encodeURIComponent(canal_prefixo)}?projeto_prefixo=${encodeURIComponent(projeto_prefixo)}`);
+
+/** Se há verificação de vídeos novos rodando e o resultado da última verificação manual */
+export const getAutoUpdateStatus = () => axios.get(`${API_BASE}/auto-update/status`);
 
 /** Triggers an immediate auto-update check for all configured channels */
 export const runAutoUpdate = () => axios.post(`${API_BASE}/auto-update/run`);

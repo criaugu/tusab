@@ -1,7 +1,7 @@
 {
   "display_name": "Tusab",
   "description": "Your study and research notebook inside your AI: build a base on this computer from YouTube, documents and 70 public sources, ask with citations to the minute or the page, and study with flashcards, quizzes and mind maps that stay saved.",
-  "long_description": "Tusab turns Claude (or another MCP-compatible AI) into a study and research notebook connected to **your** sources, kept on this computer.\n\n**Build your base**\n- **YouTube:** transcripts of channels, playlists and videos, extracted on this computer, from your own IP, with automatic channel updates.\n- **Documents:** PDF, Word, Excel, CSV, TXT/Markdown, web pages and FHIR, with the original file kept.\n- **70 public sources** in 11 areas: arXiv, PubMed, SciELO, Brazilian Chamber and Senate, Supreme Court, IBGE, Central Bank, open data portals and others, with no sign-up or key.\n\n**Ask with citations**\n- The AI fetches only the right excerpts and cites the source: the video and the minute, with a link, or the PDF page.\n- It uses fewer tokens than attaching whole sources, and Tusab shows how much it saved.\n\n**Study, teach and create**\n- **Library with 41 ready-made prompts**, 20 of them based on evidence-based techniques (pretest, interleaved practice, backward design, PRISMA, pre-mortem…), to study, teach, research and decide, with the suggested AI model for each task.\n- **What the AI creates stays saved in Tusab:** flashcards with spaced repetition, summaries, quizzes, mind maps and lesson plans, which open drawn in the Materials tab.\n\n**On the Tusab screen** (in the browser, served by this computer): extraction, repository, materials and export or import of the base (.tusab, zip, spreadsheet and PDF). In Portuguese, English and Spanish.\n\n**Privacy:** the base stays on this computer. Nothing goes through CriAugu servers; only the excerpts the AI queries go to the AI you chose.",
+  "long_description": "Tusab turns Claude (or another MCP-compatible AI) into a study and research notebook connected to **your** sources, kept on this computer.\n\n**Build your base**\n- **YouTube:** transcripts of channels, playlists and videos, extracted on this computer, from your own IP, with automatic channel updates.\n- **Documents:** PDF, Word, Excel, CSV, TXT/Markdown, web pages and FHIR, with the original file kept.\n- **70 public sources** in 11 areas: arXiv, PubMed, SciELO, Brazilian Chamber and Senate, Supreme Court, IBGE, Central Bank, open data portals and others, with no sign-up or key.\n\n**Ask with citations**\n- The AI fetches only the right excerpts and cites the source: the video and the minute, with a link, or the PDF page.\n- It uses fewer tokens than attaching whole sources, and Tusab shows how much it saved.\n\n**Study, teach and create**\n- **Library with 63 ready-made prompts** and **5 trails** (prompts in sequence), 38 of them based on evidence-based techniques (pretest, interleaved practice, backward design, PRISMA, pre-mortem…), to study, teach, research and decide, with the suggested AI model for each task.\n- **What the AI creates stays saved in Tusab:** flashcards with spaced repetition, summaries, quizzes, mind maps and lesson plans, which open drawn in the Materials tab.\n\n**On the Tusab screen** (in the browser, served by this computer): extraction, repository, materials and export or import of the base (.tusab, zip, spreadsheet and PDF). In Portuguese, English and Spanish.\n\n**Privacy:** the base stays on this computer. Nothing goes through CriAugu servers, except the feedback you decide to send; only the excerpts the AI queries go to the AI you chose.",
   "keywords": [
     "study",
     "research",
@@ -72,6 +72,10 @@
     {
       "name": "tusab_abrir_painel",
       "description": "Opens the Tusab screen in the browser, served by this computer."
+    },
+    {
+      "name": "tusab_trilha",
+      "description": "Shows and advances the study trails (prompts in sequence, with the step saved per project)."
     }
   ],
   "prompts": [
@@ -284,6 +288,116 @@
       "name": "reflexao-semana",
       "description": "What I learned, what is still unclear and next week's goal.",
       "text": "Weekly reflection — project ${arguments.projeto}"
+    },
+    {
+      "name": "inventario-afirmacoes",
+      "description": "Each claim in the sources classified as a finding, an assumption or a repetition of another author.",
+      "text": "Claim inventory — project ${arguments.projeto}"
+    },
+    {
+      "name": "consenso-minoria",
+      "description": "What all the sources support, what only one says and why the minority may be right.",
+      "text": "Consensus and minority voice — project ${arguments.projeto}"
+    },
+    {
+      "name": "glossario-divergente",
+      "description": "Terms the sources use with different meanings, side by side.",
+      "text": "Same word, different meanings — project ${arguments.projeto}"
+    },
+    {
+      "name": "rastro-origem",
+      "description": "Who said it first and who only repeats it, to know what data everything rests on.",
+      "text": "Trace the origin — project ${arguments.projeto}"
+    },
+    {
+      "name": "evolucao-posicao",
+      "description": "How an author's or the field's view changed over time, by the sources' dates.",
+      "text": "How the position changed — project ${arguments.projeto}"
+    },
+    {
+      "name": "teste-estresse",
+      "description": "The evidence that would weaken the main conclusion the most, and whether the base already has something like it.",
+      "text": "Stress-test the conclusion — project ${arguments.projeto}"
+    },
+    {
+      "name": "metodos-amostra",
+      "description": "For each study in the base: question, method, sample, period and stated limitations.",
+      "text": "Methods and sample — project ${arguments.projeto}"
+    },
+    {
+      "name": "auditar-meu-texto",
+      "description": "You paste your text and each sentence is checked against the base, with the missing citation.",
+      "text": "Audit my text — project ${arguments.projeto}"
+    },
+    {
+      "name": "notas-cornell",
+      "description": "Notes by video segment or PDF page, cue questions in the margin and a summary at the end.",
+      "text": "Cornell notes — project ${arguments.projeto}"
+    },
+    {
+      "name": "simulado-diagnostico",
+      "description": "A short exam mixing formats; at the end, a score by topic and flashcards of what you got wrong.",
+      "text": "Mock exam with diagnosis — project ${arguments.projeto}"
+    },
+    {
+      "name": "cobertura-edital",
+      "description": "You paste the syllabus or exam notice; each topic is marked as well covered, weak or missing in the base.",
+      "text": "Syllabus coverage — project ${arguments.projeto}"
+    },
+    {
+      "name": "tutor-socratico",
+      "description": "The AI does not give the answer: it asks questions, one at a time, until you get there.",
+      "text": "Socratic tutor — project ${arguments.projeto}"
+    },
+    {
+      "name": "ponte-entre-temas",
+      "description": "Unexpected links between two subjects in the base: shared principles and where the analogy breaks.",
+      "text": "Bridge between two topics — project ${arguments.projeto}"
+    },
+    {
+      "name": "trilha-de-trechos",
+      "description": "A \"playlist of moments\": the video segments to watch, in order, within your time.",
+      "text": "Watch only the essentials — project ${arguments.projeto}"
+    },
+    {
+      "name": "outro-publico",
+      "description": "The same subject in three versions: a child, a colleague in the field and a manager.",
+      "text": "Same content, another audience — project ${arguments.projeto}"
+    },
+    {
+      "name": "aula-de-um-video",
+      "description": "Turns a video from the base into a lesson plan with clips, question pauses and an activity.",
+      "text": "A class from one video — project ${arguments.projeto}"
+    },
+    {
+      "name": "por-que-e-assim",
+      "description": "The AI asks \"why?\" about the central facts and compares your explanation with the base.",
+      "text": "Why is this true? — project ${arguments.projeto}"
+    },
+    {
+      "name": "calendario-revisao",
+      "description": "Sessions and reviews with intervals calculated from the deadline.",
+      "text": "Review calendar up to the exam — project ${arguments.projeto}"
+    },
+    {
+      "name": "certeza-antes-da-resposta",
+      "description": "You give your confidence before each answer; high-confidence mistakes become the priority.",
+      "text": "How sure are you? — project ${arguments.projeto}"
+    },
+    {
+      "name": "desfazer-equivocos",
+      "description": "Each misconception stated, refuted and replaced by the right explanation.",
+      "text": "Misconceptions the sources correct — project ${arguments.projeto}"
+    },
+    {
+      "name": "perguntas-conceituais",
+      "description": "Concept questions for voting and discussion among classmates.",
+      "text": "Questions for pair discussion — project ${arguments.projeto}"
+    },
+    {
+      "name": "video-com-pausas",
+      "description": "The video in parts, with 2 questions between one part and the next.",
+      "text": "Watch with questions in between — project ${arguments.projeto}"
     }
   ]
 }

@@ -113,10 +113,42 @@ test('motor ocupado: o canal entra na fila uma vez só, e /auto-update/run esper
     a.salvarConfig({ canal_prefixo: 'canalteste', projeto_prefixo: 'Bio2', enabled: false });
   }
 
-  // Livre: /auto-update/run responde na hora e verifica em segundo plano.
+  // Nenhum canal ligado: /auto-update/run avisa, em vez de rodar à toa.
+  assert.deepEqual(a.executar(), { ok: true, sem_canais: true, message: 'Nenhum canal com a verificação automática ligada.' });
+
+  // Canal ligado e motor livre: responde na hora, verifica em segundo plano e guarda o resultado
+  // (a tela mostra o resultado e a hora da última verificação de cada canal).
+  a.salvarConfig({ canal_prefixo: 'canalteste', projeto_prefixo: 'Bio2', enabled: true, fontes: ['Videos'] });
   assert.deepEqual(a.executar(), { ok: true, message: 'Verificação iniciada em background' });
-  assert.deepEqual(await a.execucao, []);
-  assert.ok(m.logs.some((l) => l.message.includes('Auto-update manual: todos os canais estão atualizados')));
+  assert.equal(a.status().verificando, true);
+  await a.execucao;
+  assert.equal(a.status().verificando, false);
+  assert.equal(a.status().ultimo_resultado.verificados, 1);
+  assert.ok(a.ultimasVerificacoes()['Bio2/canalteste'] > 0);
+  m.filaLimpar();
+  a.salvarConfig({ canal_prefixo: 'canalteste', projeto_prefixo: 'Bio2', enabled: false });
+});
+
+test('histórico: canal com pasta de código (UC…) usa /channel/, o endereço gravado vale mais, e traz nome e periodicidade', async () => {
+  const { resumirProjetosYoutube } = await import('../src/nucleo/gestao.js');
+  const raiz = fs.mkdtempSync(path.join(os.tmpdir(), 'tusab-hist-'));
+  const codigo = 'UCM3vJxmuJJkk1r0yzFI9eZg';
+  const gestao = path.join(raiz, 'data', 'neural', 'Invest', 'management');
+  fs.mkdirSync(gestao, { recursive: true });
+  fs.writeFileSync(path.join(gestao, `${codigo}_base.csv`), 'ID,Titulo,Link,Status\nabcdefghijk,Um,https://www.youtube.com/watch?v=abcdefghijk,Sucesso\n');
+  let [h] = resumirProjetosYoutube(raiz);
+  assert.equal(h.canal_url, `https://www.youtube.com/channel/${codigo}`);
+  assert.deepEqual(h.auto_update, { enabled: false, frequencia: 'semanal', fontes: [] });
+
+  const meta = path.join(raiz, 'data', 'neural', 'Invest', 'youtube', codigo);
+  fs.mkdirSync(meta, { recursive: true });
+  fs.writeFileSync(path.join(meta, `${codigo}_meta.json`), JSON.stringify({ canal_nome: 'Investidor Sardinha', canal_handle: '@investidorsardinha' }));
+  fs.writeFileSync(path.join(gestao, `${codigo}_summary.json`), JSON.stringify({ canal_url: 'https://www.youtube.com/@investidorsardinha', auto_update: { enabled: true, frequencia: 'diario', fontes: ['Videos'] } }));
+  [h] = resumirProjetosYoutube(raiz);
+  assert.equal(h.canal_url, 'https://www.youtube.com/@investidorsardinha');
+  assert.equal(h.canal_nome, 'Investidor Sardinha');
+  assert.equal(h.canal_handle, '@investidorsardinha');
+  assert.deepEqual(h.auto_update, { enabled: true, frequencia: 'diario', fontes: ['Videos'] });
 });
 
 // ── Frequência e agendamento (motor simulado: conta as consultas ao yt-dlp) ──
@@ -198,7 +230,7 @@ test('vídeo novo vai para o motor com o projeto e as abas da configuração', a
   const m = motorSimulado();
   const a = new Atualizacao(r, m);
   assert.deepEqual(await a.verificar(), ['P/semanal']);
-  assert.deepEqual(m.pedidos, [{ url: 'https://www.youtube.com/@semanal', projeto_nome: 'P', fontes: ['Videos'] }]);
+  assert.deepEqual(m.pedidos, [{ url: 'https://www.youtube.com/@semanal', projeto_nome: 'P', fontes: ['Videos'], canal_pasta: 'semanal' }]);
   assert.ok(m.logs.some((l) => l.includes('🆕 Auto-update: https://www.youtube.com/@semanal tem 1 vídeo(s) novo(s) — enfileirando extração')));
 });
 

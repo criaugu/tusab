@@ -13,7 +13,7 @@ import RelatorioTab from '../assistente/RelatorioTab';
 import CanalUrlSearchInput from './CanalUrlSearchInput';
 import { BTN_FOCUS } from '../../constants';
 import {
-  fetchHistory, setChannel, saveAutoUpdateConfig, runAutoUpdate, openFolder, clearLog,
+  fetchHistory, setChannel, saveAutoUpdateConfig, runAutoUpdate, getAutoUpdateStatus, openFolder, clearLog,
 } from '../../services/api';
 
 export default function ExtractionTab({
@@ -86,7 +86,7 @@ export default function ExtractionTab({
   // Reseta o "mostrar mais" a cada nova busca — senão uma busca anterior
   // expandida deixa a próxima já aberta por engano.
   React.useEffect(() => { setItensExpandido(false); }, [lastFonteResult]);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [logFiltroCanal, setLogFiltroCanal] = React.useState('');
 
   // Deriva canais distintos presentes nos logs (mantém ordem de aparição)
@@ -105,6 +105,36 @@ export default function ExtractionTab({
       : (status.logs || []),
     [status.logs, logFiltroCanal]
   );
+
+  // "Verificar agora": a verificação roda em segundo plano no Tusab; aqui a tela acompanha até o
+  // fim e diz o resultado (antes ele só aparecia no registro da aba Extração).
+  const [resultadoVerificacao, setResultadoVerificacao] = React.useState('');
+  const verificarAgora = async () => {
+    setAutoUpdateChecking(true);
+    setResultadoVerificacao(t('autoupdate.checking'));
+    try {
+      const { data } = await runAutoUpdate();
+      if (data?.error) { setResultadoVerificacao(data.message || t('autoupdate.result_error')); return; }
+      if (data?.sem_canais) { setResultadoVerificacao(t('autoupdate.no_channels')); return; }
+      const limite = Date.now() + 10 * 60 * 1000;
+      let status = null;
+      while (Date.now() < limite) {
+        await new Promise((r) => setTimeout(r, 2000));
+        status = (await getAutoUpdateStatus()).data;
+        if (!status?.verificando) break;
+      }
+      const r = status?.ultimo_resultado;
+      if (!r) setResultadoVerificacao(t('autoupdate.checking_background'));
+      else if (r.erro) setResultadoVerificacao(t('autoupdate.result_error'));
+      else if (r.novos?.length) setResultadoVerificacao(t('autoupdate.result_new', { count: r.novos.length }));
+      else setResultadoVerificacao(t('autoupdate.result_none', { count: r.verificados }));
+      fetchHistory().then((res) => setHistory(res.data)).catch(() => {});
+    } catch {
+      setResultadoVerificacao(t('autoupdate.result_error'));
+    } finally {
+      setAutoUpdateChecking(false);
+    }
+  };
 
   return (
     <div id="panel-extracao" role="tabpanel" aria-labelledby="tab-extracao"
@@ -735,15 +765,12 @@ export default function ExtractionTab({
       {/* Sub-aba: Auto-Update */}
       {extracaoSubTab === 'periodicidade' && (
         <div className="flex-1 overflow-y-auto px-4 lg:px-8 pb-6 pt-5 space-y-4 custom-scrollbar">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-3">
             <p className={`text-xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
               {t('autoupdate.subtitle_tab')}
             </p>
             <button
-              onClick={() => {
-                setAutoUpdateChecking(true);
-                runAutoUpdate().finally(() => setAutoUpdateChecking(false));
-              }}
+              onClick={verificarAgora}
               disabled={autoUpdateChecking || isRunning}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-colors disabled:opacity-40 ${BTN_FOCUS}
                 ${darkMode ? 'border-cyan-500/30 text-cyan-400 bg-cyan-500/8 hover:bg-cyan-500/15' : 'border-cyan-500/40 text-cyan-700 bg-cyan-50 hover:bg-cyan-100'}`}>
@@ -751,6 +778,10 @@ export default function ExtractionTab({
               {t('autoupdate.check_now')}
             </button>
           </div>
+
+          <p role="status" aria-live="polite" data-resultado-verificacao className={`text-xs ${resultadoVerificacao ? '' : 'sr-only'} ${darkMode ? 'text-cyan-300' : 'text-cyan-800'}`}>
+            {resultadoVerificacao}
+          </p>
 
           <div className={`rounded-2xl border overflow-hidden ${darkMode ? 'bg-white/4 border-white/10' : 'bg-white border-slate-200 shadow-sm'}`}>
             <div className={`px-5 py-3 border-b flex items-center gap-2 ${darkMode ? 'border-white/10 bg-white/4' : 'border-slate-100 bg-slate-50'}`}>
@@ -767,7 +798,9 @@ export default function ExtractionTab({
                   </p>
                 </div>
               ) : history.map((h) => {
-                const cfg = autoUpdateConfigs[h.canal] || { enabled: false, frequencia: 'semanal' };
+                const chaveCfg = `${h.projeto || ''}/${h.canal}`;
+                const cfg = autoUpdateConfigs[chaveCfg] || { enabled: false, frequencia: 'semanal' };
+                const nomeCanal = h.canal_nome || h.canal;
                 const FREQ_LABELS = {
                   ao_abrir: t('extraction.freq_on_open'),
                   diario:   t('extraction.freq_daily'),
@@ -779,30 +812,39 @@ export default function ExtractionTab({
                 const rowKey = projetoPrefixo ? `${h.canal}__${projetoPrefixo}` : h.canal;
                 const toggleEnabled = (canal, currentCfg) => {
                   const next = { ...currentCfg, enabled: !currentCfg.enabled };
-                  setAutoUpdateConfigs(prev => ({ ...prev, [canal]: next }));
+                  setAutoUpdateConfigs(prev => ({ ...prev, [chaveCfg]: next }));
                   saveAutoUpdateConfig(canal, next.enabled, next.frequencia || 'semanal', next.fontes || [], canalUrl, projetoPrefixo).catch(() => {});
                 };
                 const changeFreq = (canal, currentCfg, freq) => {
                   const next = { ...currentCfg, frequencia: freq };
-                  setAutoUpdateConfigs(prev => ({ ...prev, [canal]: next }));
+                  setAutoUpdateConfigs(prev => ({ ...prev, [chaveCfg]: next }));
                   saveAutoUpdateConfig(canal, next.enabled, freq, next.fontes || [], canalUrl, projetoPrefixo).catch(() => {});
                 };
                 return (
                   <div key={rowKey} className={`px-5 py-3.5 flex items-center gap-3 ${darkMode ? 'hover:bg-white/3' : 'hover:bg-slate-50'} transition-colors`}>
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-black shrink-0 ${darkMode ? 'bg-white/8 text-slate-300' : 'bg-slate-100 text-slate-500'}`}>
-                      {(h.canal || '?')[0].toUpperCase()}
+                      {(nomeCanal || '?')[0].toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-xs font-semibold truncate ${darkMode ? 'text-slate-200' : 'text-slate-800'}`}>@{h.canal}</p>
-                      <p className={`text-[10px] ${darkMode ? 'text-slate-600' : 'text-slate-400'}`}>
+                      <p className={`text-xs font-semibold truncate ${darkMode ? 'text-slate-200' : 'text-slate-800'}`}>
+                        {nomeCanal}{h.canal_handle && <span className={`font-normal ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}> {h.canal_handle}</span>}
+                      </p>
+                      <p className={`text-[10px] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                         {t('autoupdate.videos_extracted', { count: h.extraidos ?? h.total ?? 0 })}
                         {projetoPrefixo && <> · {t('autoupdate.project_label')} <span className="font-medium">{projetoPrefixo}</span></>}
                       </p>
+                      {cfg.enabled && (
+                        <p className={`text-[10px] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                          {h.ultima_verificacao
+                            ? t('autoupdate.last_check', { data: new Date(h.ultima_verificacao * 1000).toLocaleString(i18n.language, { dateStyle: 'short', timeStyle: 'short' }) })
+                            : t('autoupdate.never_checked')}
+                        </p>
+                      )}
                     </div>
                     {cfg.enabled && (
-                      <div className="flex gap-1">
+                      <div className="flex gap-1 flex-wrap justify-end" role="group" aria-label={t('autoupdate.freq_group_aria', { canal: nomeCanal })}>
                         {['ao_abrir', 'diario', 'semanal', 'mensal'].map(f => (
-                          <button key={f} onClick={() => changeFreq(h.canal, cfg, f)}
+                          <button key={f} onClick={() => changeFreq(h.canal, cfg, f)} aria-pressed={cfg.frequencia === f}
                             className={`px-2 py-1 rounded-lg text-[10px] font-bold border transition-colors ${BTN_FOCUS}
                               ${cfg.frequencia === f
                                 ? 'bg-cyan-500 border-cyan-500 text-white'
@@ -814,7 +856,7 @@ export default function ExtractionTab({
                     )}
                     <button
                       onClick={() => toggleEnabled(h.canal, cfg)}
-                      role="switch" aria-checked={cfg.enabled}
+                      role="switch" aria-checked={cfg.enabled} aria-label={t('autoupdate.toggle_aria', { canal: nomeCanal, projeto: projetoPrefixo })}
                       className={`w-9 h-5 rounded-full flex items-center shrink-0 transition-colors px-0.5 ${BTN_FOCUS}
                         ${cfg.enabled ? 'bg-cyan-500 justify-end' : darkMode ? 'bg-white/15 justify-start' : 'bg-slate-300 justify-start'}`}>
                       <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
@@ -825,7 +867,7 @@ export default function ExtractionTab({
             </div>
           </div>
 
-          <p className={`text-[10px] text-center ${darkMode ? 'text-slate-600' : 'text-slate-400'}`}>
+          <p className={`text-[11px] text-center ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
             {t('autoupdate.footer_hint')}
           </p>
         </div>

@@ -126,11 +126,19 @@ export function resumirProjetosYoutube(raiz) {
       const sucesso = linhas.filter((l) => l.Status === 'Sucesso').length;
       const semLeg = linhas.filter((l) => l.Status === 'Sem Legenda').length;
       const datas = linhas.map((l) => l.Data_Extracao).filter(Boolean).sort();
-      let canalUrl = `https://www.youtube.com/@${canalBase}`;
+      const sumario = lerJson(p.replace(/_base\.csv$/, '_summary.json'), null);
+      // Endereço do canal: o que a extração gravou no resumo vale mais. Sem ele, o @ do link; e uma
+      // pasta com o código do canal (UC + 22 caracteres) vira /channel/<código>, não @<código>
+      // (o @ com código não existe no YouTube, e a verificação de vídeos novos falhava).
+      let canalUrl = /^UC[A-Za-z0-9_-]{22}$/.test(canalBase)
+        ? `https://www.youtube.com/channel/${canalBase}`
+        : `https://www.youtube.com/@${canalBase}`;
       const link = linhas.find((l) => l.Link)?.Link || '';
       const m = link.match(/@([^/?\s]+)/);
       if (m) canalUrl = `https://www.youtube.com/@${m[1]}`;
-      const sumario = lerJson(p.replace(/_base\.csv$/, '_summary.json'), null);
+      if (typeof sumario?.canal_url === 'string' && /^https:\/\/(www\.)?youtube\.com\//.test(sumario.canal_url)) canalUrl = sumario.canal_url;
+      // Nome e @ do canal, como o YouTube mostra (guardados na extração, em youtube/<canal>/<canal>_meta.json)
+      const meta = lerJson(path.join(pastaYoutubeCanal(raiz, projeto, canalBase), `${canalBase}_meta.json`), null);
       const totalMapeado = sumario?.total_mapeado ?? total;
       const uf = sumario?.ultimo_filtro || {};
       const ultimoFiltro = (uf.playlists?.length || uf.data_inicio || uf.data_fim) ? uf : null;
@@ -145,6 +153,11 @@ export function resumirProjetosYoutube(raiz) {
         cobertura: totalMapeado > 0 ? Math.round((sucesso / totalMapeado) * 100) : 0,
         ultima_extracao: datas.at(-1) || '',
         ultimo_filtro: ultimoFiltro,
+        canal_nome: typeof meta?.canal_nome === 'string' && meta.canal_nome.trim() ? meta.canal_nome.trim() : '',
+        canal_handle: typeof meta?.canal_handle === 'string' && meta.canal_handle.startsWith('@') && meta.canal_handle !== `@${canalBase}` ? meta.canal_handle : '',
+        auto_update: sumario?.auto_update && typeof sumario.auto_update === 'object'
+          ? { enabled: Boolean(sumario.auto_update.enabled), frequencia: sumario.auto_update.frequencia || 'semanal', fontes: Array.isArray(sumario.auto_update.fontes) ? sumario.auto_update.fontes : [] }
+          : { enabled: false, frequencia: 'semanal', fontes: [] },
       });
     } catch { /* CSV corrompido é pulado, como no desktop */ }
   }

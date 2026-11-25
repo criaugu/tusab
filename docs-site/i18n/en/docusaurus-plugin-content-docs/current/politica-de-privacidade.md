@@ -15,7 +15,7 @@ This policy applies to Tusab from version 2.0.0, the local connector for Claude 
 
 ## 1. The principle: your data stays on your computer
 
-Tusab runs on your computer. **CriAugu operates no server** that receives the content of your base, your conversations with the AI, your files or data about how you use Tusab. There is no account, login, telemetry, tracking cookies or cloud sync.
+Tusab runs on your computer. **CriAugu operates no server** that receives the content of your base, your conversations with the AI, your files or data about how you use Tusab. There is no account, login, telemetry, tracking cookies or cloud sync. The only exception is [voluntary feedback](#feedback-voluntario): it leaves only if you decide to send it, after seeing exactly what will go.
 
 This policy follows Brazil's General Data Protection Law (LGPD, Law No. 13,709/2018) and, where applicable, the EU General Data Protection Regulation (GDPR, Regulation (EU) 2016/679).
 
@@ -31,6 +31,7 @@ Everything stays in the folder you choose at installation (the "repository folde
 | Study materials and spaced-repetition state | Keeping what the AI produces and remembering review dates |
 | Your own requests (prompts), language, extraction queue and preferences | Configuring Tusab |
 | Token-savings counter (aggregate numbers only) | Showing how much the search saved |
+| Usage counters (numbers only: tools used, prompts, trails, days of use) and the state of the feedback invitation | Inviting you to give feedback at the right time and, if you want, sending them with it |
 
 CriAugu has no access to any of this data.
 
@@ -43,10 +44,22 @@ CriAugu has no access to any of this data.
 | Public sources (paper databases, legislation, open data) | The term you searched for | When you search |
 | Sites of the web pages you add | The page request | When you add a page |
 | GitHub | Download of the yt-dlp tool and its checksum | Only if the computer does not have yt-dlp yet |
+| **CriAugu**, in the CriAugu feedback collector ([voluntary feedback](#feedback-voluntario)) | The score, the comment, the email (if you give it) and, if you leave it checked, the usage numbers | Only when you click Send in the feedback form |
 
 **What the AI tool does with the excerpts** (storing them, using them to train models, which country the servers are in) follows the terms and privacy policy of that tool and AI service, not Tusab's. You choose the tool; read its policy. These services may be outside Brazil, which is an international data transfer made at your initiative (LGPD, art. 33).
 
 To use an AI in the browser, Tusab copies a request with excerpts from the base to your clipboard. Nothing is sent until you paste it into the AI.
+
+### Voluntary feedback {#feedback-voluntario}
+
+From time to time (after you complete a trail, save 5 materials, after a week of use or on a new version; at most once every 30 days), the Tusab screen invites you to give a score and a comment. You can also open the form from Help. Before sending, you see exactly what will go:
+
+- the score from 0 to 10 and the comment, if you write one (please do not write personal data or excerpts from your documents);
+- the email, only if you want a reply;
+- if you leave it checked, the **usage numbers**: how many times each tool was used, which prompts and trails, how many projects, sources and videos, version, system and language. The content of the base, the queries, project names, titles or folders **never** go;
+- a random installation code, to group submissions from the same installation without identifying you.
+
+The submission goes to the CriAugu collector (`coletor.criaugu.com`, on the hosting CriAugu contracts from Hostinger, which acts as a processor), is stored there and reaches the tusab@tusab.solutions mailbox by email. If direct sending fails, Tusab prepares the same email, which you send if you want. "Not now" postpones it for 14 days; "Don't ask again" turns the invitation off for good. This data is used only to improve Tusab and reply to you, and is deleted on request through the contact email.
 
 Technical details are in [Privacy (technical details)](/privacidade).
 
@@ -56,6 +69,7 @@ Technical details are in [Privacy (technical details)](/privacidade).
 |---|---|
 | Building and querying your base on your computer, for personal use | Processing by a natural person for exclusively private, non-economic purposes, outside the scope of the LGPD (art. 4, I) |
 | The same, in professional or institutional use | Whoever uses it (you or your organization) is the controller and chooses the appropriate legal basis (LGPD, arts. 7 and 11; GDPR, art. 6) |
+| Voluntary feedback (score, comment, optional email and usage numbers) | Consent (LGPD, art. 7, I; GDPR, art. 6(1)(a)), given at each submission; you can ask for deletion at any time |
 | Sending excerpts to the AI tool you chose | An action you start, under the terms of the chosen tool |
 | Third parties' personal data you put in the base (for example, names in documents) | The legal basis is the responsibility of whoever adds the content (see the [Terms and Conditions](/termos-e-condicoes)) |
 

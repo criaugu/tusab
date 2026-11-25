@@ -61,6 +61,17 @@ export class Atualizacao {
     this._primeira = true;
     this._relogioInicial = null;
     this._relogio = null;
+    this.ultimoResultado = null; // { em, novos, verificados } da última verificação manual
+  }
+
+  /** Quando cada canal foi verificado pela última vez: { "projeto/canal": segundos }. */
+  ultimasVerificacoes() {
+    return { ...this._estado().ultima_verificacao };
+  }
+
+  /** GET /auto-update/status: se há verificação rodando e o resultado da última manual. */
+  status() {
+    return { verificando: this.verificando, ultimo_resultado: this.ultimoResultado };
   }
 
   // ── Caminhos e estado ─────────────────────────────────────────────────────
@@ -152,12 +163,16 @@ export class Atualizacao {
       return { error: true, message: t('Extração em andamento. Aguarde para verificar atualizações.') };
     }
     if (this.verificando) return { ok: true, message: t('Verificação já em andamento') };
+    const ativos = this.canaisAtivos().length;
+    if (!ativos) return { ok: true, sem_canais: true, message: t('Nenhum canal com a verificação automática ligada.') };
     this.execucao = this.verificar({ manual: true }).then((novos) => {
       if (novos.length) this.motor.log(t('🔄 Auto-update manual: {length} canal(is) com novos vídeos enfileirado(s)', { length: novos.length }));
       else this.motor.log(t('✅ Auto-update manual: todos os canais estão atualizados'));
+      this.ultimoResultado = { em: this.agora(), novos, verificados: ativos };
       return novos;
     }, (e) => {
       this.motor.log(t('⚠️  Auto-update manual: erro — {message}', { message: e.message }));
+      this.ultimoResultado = { em: this.agora(), novos: [], verificados: ativos, erro: e.message };
       return [];
     });
     return { ok: true, message: t('Verificação iniciada em background') };
@@ -291,7 +306,8 @@ export class Atualizacao {
           }
           this.motor.log(t('🆕 Auto-update: {url} tem {length} vídeo(s) novo(s) — enfileirando extração', { url, length: novos.length }));
           // Livre: começa agora; ocupado: entra na fila do motor.
-          this.motor.extrairOuEnfileirar({ url, projeto_nome: item.projeto, fontes: item.fontes });
+          // Na mesma pasta do canal verificado (não na que o nome do YouTube daria).
+          this.motor.extrairOuEnfileirar({ url, projeto_nome: item.projeto, fontes: item.fontes, canal_pasta: item.canal });
         }
         if (acessou || !item.canal_urls.length) {
           verificados.push(item.chave);

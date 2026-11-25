@@ -14,6 +14,7 @@ import { Motor } from './motor.js';
 import { ServicoFontes } from '../fontes/servico.js';
 import { carregarIdioma } from './idioma.js';
 import { t } from './idioma.js';
+import { contarCliente, contarFerramenta } from './uso.js';
 
 const TAMANHO_MAX_TEXTO = 5 * 1024 * 1024;
 
@@ -36,6 +37,7 @@ export class Tusab {
   /** Uma ferramenta de IA terminou a inicialização MCP (clientInfo: { name, version }). */
   conectarMcp(clientInfo, { id = 'local', remoto = false } = {}) {
     const anterior = this.clientes.get(id);
+    if (!anterior) contarCliente(this.raiz, clientInfo?.name);
     this.clientes.set(id, {
       nome: String(clientInfo?.name || ''),
       versao: String(clientInfo?.version || ''),
@@ -58,6 +60,7 @@ export class Tusab {
   /** A IA chamou uma ferramenta do Tusab. */
   registrarUsoMcp(ferramenta) {
     this.ultimaFerramenta = { nome: ferramenta, em: Date.now() };
+    contarFerramenta(this.raiz, ferramenta);
   }
 
   /** GET /api/conexao — "cliente" é a primeira IA conectada; "clientes", todas. */

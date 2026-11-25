@@ -527,7 +527,10 @@ export function reprCurto(item) {
 export function exigirJson(resp, fonteNome) {
   const tipo = resp.headers.get('content-type') || '';
   if (!tipo.toLowerCase().includes('json')) {
-    throw new Error(t('{fonteNome} respondeu {tipo} em vez de JSON (bloqueio ou manutenção no servidor de origem)', { fonteNome, tipo: tipo || t('sem tipo') }));
+    // A mensagem chega à IA: do cabeçalho vai só o tipo (ex.: text/html), nunca texto livre do
+    // servidor de origem (que poderia trazer uma instrução escondida).
+    const seguro = tipo.split(';')[0].trim().match(/^[a-z0-9.+-]{1,40}\/[a-z0-9.+-]{1,60}$/i)?.[0];
+    throw new Error(t('{fonteNome} respondeu {tipo} em vez de JSON (bloqueio ou manutenção no servidor de origem)', { fonteNome, tipo: seguro || t('sem tipo') }));
   }
   return resp.json();
 }

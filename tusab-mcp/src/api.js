@@ -25,7 +25,9 @@ import {
   statusSomenteLeitura,
 } from './nucleo/exportar.js';
 import { ErroValidacao as ErroValidacaoFontes } from './fontes/servico.js';
-import { excluirPromptUsuario, listarPrompts, montarPrompt, montarPromptComTrechos, renomearPasta, salvarPromptUsuario } from './nucleo/prompts.js';
+import { alternarFavorito, definirMenu, excluirPromptUsuario, listarPrompts, montarPrompt, montarPromptComTrechos, registrarUso, renomearPasta, salvarPromptUsuario } from './nucleo/prompts.js';
+import { listarTrilhas, mudarAndamento } from './nucleo/trilhas.js';
+import { conviteFeedback, enviarFeedback, montarEnvio, registrarConvite, registrarEnvioPorEmail } from './nucleo/feedback.js';
 import { medirPerguntas, resumoEconomia, zerarEconomia } from './nucleo/tokens.js';
 import { URL_CANAL } from './nucleo/ytdlp.js';
 import { t } from './nucleo/idioma.js';
@@ -35,6 +37,11 @@ export class ErroHttp extends Error {
     super(mensagem);
     this.status = status;
   }
+}
+
+/** decodeURIComponent que responde 400 (e não 500) a um endereço com "%" malformado. */
+function decodificar(s) {
+  try { return decodeURIComponent(s); } catch { throw new ErroHttp(400, t('Endereço inválido.')); }
 }
 
 // Métricas (router_metrics.py): amostra a cada 2 s, histórico de 60 pontos.
@@ -86,7 +93,7 @@ const NEUTRAS = {
 async function rotaEstudo(tusab, metodo, caminho, json) {
   const raiz = tusab.raiz;
   const ok = (corpo) => ({ status: 200, corpo });
-  const dec = decodeURIComponent;
+  const dec = decodificar;
   const validando = (fn) => {
     try { return ok(fn()); } catch (e) {
       if (e instanceof ErroValidacao) throw new ErroHttp(422, e.message);
@@ -181,7 +188,11 @@ export async function atenderApi(tusab, metodo, caminho, query, lerCorpo) {
     }
 
     // ── Repositório, histórico e relatório ─────────────────────────────────
-    case 'GET /history': return ok(resumirProjetosYoutube(raiz));
+    case 'GET /history': {
+      const ultimas = tusab.atualizacao?.ultimasVerificacoes?.() || {};
+      return ok(resumirProjetosYoutube(raiz).map((h) => ({ ...h, ultima_verificacao: ultimas[`${h.projeto}/${h.canal}`] || null })));
+    }
+    case 'GET /auto-update/status': return ok(tusab.atualizacao.status());
     case 'GET /repositorio': return ok(listarRepositorio(raiz));
     case 'GET /neural/projetos': return ok(listarProjetos(raiz));
     case 'POST /neural/projeto': return ok(criarProjeto(raiz, (await json()).nome));
@@ -203,7 +214,14 @@ export async function atenderApi(tusab, metodo, caminho, query, lerCorpo) {
     case 'POST /neural/buscar': return ok(buscarTexto(raiz, await json()));
     case 'POST /neural/ler-arquivo': return ok(lerArquivo(raiz, (await json()).caminho));
     case 'DELETE /neural/limpar': return ok(depoisDeMudar(limparProjeto(raiz, await json())));
-    case 'DELETE /historico/limpar': return ok(limparHistorico(raiz, (await json()).prefixos || []));
+    case 'DELETE /historico/limpar': {
+      // Lista de canais, ou nada (= todos). Outro tipo não pode virar "apagar todos" por engano.
+      const { prefixos } = await json();
+      if (prefixos != null && !(Array.isArray(prefixos) && prefixos.every((x) => typeof x === 'string'))) {
+        throw new ErroHttp(400, t('prefixos deve ser uma lista de nomes de canal.'));
+      }
+      return ok(limparHistorico(raiz, prefixos || []));
+    }
     case 'DELETE /reset-total': {
       if (motor.is_running) motor.cancelarExtracao();
       await motor.execucao;
@@ -292,13 +310,13 @@ export async function atenderApi(tusab, metodo, caminho, query, lerCorpo) {
   // Rotas com parâmetro no caminho
   let m;
   if (metodo === 'GET' && (m = caminho.match(/^\/auto-update\/config\/([^/]+)$/))) {
-    return ok(tusab.atualizacao.lerConfig(decodeURIComponent(m[1]), query.get('projeto_prefixo') || ''));
+    return ok(tusab.atualizacao.lerConfig(decodificar(m[1]), query.get('projeto_prefixo') || ''));
   }
   if (metodo === 'GET' && (m = caminho.match(/^\/export\/base-compartilhavel\/([^/]+)$/))) {
     // ?originais=1: incluir os arquivos originais (desligado por padrão — podem ter dados pessoais).
-    return arquivo(await exportarBaseCompartilhavel(raiz, decodeURIComponent(m[1]), { comOriginais: query.get('originais') === '1' }));
+    return arquivo(await exportarBaseCompartilhavel(raiz, decodificar(m[1]), { comOriginais: query.get('originais') === '1' }));
   }
-  if (metodo === 'GET' && (m = caminho.match(/^\/relatorio\/(.+)$/))) return ok(relatorio(raiz, decodeURIComponent(m[1])));
+  if (metodo === 'GET' && (m = caminho.match(/^\/relatorio\/(.+)$/))) return ok(relatorio(raiz, decodificar(m[1])));
   if (metodo === 'DELETE' && (m = caminho.match(/^\/queue\/item\/(-?\d+)$/))) return ok(motor.filaRemover(Number(m[1])));
   if (metodo === 'DELETE' && (m = caminho.match(/^\/prompts\/usuario\/(u-[0-9a-f]{8})$/))) {
     const r = excluirPromptUsuario(raiz, m[1]);
@@ -306,14 +324,46 @@ export async function atenderApi(tusab, metodo, caminho, query, lerCorpo) {
     return ok(r);
   }
   if (metodo === 'DELETE' && (m = caminho.match(/^\/neural\/arquivo\/([^/]+)\/([^/]+)$/))) {
-    return ok(depoisDeMudar(excluirArquivo(raiz, decodeURIComponent(m[1]), decodeURIComponent(m[2]))));
+    return ok(depoisDeMudar(excluirArquivo(raiz, decodificar(m[1]), decodificar(m[2]))));
   }
+  // ── Feedback voluntário (nada sai sem o usuário ver e enviar) ──────────
+  if (rota === 'GET /feedback/convite') return ok(conviteFeedback(raiz));
+  if (rota === 'POST /feedback/convite') return ok(registrarConvite(raiz, await json()));
+  if (rota === 'POST /feedback/previa') {
+    try { return ok({ ok: true, envio: montarEnvio(tusab, undefined, await json()) }); } catch (e) { return ok({ error: true, message: e.message }); }
+  }
+  if (rota === 'POST /feedback/enviar') {
+    try { return ok(await enviarFeedback(tusab, undefined, await json())); } catch (e) { return ok({ error: true, message: e.message }); }
+  }
+  if (rota === 'POST /feedback/enviado-por-email') return ok(registrarEnvioPorEmail(raiz, await json()));
+
   // ── Prompts prontos (a IA gera; o Tusab entrega o pedido certo) ────────
   if (rota === 'GET /prompts') return ok(listarPrompts(raiz));
+  if (rota === 'POST /prompts/favorito') {
+    const r = alternarFavorito(raiz, String((await json()).id || ''));
+    if (r.ok) tusab.aoMudarPrompts?.();
+    return ok(r);
+  }
+  if (rota === 'POST /prompts/menu') {
+    const r = definirMenu(raiz, (await json()).menu);
+    if (r.ok) tusab.aoMudarPrompts?.();
+    return ok(r);
+  }
+  // ── Trilhas (prompts em sequência, com o passo guardado por projeto) ────
+  if (rota === 'GET /trilhas') return ok({ trilhas: listarTrilhas(raiz, query.get('projeto') || '') });
+  if (rota === 'POST /trilhas/andamento') {
+    try { return ok(mudarAndamento(raiz, await json())); } catch (e) { return ok({ error: true, message: e.message }); }
+  }
   if (rota === 'POST /prompts/montar') {
     const { id, projeto, tema, quantidade, navegador } = await json();
+    // Copiar conta como uso (alimenta "mais usados" no "+" da IA); pedido inválido não conta.
+    const contar = () => { registrarUso(raiz, id); tusab.aoMudarPrompts?.(); };
     try {
-      if (!navegador) return ok({ ok: true, texto: montarPrompt(id, { projeto, tema, quantidade }, raiz) });
+      if (!navegador) {
+        const texto = montarPrompt(id, { projeto, tema, quantidade }, raiz);
+        contar();
+        return ok({ ok: true, texto });
+      }
       // IA no navegador: os trechos vão dentro do pedido (do tema, ou um panorama do projeto)
       tusab.sincronizar();
       const proj = String(projeto || '').trim();
@@ -357,7 +407,7 @@ export async function atenderApi(tusab, metodo, caminho, query, lerCorpo) {
   // ── Fontes públicas (fase C) ───────────────────────────────────────────
   if (rota === 'GET /fontes') return ok(tusab.fontes.listar());
   if ((m = caminho.match(/^\/fontes\/([^/]+)\/(search|status|cancel)$/))) {
-    const id = decodeURIComponent(m[1]);
+    const id = decodificar(m[1]);
     if (metodo === 'GET' && m[2] === 'status') return ok(tusab.fontes.status(id));
     if (metodo === 'POST' && m[2] === 'cancel') return ok(tusab.fontes.cancelar(id));
     if (metodo === 'POST' && m[2] === 'search') {

@@ -440,6 +440,28 @@ export class Indice {
   }
 
   /**
+   * Busca com as variações que a IA do usuário escreveu (sinônimos, termo técnico, outro idioma):
+   * a IA entende o significado e o Tusab procura cada forma de dizer. Os resultados se juntam pela
+   * fusão por posição (RRF, Cormack et al., 2009): o trecho bem colocado em várias buscas sobe.
+   * Sem variações, é a busca comum. Mesmo formato de buscar().
+   */
+  buscarComVariacoes(consulta, variacoes = [], { projeto = null, limite = 8 } = {}) {
+    const formas = [...new Set([consulta, ...variacoes].map((x) => String(x || '').trim()).filter(Boolean))].slice(0, 5);
+    if (formas.length <= 1) return this.buscar(consulta, { projeto, limite });
+    const lim = Math.min(Math.max(Number(limite) || 8, 1), 20);
+    const K = 60; // constante usual da RRF: suaviza a diferença entre 1º e 2º lugar
+    const placar = new Map(); // trecho_id → { achado, pontos }
+    for (const forma of formas) {
+      this.buscar(forma, { projeto, limite: 20 }).forEach((achado, posicao) => {
+        const atual = placar.get(achado.trecho_id) || { achado, pontos: 0 };
+        atual.pontos += 1 / (K + posicao + 1);
+        placar.set(achado.trecho_id, atual);
+      });
+    }
+    return [...placar.values()].sort((a, b) => b.pontos - a.pontos).slice(0, lim).map((x) => x.achado);
+  }
+
+  /**
    * Panorama do projeto sem consulta: os primeiros trechos de cada fonte, alternando entre as
    * fontes (1º de cada, depois o 2º de cada...). Usado quando o pedido não tem tema.
    * Mesmo formato de buscar().

@@ -10,7 +10,7 @@ import axios from 'axios';
 import { Trans, useTranslation } from 'react-i18next';
 import i18n from './i18n';
 import {
-  Pause, Square, Activity, FileText, Video, HelpCircle,
+  Pause, Square, Activity, FileText, Video, HelpCircle, Maximize2, Minimize2,
   Database, Zap, Terminal, Brain,
   CheckCircle2, AlertTriangle, Loader2, BarChart3, Menu, X,
   CloudOff, Trophy, Globe, MicOff, Scissors, Bot, Sparkles,
@@ -24,6 +24,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { API_BASE, BTN_FOCUS, MODO_EXTENSAO } from './constants';
 import { initAnalytics, getConsent, Analytics } from './services/analytics';
 import { useOnboarding } from './hooks/useOnboarding';
+import { useTelaCheia } from './hooks/useTelaCheia';
+import AvisoTraducao from './components/shared/AvisoTraducao';
+import Feedback from './components/shared/Feedback';
+import { ATALHOS_ACOES, ATALHOS_NAVEGACAO, ATALHO_NOVO_POR_TELA, TECLA_NOVO, atalhosLigados, teclaDeAtalho } from './constants/atalhos';
 import { useAssistenteConfig } from './hooks/useAssistenteConfig';
 import { useChatEngine }  from './hooks/useChatEngine';
 import { usePerfil, PERFIS_META, PERFIS_CONFIG } from './hooks/usePerfil';
@@ -751,45 +755,48 @@ function App() {
   /** Syncs dark class on html element */
   useEffect(() => { document.documentElement.classList.toggle('dark', darkMode); }, [darkMode]);
 
-  /** Keyboard shortcuts: Esc closes/collapses chat; Shift+key (or ⌘+key on
-   * macOS, for most letters) navigates tabs / opens chat. macOS users expect
-   * ⌘ as the native shortcut modifier — Shift still works on macOS too, ⌘ is
-   * only an ADDED alternative. window.tusab.platform (Electron preload, see
-   * preload.js) is the reliable source; navigator.platform/userAgent is the
-   * fallback for the plain dev server (no window.tusab outside Electron).
-   *
-   * R, M, H are excluded from the ⌘ mapping on macOS: ⌘+R is already bound
-   * to "Reload" as an Electron menu accelerator (CmdOrCtrl+R, main.js) and
-   * fires before this handler ever runs; ⌘+M (minimize) and ⌘+H (hide app)
-   * are macOS window-manager shortcuts the app can't intercept even with
-   * preventDefault. Those three stay Shift-only on every platform. */
+  // Tela cheia do navegador: botão na barra lateral e na tela inicial; atalho F (Esc sai).
+  const telaCheia = useTelaCheia();
+  // handleStart é declarado mais abaixo; o atalho N chama a versão atual por esta referência.
+  const novaExtracaoRef = useRef(null);
+
+  /** Atalhos de teclado (lista e regras em constants/atalhos.js): sem Ctrl, Alt, ⌘ ou Option, para
+   * não brigar com o Windows, o macOS nem o navegador. Números de 0 a 7 navegam (ordem da barra
+   * lateral); uma tecla faz uma ação (/, F, T, ?). Valem fora de caixas de texto e de janelas abertas,
+   * e podem ser desligados na Ajuda. */
   useEffect(() => {
-    const isMac = window.tusab?.platform === 'darwin'
-      || /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || '');
-    const NAV_KEYS = { B: 'repositorio', E: 'extracao', A: 'admin', I: 'agente', M: 'monitor', V: 'visao-geral', H: 'historico', U: 'estudo' };
-    const SEM_CMD_NO_MAC = new Set(['R', 'M', 'H']); // colidem com atalhos do Electron/macOS — ver comentário acima
+    const irPara = ({ aba, sub }) => {
+      if (!aba) { setShowHome(true); return; }
+      if (!regras.abas?.includes(aba)) return;
+      setActiveTab(aba);
+      if (sub) setExtracaoSubTab(sub);
+      setShowHome(false);
+    };
     const onKey = (e) => {
-      if (e.key === 'Escape' && chatOpen) {
-        if (chatExpandido) { setChatExpandido(false); return; }
-        setChatOpen(false);
+      if (!atalhosLigados() || !teclaDeAtalho(e)) return;
+      const tecla = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      const destino = ATALHOS_NAVEGACAO.find((a) => a.tecla === tecla);
+      if (destino) { e.preventDefault(); irPara(destino); return; }
+      if (tecla === TECLA_NOVO && !showHome && ATALHO_NOVO_POR_TELA[activeTab]) {
+        e.preventDefault();
+        if (activeTab === 'extracao') novaExtracaoRef.current?.();
+        else document.querySelector('[data-atalho-novo]')?.click();
         return;
       }
-      const key = e.key.toUpperCase();
-      const cmdValido = isMac && e.metaKey && !SEM_CMD_NO_MAC.has(key);
-      if (!e.shiftKey && !cmdValido) return;
-      const tag = document.activeElement?.tagName?.toLowerCase();
-      const editable = document.activeElement?.isContentEditable;
-      if (tag === 'input' || tag === 'textarea' || tag === 'select' || editable) return;
-      if (e.key === '>' && chatOpen && chatExpandido) { setChatExpandido(false); return; }
-      if (e.key === '<' && chatOpen && !chatExpandido) { setChatExpandido(true); return; }
-      if (key === 'C' && !chatOpen) { e.preventDefault(); handleOpenChat(); return; }
-      if (key === 'R' && e.shiftKey && regras.abas?.includes('extracao')) { e.preventDefault(); setActiveTab('extracao'); setExtracaoSubTab('relatorio'); setShowHome(false); return; }
-      const tab = NAV_KEYS[key];
-      if (tab && regras.abas?.includes(tab)) { e.preventDefault(); setActiveTab(tab); setShowHome(false); }
+      const acao = ATALHOS_ACOES.find((a) => a.tecla === tecla)?.acao;
+      if (!acao) return;
+      e.preventDefault();
+      if (acao === 'telaCheia' && telaCheia.suportada) telaCheia.alternar();
+      else if (acao === 'tema') { const prox = !darkMode; setDarkMode(prox); localStorage.setItem('tusab_theme', prox ? 'dark' : 'light'); }
+      else if (acao === 'ajuda') setShowGuide('atalhos');
+      else if (acao === 'buscar' && regras.abas?.includes('estudo')) {
+        irPara({ aba: 'estudo' });
+        setTimeout(() => document.querySelector('input[type="search"]')?.focus(), 150);
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [chatOpen, chatExpandido, setChatOpen, setChatExpandido, regras, handleOpenChat]);
+  }, [regras, darkMode, setDarkMode, telaCheia.alternar, telaCheia.suportada, showHome, activeTab]);
 
   // Extensão: "Pedir à IA → Ver todos os prompts" no Repositório abre a aba de prompts (id 'estudo').
   // Link "Abrir no Tusab" (#material/<projeto>/<id>): vai direto para o material, na aba Materiais.
@@ -859,11 +866,6 @@ function App() {
     return () => mq.removeEventListener('change', handler);
   }, []);
 
-  /** Sets initial HTML lang attribute from i18n */
-  useEffect(() => {
-    document.documentElement.lang = i18n.language.startsWith('en') ? 'en'
-      : i18n.language.startsWith('es') ? 'es' : 'pt-BR';
-  }, []);
 
   /** Closes mobile sidebar on wide viewports */
   useEffect(() => {
@@ -1060,17 +1062,10 @@ function App() {
 
   useEffect(() => {
     if (extracaoSubTab === 'relatorio') Analytics.relatorioAcessado();
-    if (extracaoSubTab === 'periodicidade' && history.length > 0) {
-      Promise.all(
-        history.map(h => getAutoUpdateConfig(h.canal, h.projeto || '')
-          .then(r => ({ canal: h.canal, cfg: r.data.auto_update || { enabled: false } }))
-          .catch(() => ({ canal: h.canal, cfg: { enabled: false } }))
-        )
-      ).then(results => {
-        const map = {};
-        results.forEach(({ canal, cfg }) => { map[canal] = cfg; });
-        setAutoUpdateConfigs(map);
-      });
+    if (extracaoSubTab === 'periodicidade') {
+      const map = {};
+      for (const h of history) map[`${h.projeto || ''}/${h.canal}`] = h.auto_update || { enabled: false, frequencia: 'semanal', fontes: [] };
+      setAutoUpdateConfigs(map);
     }
   }, [extracaoSubTab, history]);
 
@@ -1080,7 +1075,6 @@ function App() {
    *  content/chat-language notice unless the user already acknowledged it. */
   const changeLang = (lng) => {
     i18n.changeLanguage(lng);
-    document.documentElement.lang = lng === 'en' ? 'en' : lng === 'es' ? 'es' : 'pt-BR';
     if (!hasAckedLanguageNotice()) setShowLanguageNotice(true);
   };
 
@@ -1247,6 +1241,7 @@ function App() {
     listarProjetos().then(r => setProjetos(r.data.projetos || [])).catch(() => {});
     setShowExtractionModal(true);
   };
+  novaExtracaoRef.current = handleStart;
 
   /** Confirms extraction with selected content types and project, or enqueues if already running */
   const handleStartConfirm = (fontes, projetoNome = '', novaUrl, autoUpdateConfig, playlists = [], dataInicio = '', dataFim = '') => {
@@ -1502,12 +1497,12 @@ function App() {
           <motion.div
             key="folder-picker"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex overflow-y-auto overscroll-contain bg-black/50 backdrop-blur-sm p-4"
             onClick={() => setFolderPickerOpen(false)}
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
-              className={`w-full max-w-sm rounded-2xl shadow-2xl p-5 ${darkMode ? 'bg-slate-900 border border-white/10' : 'bg-white border border-slate-200'}`}
+              className={`m-auto w-full max-w-sm rounded-2xl shadow-2xl p-5 ${darkMode ? 'bg-slate-900 border border-white/10' : 'bg-white border border-slate-200'}`}
               onClick={e => e.stopPropagation()}
             >
               {(() => {
@@ -1691,7 +1686,11 @@ function App() {
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {showGuide && <GuideModal key="guide-modal" onClose={() => setShowGuide(false)} darkMode={darkMode} />}
+        {MODO_EXTENSAO && <AvisoTraducao darkMode={darkMode} />}
+        {MODO_EXTENSAO && <Feedback darkMode={darkMode} tela={showHome ? 'inicio' : activeTab} />}
+        {showGuide && <GuideModal key="guide-modal" onClose={() => setShowGuide(false)} darkMode={darkMode}
+          tela={showHome ? 'inicio' : activeTab}
+          abaInicial={showGuide === 'atalhos' ? 'atalhos' : 'tela'} />}
       </AnimatePresence>
 
       {/* Modal: alterar perfil */}
@@ -1889,12 +1888,6 @@ function App() {
               })}
             </div>
             <div className="flex flex-col items-center gap-0.5 w-full px-1.5 mb-1">
-              <button onClick={() => setShowGuide(true)} aria-label={t('guide.title')}
-                className={`w-full py-2 rounded-xl flex flex-col items-center gap-1 transition-colors ${BTN_FOCUS}
-                  ${darkMode ? 'text-slate-500 hover:text-slate-200 hover:bg-white/8' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'}`}>
-                <HelpCircle size={15} aria-hidden="true" />
-                <span className="text-[9px] font-semibold leading-none">{t('nav.help')}</span>
-              </button>
               <button
                 onClick={() => { const next = !darkMode; setDarkMode(next); localStorage.setItem('tusab_theme', next ? 'dark' : 'light'); }}
                 aria-label={darkMode ? t('footer.light') : t('footer.dark')}
@@ -1903,6 +1896,16 @@ function App() {
                 {darkMode ? <Sun size={15} aria-hidden="true" /> : <Moon size={15} aria-hidden="true" />}
                 <span className="text-[9px] font-semibold leading-none">{darkMode ? t('footer.light') : t('footer.dark')}</span>
               </button>
+              {telaCheia.suportada && (
+                <button onClick={telaCheia.alternar} aria-pressed={telaCheia.cheia}
+                  aria-label={telaCheia.cheia ? t('nav.sair_tela_cheia') : t('nav.tela_cheia')}
+                  title={t('nav.tela_cheia_dica')}
+                  className={`w-full py-2 rounded-xl flex flex-col items-center gap-1 transition-colors ${BTN_FOCUS}
+                  ${darkMode ? 'text-slate-500 hover:text-slate-200 hover:bg-white/8' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'}`}>
+                  {telaCheia.cheia ? <Minimize2 size={15} aria-hidden="true" /> : <Maximize2 size={15} aria-hidden="true" />}
+                  <span className="text-[9px] font-semibold leading-none">{telaCheia.cheia ? t('nav.sair_tela_cheia_curto') : t('nav.tela_cheia')}</span>
+                </button>
+              )}
             </div>
             <p className={`text-[9px] ${darkMode ? 'text-slate-700' : 'text-slate-300'}`}>v{__APP_VERSION__}</p>
           </nav>
@@ -1957,12 +1960,6 @@ function App() {
                   </button>
                 ))}
               </div>
-              <button onClick={() => { setShowGuide(true); setSidebarOpen(false); }}
-                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${BTN_FOCUS}
-                  ${darkMode ? 'text-slate-500 hover:text-slate-200 hover:bg-white/8' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'}`}>
-                <HelpCircle size={14} aria-hidden="true" />
-                {t('guide.title')}
-              </button>
               <button
                 onClick={() => { const next = !darkMode; setDarkMode(next); localStorage.setItem('tusab_theme', next ? 'dark' : 'light'); }}
                 className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${BTN_FOCUS}
@@ -1970,6 +1967,14 @@ function App() {
                 {darkMode ? <Sun size={14} aria-hidden="true" /> : <Moon size={14} aria-hidden="true" />}
                 {darkMode ? t('footer.light') : t('footer.dark')}
               </button>
+              {telaCheia.suportada && (
+                <button onClick={() => { telaCheia.alternar(); setSidebarOpen(false); }} aria-pressed={telaCheia.cheia}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${BTN_FOCUS}
+                    ${darkMode ? 'text-slate-500 hover:text-slate-200 hover:bg-white/8' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'}`}>
+                  {telaCheia.cheia ? <Minimize2 size={14} aria-hidden="true" /> : <Maximize2 size={14} aria-hidden="true" />}
+                  {telaCheia.cheia ? t('nav.sair_tela_cheia') : t('nav.tela_cheia')}
+                </button>
+              )}
             </motion.nav>
           )}
         </AnimatePresence>
@@ -1991,6 +1996,14 @@ function App() {
               onToggleTheme={() => { const next = !darkMode; setDarkMode(next); localStorage.setItem('tusab_theme', next ? 'dark' : 'light'); }}
               onChangeLang={changeLang}
             />
+          )}
+          {showHome && (
+            <button onClick={() => setShowGuide('tela')} aria-label={t('ajuda.botao_aria')}
+              className={`absolute top-4 right-4 z-20 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-colors ${BTN_FOCUS}
+                ${darkMode ? 'border-white/15 text-slate-300 bg-[#0C1122]/80 hover:bg-white/8' : 'border-slate-200 text-slate-600 bg-white/80 hover:bg-slate-100'}`}>
+              <HelpCircle size={14} aria-hidden="true" />
+              <span className="hidden sm:inline">{t('nav.help')}</span>
+            </button>
           )}
 
           {/* ── Tabbed app shell ── */}
@@ -2043,6 +2056,12 @@ function App() {
                 )}
               </div>
               <div className="flex items-center gap-2 flex-wrap justify-end">
+                <button onClick={() => setShowGuide('tela')} aria-label={t('ajuda.botao_aria')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-colors ${BTN_FOCUS}
+                    ${darkMode ? 'border-white/15 text-slate-300 bg-white/4 hover:bg-white/8' : 'border-slate-200 text-slate-600 bg-slate-50 hover:bg-slate-100'}`}>
+                  <HelpCircle size={14} aria-hidden="true" />
+                  <span className="hidden sm:inline">{t('nav.help')}</span>
+                </button>
                 {/* Chip de perfil (desktop). A extensão tem perfil único: sem chip nem troca de perfil. */}
                 {!MODO_EXTENSAO && (
                 <div className="flex items-center gap-1.5">

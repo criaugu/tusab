@@ -15,7 +15,7 @@ Esta política vale para o Tusab a partir da versão 2.0.0, o conector local par
 
 ## 1. O princípio: os dados ficam no seu computador
 
-O Tusab funciona no seu computador. A **CriAugu não opera nenhum servidor** que receba o conteúdo da sua base, as suas conversas com a IA, os seus arquivos ou dados sobre como você usa o Tusab. Não há conta, login, telemetria, cookies de rastreamento nem sincronização em nuvem.
+O Tusab funciona no seu computador. A **CriAugu não opera nenhum servidor** que receba o conteúdo da sua base, as suas conversas com a IA, os seus arquivos ou dados sobre como você usa o Tusab. Não há conta, login, telemetria, cookies de rastreamento nem sincronização em nuvem. A única exceção é o [feedback voluntário](#feedback-voluntario): só sai se você decidir enviar, depois de ver exatamente o que vai.
 
 Esta política segue a Lei Geral de Proteção de Dados (LGPD, Lei nº 13.709/2018) e, quando aplicável, o Regulamento Geral de Proteção de Dados da União Europeia (GDPR, Regulamento UE 2016/679).
 
@@ -31,6 +31,7 @@ Tudo fica na pasta que você escolhe ao instalar (a "pasta do repositório"):
 | Materiais de estudo e estado da revisão espaçada | Guardar o que a IA gera e lembrar as datas de revisão |
 | Seus próprios pedidos (prompts), idioma, fila de extração e preferências | Configurar o Tusab |
 | Contador de economia de tokens (só números somados) | Mostrar quanto a busca economizou |
+| Contadores de uso (só números: ferramentas usadas, prompts, trilhas, dias de uso) e o estado do convite de feedback | Convidar para o feedback na hora certa e, se você quiser, enviar junto com ele |
 
 A CriAugu não tem acesso a nenhum desses dados.
 
@@ -43,10 +44,22 @@ A CriAugu não tem acesso a nenhum desses dados.
 | Fontes públicas (bases de artigos, legislação, dados abertos) | O termo que você pesquisou | Ao fazer uma busca |
 | Sites das páginas web que você adiciona | O pedido da página | Ao adicionar uma página |
 | GitHub | Download da ferramenta yt-dlp e da soma de conferência | Só se o computador ainda não tiver o yt-dlp |
+| **CriAugu**, no coletor de feedback da CriAugu ([feedback voluntário](#feedback-voluntario)) | A nota, o comentário, o e-mail (se você informar) e, se você deixar marcado, os números de uso | Só quando você clica em Enviar no formulário de feedback |
 
 **O que a ferramenta de IA faz com os trechos** (guardar, usar para treinar modelos, em que país ficam os servidores) segue os termos e a política de privacidade dessa ferramenta e do serviço de IA, e não os do Tusab. Você escolhe a ferramenta; leia a política dela. Esses serviços podem estar fora do Brasil, o que caracteriza transferência internacional de dados por iniciativa sua (LGPD, art. 33).
 
 Para usar uma IA no navegador, o Tusab copia um pedido com trechos da base para a sua área de transferência. Nada é enviado até você colar o pedido na IA.
+
+### Feedback voluntário {#feedback-voluntario}
+
+De vez em quando (depois de concluir uma trilha, de guardar 5 materiais, de uma semana de uso ou numa versão nova; no máximo uma vez a cada 30 dias), a tela do Tusab convida você a dar uma nota e um comentário. Você também pode abrir o formulário pela Ajuda. Antes de enviar, você vê exatamente o que vai:
+
+- a nota de 0 a 10 e o comentário, se escrever (pedimos que não escreva dados pessoais nem trechos dos seus documentos);
+- o e-mail, só se você quiser resposta;
+- se você deixar marcado, os **números de uso**: quantas vezes cada ferramenta foi usada, quais prompts e trilhas, quantos projetos, fontes e vídeos, versão, sistema e idioma. **Nunca** vão o conteúdo da base, as consultas, nomes de projeto, títulos ou pastas;
+- um código aleatório da instalação, para juntar envios da mesma instalação sem identificar você.
+
+O envio vai para o coletor da CriAugu (`coletor.criaugu.com`, na hospedagem contratada pela CriAugu na Hostinger, que atua como operadora), é guardado lá e chega por e-mail à caixa tusab@tusab.solutions. Se o envio direto falhar, o Tusab prepara o mesmo e-mail, que você manda se quiser. "Agora não" adia por 14 dias; "Não perguntar mais" desliga o convite de vez. Esses dados são usados só para melhorar o Tusab e responder a você, e são apagados a pedido pelo e-mail de contato.
 
 Os detalhes técnicos estão em [Privacidade (detalhes técnicos)](/privacidade).
 
@@ -57,6 +70,7 @@ Os detalhes técnicos estão em [Privacidade (detalhes técnicos)](/privacidade)
 | Montar e consultar a sua base no seu computador, para uso pessoal | Tratamento feito por pessoa natural para fins exclusivamente particulares e não econômicos, fora do alcance da LGPD (art. 4º, I) |
 | O mesmo, em uso profissional ou institucional | Quem usa (você ou a sua organização) é o controlador e escolhe a base legal adequada (LGPD, arts. 7º e 11) |
 | Enviar trechos à ferramenta de IA que você escolheu | Ação iniciada por você, nos termos da ferramenta escolhida |
+| Feedback voluntário (nota, comentário, e-mail opcional e números de uso) | Consentimento (LGPD, art. 7º, I), dado a cada envio; você pode pedir a exclusão a qualquer momento |
 | Dados pessoais de terceiros que você incluir na base (por exemplo, nomes em documentos) | A base legal é responsabilidade de quem inclui o conteúdo (veja os [Termos e Condições](/termos-e-condicoes)) |
 
 Como a CriAugu não recebe nenhum desses dados, ela não atua como controladora nem como operadora do conteúdo da sua base. Ela é responsável apenas pelo próprio software e por esta política.

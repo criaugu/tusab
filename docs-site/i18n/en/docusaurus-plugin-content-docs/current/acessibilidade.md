@@ -32,21 +32,28 @@ The Tusab screen (the React interface in `web_interface/`, the same one the disc
 
 ## Keyboard shortcuts
 
-| Key | macOS alternative | Action |
-|-----|-------------------|--------|
-| `Shift + B` | `⌘ + B` | Repository tab |
-| `Shift + E` | `⌘ + E` | Extraction tab |
-| `Shift + R` | — | Report (inside Extraction) |
-| `Shift + U` | `⌘ + U` | Prompt Library |
-| `Shift + V` | `⌘ + V` | Overview |
-| `Shift + M` | — | Monitor |
-| `Shift + A` | `⌘ + A` | Admin |
+Shortcuts use **only letters and symbols, with no Ctrl, Alt, ⌘ or Option**. Every Windows, macOS and browser shortcut uses one of those modifiers (or F1 to F12), so Tusab's never clash with them. They work outside text fields and when no window is open. To navigate, use the **numbers 0 to 7**, in the order of the sidebar (the numeric keypad works too): one key, the same in any language.
 
-All `Shift` shortcuts are turned off automatically while the focus is in a text field, so they do not interfere with typing, on any system.
+| Shortcut | Action |
+|---|---|
+| `0` | Home screen |
+| `1` | Extraction |
+| `2` | Repository |
+| `3` | Prompt Library |
+| `4` | Materials |
+| `5` | Overview |
+| `6` | Monitor |
+| `7` | Admin |
+| `N` | Create on the open screen: new extraction (Extraction), new project (Repository) or new prompt (Library) |
+| `/` | Search the Prompt Library |
+| `F` | Full screen (enter and exit) |
+| `T` | Light or dark theme |
+| `?` | Show the shortcuts |
+| `Esc` | Close the open window or notice |
 
-On macOS, most shortcuts also accept `⌘` (Cmd), besides `Shift`. **Monitor and Report stay `Shift`-only**, even on a Mac: the letters `M` and `R` collide with system and browser shortcuts (Minimize, Reload), which grab the key before the screen does.
+**They can be turned off** in Help › Keyboard shortcuts (WCAG success criterion 2.1.4, for people who use voice control or type by accident). The choice is saved in the browser.
 
-The discontinued desktop app had extra shortcuts for the chat, the Assistant and the History, which do not exist on today's screen.
+The list lives in `web_interface/src/constants/atalhos.js`, the same one the keyboard and Help use.
 
 ## WCAG 2.1 AA checklist — summary by principle
 

@@ -120,7 +120,9 @@ function ModalWrapper({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className={`fixed inset-0 ${zIndex} ${backdrop} flex items-center justify-center p-4`}
+      // Centralização segura: centraliza quando cabe; se a janela for maior que a tela (zoom,
+      // notebook baixo), começa no topo e a camada rola, em vez de cortar as pontas.
+      className={`fixed inset-0 ${zIndex} ${backdrop} flex overflow-y-auto overscroll-contain p-4`}
       onClick={handleBackdropClick}
     >
       <div
@@ -129,6 +131,7 @@ function ModalWrapper({
         aria-modal="true"
         aria-label={label}
         onKeyDown={handleKeyDown}
+        className="m-auto w-full flex justify-center"
         style={{ outline: 'none' }}
       >
         {children}

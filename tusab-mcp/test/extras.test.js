@@ -235,7 +235,7 @@ test('IA no navegador: o pedido vai com os trechos da base dentro (do tema ou um
   assert.equal(r.ok, true, r.message);
   assert.ok(r.trechos >= 2);
   assert.match(r.texto, /Use só os trechos da minha base do Tusab que estão abaixo \(projeto "Bio"\)/);
-  assert.match(r.texto, /\[1\] Fotossíntese\nA clorofila absorve/);
+  assert.match(r.texto, /\[1\] Fotossíntese\n⟦fonte [0-9a-f]{8}⟧\nA clorofila absorve/);
   assert.match(r.texto, /Respiração/);
   // Sem ferramentas (a IA do navegador não alcança o Tusab): nada de tusab_buscar nem de guardar
   assert.doesNotMatch(r.texto, /tusab_buscar|tusab_salvar_estudo|Antes de começar/);

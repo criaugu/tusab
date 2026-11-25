@@ -801,8 +801,8 @@ function RepositorioTab({ darkMode, repositorio, setRepositorio, history, btnFoc
               <span className={`w-px h-4 ${darkMode ? 'bg-white/10' : 'bg-slate-200'}`} />
             </>
           )}
-          {/* Novo Projeto */}
-          <button
+          {/* Novo Projeto (atalho N) */}
+          <button data-atalho-novo
             onClick={() => { setCriarProjetoNome(''); setShowCriarProjetoModal(true); }}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors border ${btnFocus}
               ${darkMode ? 'text-slate-300 border-white/15 hover:bg-white/8' : 'text-slate-600 border-slate-300 bg-white hover:bg-slate-50'}`}>
@@ -995,13 +995,13 @@ function RepositorioTab({ darkMode, repositorio, setRepositorio, history, btnFoc
 
       {/* Add modal */}
       {showAdd_ && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+        <div className="fixed inset-0 z-50 flex overflow-y-auto overscroll-contain bg-black/50 backdrop-blur-sm p-4"
           onClick={() => closeAddModal()}>
           <div
             role="dialog"
             aria-modal="true"
             aria-label={!_canalEfetivo() ? 'Selecionar projeto' : mode === 'texto' ? 'Colar texto' : mode === 'url' ? 'Colar URL' : 'Enviar arquivo'}
-            className={`w-full max-w-lg rounded-2xl border shadow-2xl p-4 space-y-3 overflow-y-auto
+            className={`m-auto w-full max-w-lg rounded-2xl border shadow-2xl p-4 space-y-3 overflow-y-auto
               ${darkMode ? 'bg-[#0C1122] border-white/15' : 'bg-white border-slate-200'}
               ${dragging ? darkMode ? 'border-primary' : 'border-violet-400' : ''}`}
             style={{ maxHeight: 'min(90vh, 680px)', outline: 'none' }}
