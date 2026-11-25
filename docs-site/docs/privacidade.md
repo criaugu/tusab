@@ -20,7 +20,7 @@ Esta página descreve tecnicamente o que fica no computador e o que sai dele. A 
 | Prompts próprios, idioma, fila, configurações | `data/config/` |
 | Contador de economia de tokens (só números agregados) | `data/config/economia_tokens.json` |
 
-O Tusab não tem conta, login nem telemetria: na tela, o módulo de analytics não carrega nada.
+O Tusab não tem conta, login nem telemetria automática: na tela, o módulo de analytics não carrega nada. Os contadores de uso (`data/config/uso.json`, só números) ficam no computador e só saem no [feedback voluntário](/politica-de-privacidade#feedback-voluntario), quando o usuário clica em Enviar.
 
 ## O que sai do computador
 
@@ -31,6 +31,7 @@ O Tusab não tem conta, login nem telemetria: na tela, o módulo de analytics n�
 | Fontes públicas | O tema pesquisado | Ao buscar numa fonte pública |
 | Sites de páginas web | Pedido da página e do `robots.txt` | Ao adicionar uma página web |
 | GitHub (`github.com/yt-dlp`) | Download do yt-dlp e da lista de somas SHA-256 | Só se o computador não tiver o yt-dlp |
+| Coletor de feedback da CriAugu (`coletor.criaugu.com`, hospedagem na Hostinger; código em `coletor-feedback/`) | Nota, comentário, e-mail opcional, código aleatório da instalação e, se marcado, as contagens de uso (o que a prévia do formulário mostra) | Só ao clicar em Enviar no formulário de feedback |
 | Domínios de imagens do YouTube | Carregamento de miniaturas na tela | Ao exibir canais e vídeos na tela |
 
 O que a ferramenta de IA faz com os trechos recebidos (armazenamento, uso, país dos servidores) segue os termos dessa ferramenta e do serviço de IA, não do Tusab. Os servidores podem estar fora do Brasil.

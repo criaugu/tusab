@@ -148,5 +148,11 @@ jobs:
             echo "@criaugu/tusab@$V já está no npm."
             exit 0
           fi
+          # Primeira publicação sem o segredo NPM_TOKEN: não há como publicar (a publicação confiável só
+          # vale depois que o pacote existe). Avisa e não derruba a release do .mcpb, que já saiu.
+          if [ -z "$NODE_AUTH_TOKEN" ] && ! npm view "@criaugu/tusab" version >/dev/null 2>&1; then
+            echo "::warning::npm não publicado: falta o segredo NPM_TOKEN para a primeira publicação de @criaugu/tusab. A release do .mcpb saiu normalmente."
+            exit 0
+          fi
           npm install -g npm@11
           npm publish --access public --provenance

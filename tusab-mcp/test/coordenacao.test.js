@@ -77,7 +77,7 @@ test('duas IAs na mesma base: a segunda repassa ao principal, e assume quando el
   try {
     // B vê as mesmas ferramentas e grava pela mão do principal.
     const { tools } = await iaB.cliente.listTools();
-    assert.equal(tools.length, 15);
+    assert.equal(tools.length, 16);
     const arquivo = path.join(temp('arquivo'), 'fotossintese.txt');
     fs.writeFileSync(arquivo, 'A fotossíntese transforma luz em energia química nos cloroplastos.');
     const add = await iaB.cliente.callTool({ name: 'tusab_adicionar_arquivo', arguments: { caminho: arquivo, projeto: 'Biologia' } });

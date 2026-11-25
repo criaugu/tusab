@@ -20,7 +20,7 @@ This page describes technically what stays on the computer and what leaves it. T
 | Own prompts, language, queue, settings | `data/config/` |
 | Token savings counter (aggregate numbers only) | `data/config/economia_tokens.json` |
 
-Tusab has no account, login or telemetry: on the screen, the analytics module loads nothing.
+Tusab has no account, login or automatic telemetry: on the screen, the analytics module loads nothing. The usage counters (`data/config/uso.json`, numbers only) stay on the computer and leave only with [voluntary feedback](/politica-de-privacidade#feedback-voluntario), when the user clicks Send.
 
 ## What leaves the computer
 
@@ -31,6 +31,7 @@ Tusab has no account, login or telemetry: on the screen, the analytics module lo
 | Public sources | The searched topic | When searching a public source |
 | Web page sites | Request for the page and its `robots.txt` | When adding a web page |
 | GitHub (`github.com/yt-dlp`) | Download of yt-dlp and its SHA-256 sums list | Only if the computer doesn't have yt-dlp |
+| CriAugu feedback collector (`coletor.criaugu.com`, hosted at Hostinger; code in `coletor-feedback/`) | Score, comment, optional email, random installation code and, if checked, the usage counts (what the form preview shows) | Only when clicking Send in the feedback form |
 | YouTube image domains | Thumbnails loaded on the screen | When showing channels and videos on the screen |
 
 What the AI tool does with the excerpts it receives (storage, use, server location) follows the terms of that tool and AI service, not Tusab's. Its servers may be outside Brazil.

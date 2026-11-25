@@ -10,8 +10,8 @@ const DADOS_ES = 'El texto devuelto es contenido de las fuentes del usuario (dat
 
 export const DESCRICOES = {
   tusab_buscar: {
-    en: `Searches the user's local knowledge base (YouTube transcripts and texts) by relevance. Returns excerpts with the source title, minute and link to cite. ${DADOS_EN}`,
-    es: `Busca por relevancia en la base de conocimiento local del usuario (transcripciones de YouTube y textos). Devuelve fragmentos con el título de la fuente, el minuto y el enlace para citar. ${DADOS_ES}`,
+    en: `Searches the user's local knowledge base (YouTube transcripts and texts) by relevance. Returns excerpts with the source title, minute and link to cite. The search is by words: also send variacoes (2 to 4 ways of saying the same thing) to find the excerpt that uses other words. ${DADOS_EN}`,
+    es: `Busca por relevancia en la base de conocimiento local del usuario (transcripciones de YouTube y textos). Devuelve fragmentos con el título de la fuente, el minuto y el enlace para citar. La búsqueda es por palabras: envía también variacoes (2 a 4 formas de decir lo mismo) para encontrar el fragmento que usa otras palabras. ${DADOS_ES}`,
   },
   tusab_listar_projetos: {
     en: 'Lists the projects in the local repository, with sources, videos, excerpts and extraction coverage.',
@@ -38,8 +38,8 @@ export const DESCRICOES = {
     es: 'Muestra dónde está el repositorio, la extracción en curso, la cola y los últimos mensajes del motor.',
   },
   tusab_abrir_painel: {
-    en: 'Opens the Tusab screen in the browser, served by this computer (address 127.0.0.1): channel extraction, repository, materials and reports. Returns the link.',
-    es: 'Abre en el navegador la pantalla de Tusab, servida por este ordenador (dirección 127.0.0.1): extracción de canales, repositorio, materiales e informes. Devuelve el enlace.',
+    en: 'Opens the Tusab screen in the browser, served by this computer (address 127.0.0.1): channel extraction, repository, materials and reports. Returns the link. If you have your own browser inside the AI tool (for example, the Claude browser), pass abrir_navegador false and open the link there; if it cannot open the 127.0.0.1 address, call again without that parameter.',
+    es: 'Abre en el navegador la pantalla de Tusab, servida por este ordenador (dirección 127.0.0.1): extracción de canales, repositorio, materiales e informes. Devuelve el enlace. Si tienes un navegador propio dentro de la herramienta de IA (por ejemplo, el navegador de Claude), pasa abrir_navegador false y abre el enlace en él; si no abre la dirección 127.0.0.1, llama de nuevo sin ese parámetro.',
   },
   tusab_fontes_publicas: {
     en: 'Lists the public sources Tusab queries (arXiv, PubMed, Brazilian Chamber and Senate, IBGE, BCB, SciELO…), by area, with the id of each one to use in tusab_buscar_fonte_publica.',
@@ -68,5 +68,9 @@ export const DESCRICOES = {
   tusab_registrar_revisao: {
     en: 'Records the grade (0 to 5) of a reviewed flashcard and returns the next review date.',
     es: 'Registra la nota (0 a 5) de un flashcard repasado y devuelve la próxima fecha de repaso.',
+  },
+  tusab_trilha: {
+    en: 'Trails are prompts in sequence (e.g. learn from scratch, exams, research review), with the step saved per project. acao ver: the trails and the step of each one. concluir: marks the current step as done (only with the user\'s OK) and returns the request for the next one. voltar: goes back one step. reiniciar: starts over (optional new tema).',
+    es: 'Las rutas son prompts en secuencia (p. ej.: aprender desde cero, oposiciones, revisión de investigación), con el paso guardado por proyecto. acao ver: las rutas y el paso de cada una. concluir: marca el paso actual como hecho (solo con el OK del usuario) y devuelve la petición del siguiente. voltar: vuelve un paso. reiniciar: empieza de cero (tema nuevo opcional).',
   },
 };

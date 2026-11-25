@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Trash2, Bell, BellOff, BellRing, Mail, CheckCircle2, RefreshCw, Plug, Copy, Check, Globe } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import i18n from '../../i18n';
+import i18n, { idiomaAtual, idiomasDaTela } from '../../i18n';
 import PrivacidadeRede from '../assistente/PrivacidadeRede';
 import RedesCorporativas from '../assistente/RedesCorporativas';
 import { BTN_FOCUS, MODO_EXTENSAO } from '../../constants';
@@ -119,14 +119,16 @@ export default function AdminTab({
             {t('admin.language_desc')}
           </p>
           <select
-            value={i18n.language.startsWith('pt') ? 'pt' : i18n.language.startsWith('en') ? 'en' : 'es'}
+            value={idiomaAtual()}
             onChange={e => onChangeLang?.(e.target.value)}
             aria-label={t('admin.language_title')}
             className={`rounded-xl border px-3 py-2 text-xs font-bold outline-none focus:border-primary transition-colors ${BTN_FOCUS}
               ${darkMode ? 'bg-white/5 border-white/20 text-white' : 'bg-white border-slate-300 text-slate-800'}`}>
-            <option value="pt" className={darkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-800'}>Português</option>
-            <option value="en" className={darkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-800'}>English</option>
-            <option value="es" className={darkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-800'}>Español</option>
+            {idiomasDaTela().map((o) => (
+              <option key={o.codigo} value={o.codigo} className={darkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-800'}>
+                {o.nome}{o.automatico ? ` (${t('admin.idioma_automatico')})` : ''}
+              </option>
+            ))}
           </select>
         </div>
       </section>

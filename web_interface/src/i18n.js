@@ -1,6 +1,5 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 import pt from './locales/pt.json';
 import en from './locales/en.json';
 import es from './locales/es.json';
@@ -33,21 +32,85 @@ const EXTENSAO = {
 };
 const traducao = (lng, base) => (MODO_EXTENSAO ? { ...base, ...EXTENSAO[lng] } : base);
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources: {
-      pt: { translation: traducao('pt', pt) },
-      en: { translation: traducao('en', en) },
-      es: { translation: traducao('es', es) },
-    },
-    fallbackLng: 'pt',
-    detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
-    },
-    interpolation: { escapeValue: false },
-  });
+// Idiomas que o Tusab traz prontos. Para os outros, a tela abre em inglês e oferece baixar uma
+// tradução feita pelo próprio navegador (services/traducaoAutomatica.js), guardada neste navegador.
+export const IDIOMAS_DO_TUSAB = ['pt', 'en', 'es'];
+export const PREFIXO_TRADUCAO = 'tusab_traducao_';
+const CHAVE_IDIOMA = 'i18nextLng';
+
+const raiz = (codigo) => String(codigo || '').toLowerCase().split('-')[0];
+
+/** Traduções automáticas já baixadas neste navegador: { codigo: textos }. */
+function traducoesSalvas() {
+  const saida = {};
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const chave = localStorage.key(i);
+      if (!chave?.startsWith(PREFIXO_TRADUCAO)) continue;
+      const textos = JSON.parse(localStorage.getItem(chave))?.textos;
+      if (textos && typeof textos === 'object') saida[chave.slice(PREFIXO_TRADUCAO.length)] = textos;
+    }
+  } catch { /* sem armazenamento: só os três idiomas do Tusab */ }
+  return saida;
+}
+
+const salvas = traducoesSalvas();
+
+/** Idioma ao abrir: o escolhido antes; se não houver, o do navegador; se o Tusab não tiver, inglês. */
+function idiomaInicial() {
+  let escolhido = '';
+  try { escolhido = raiz(localStorage.getItem(CHAVE_IDIOMA)); } catch { /* idem */ }
+  if (IDIOMAS_DO_TUSAB.includes(escolhido) || salvas[escolhido]) return escolhido;
+  const navegador = raiz(typeof navigator !== 'undefined' ? navigator.language : '');
+  return IDIOMAS_DO_TUSAB.includes(navegador) ? navegador : 'en';
+}
+
+const recursos = {
+  pt: { translation: traducao('pt', pt) },
+  en: { translation: traducao('en', en) },
+  es: { translation: traducao('es', es) },
+};
+for (const [codigo, textos] of Object.entries(salvas)) {
+  if (!IDIOMAS_DO_TUSAB.includes(codigo)) recursos[codigo] = { translation: textos };
+}
+
+/** Atributo lang da página: leitores de tela e a tradução do navegador dependem dele. */
+const marcarIdiomaDaPagina = (lng) => {
+  if (typeof document !== 'undefined') document.documentElement.lang = lng === 'pt' ? 'pt-BR' : lng;
+};
+
+i18n.use(initReactI18next).init({
+  resources: recursos,
+  lng: idiomaInicial(),
+  fallbackLng: 'en', // frase que faltar numa tradução automática aparece em inglês
+  interpolation: { escapeValue: false },
+});
+marcarIdiomaDaPagina(i18n.language);
+i18n.on('languageChanged', (lng) => {
+  try { localStorage.setItem(CHAVE_IDIOMA, lng); } catch { /* idem */ }
+  marcarIdiomaDaPagina(lng);
+});
+
+/** Opções dos seletores de idioma: os três do Tusab e as traduções baixadas neste navegador. */
+export function idiomasDaTela() {
+  const nome = (codigo) => {
+    try { return new Intl.DisplayNames([codigo], { type: 'language' }).of(codigo); } catch { return codigo; }
+  };
+  const fixos = [
+    { codigo: 'pt', curto: 'PT', nome: 'Português' },
+    { codigo: 'en', curto: 'EN', nome: 'English' },
+    { codigo: 'es', curto: 'ES', nome: 'Español' },
+  ];
+  const baixados = Object.keys(i18n.options.resources || {})
+    .filter((c) => !IDIOMAS_DO_TUSAB.includes(c))
+    .map((c) => ({ codigo: c, curto: c.toUpperCase(), nome: nome(c), automatico: true }));
+  return [...fixos, ...baixados];
+}
+
+/** Código do idioma atual entre as opções (traduções automáticas incluídas). */
+export function idiomaAtual() {
+  const lng = raiz(i18n.language);
+  return idiomasDaTela().some((o) => o.codigo === lng) ? lng : 'en';
+}
 
 export default i18n;

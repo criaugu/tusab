@@ -8,7 +8,9 @@
 import React, { useState } from 'react';
 import { MODO_EXTENSAO } from '../../constants';
 import { useTranslation } from 'react-i18next';
-import { X } from 'lucide-react';
+import { X, Maximize2, Minimize2 } from 'lucide-react';
+import { useTelaCheia } from '../../hooks/useTelaCheia';
+import { idiomaAtual, idiomasDaTela } from '../../i18n';
 import CircuitBackground from './CircuitBackground';
 
 // Preferência só do perfil Especialista — Estudo é menos central pra esse
@@ -19,7 +21,7 @@ const CHAVE_ESTUDO_OCULTO = 'tusab_home_estudo_oculto';
 
 function HomeScreen({ darkMode, history, repositorio, agentStatus, ollamaStatus, btnFocus, onNavigate, onNavigatePesquisaAcademica, onAddFiles, onToggleTheme, onChangeLang, onImportBase, onOpenChatExpandido, regras }) {
   const { t, i18n: homeI18n } = useTranslation();
-  const currentLang = homeI18n.language.startsWith('pt') ? 'pt' : homeI18n.language.startsWith('en') ? 'en' : 'es';
+  const currentLang = idiomaAtual();
 
   const totalDocs    = (repositorio.documentos?.length || 0) + (repositorio.textos?.length || 0);
   const totalArquivos = (repositorio.youtube?.length || 0) + totalDocs;
@@ -237,6 +239,7 @@ function HomeScreen({ darkMode, history, repositorio, agentStatus, ollamaStatus,
 
   // Idioma/tema/assinatura — vivem junto do logo (coluna esquerda no desktop,
   // abaixo da logo mobile em telas estreitas), não mais soltos ao fim dos cards.
+  const telaCheia = useTelaCheia();
   const footerControls = (
     <div className="flex flex-col items-center gap-3 mt-4">
       <div className="flex items-center gap-2">
@@ -247,9 +250,9 @@ function HomeScreen({ darkMode, history, repositorio, agentStatus, ollamaStatus,
           <select value={currentLang} onChange={e => onChangeLang(e.target.value)}
             aria-label={t('common.select_language')}
             className={`text-[11px] font-bold bg-transparent border-none outline-none cursor-pointer pr-1 ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            <option value="pt" className={darkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-800'}>PT</option>
-            <option value="en" className={darkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-800'}>EN</option>
-            <option value="es" className={darkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-800'}>ES</option>
+            {idiomasDaTela().map((o) => (
+              <option key={o.codigo} value={o.codigo} className={darkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-800'}>{o.curto}</option>
+            ))}
           </select>
         </div>
         <button onClick={onToggleTheme}
@@ -261,6 +264,14 @@ function HomeScreen({ darkMode, history, repositorio, agentStatus, ollamaStatus,
             : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
           }
         </button>
+        {telaCheia.suportada && (
+          <button onClick={telaCheia.alternar} aria-pressed={telaCheia.cheia}
+            aria-label={telaCheia.cheia ? t('nav.sair_tela_cheia') : t('nav.tela_cheia')}
+            title={t('nav.tela_cheia_dica')}
+            className={`p-2 rounded-lg border transition-colors ${darkMode ? 'bg-white/10 border-white/20 text-slate-400 hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'}`}>
+            {telaCheia.cheia ? <Minimize2 size={14} aria-hidden="true" /> : <Maximize2 size={14} aria-hidden="true" />}
+          </button>
+        )}
       </div>
       <p className={`text-[11px] ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
         {t('home.by')}

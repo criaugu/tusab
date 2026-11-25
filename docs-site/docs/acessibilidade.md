@@ -32,21 +32,28 @@ A tela do Tusab (a interface React de `web_interface/`, a mesma que o app deskto
 
 ## Atalhos de teclado
 
-| Tecla | Alternativa no macOS | Ação |
-|-------|----------------------|------|
-| `Shift + B` | `⌘ + B` | Aba Repositório |
-| `Shift + E` | `⌘ + E` | Aba Extração |
-| `Shift + R` | — | Relatório (dentro de Extração) |
-| `Shift + U` | `⌘ + U` | Biblioteca de Prompts |
-| `Shift + V` | `⌘ + V` | Visão Geral |
-| `Shift + M` | — | Monitor |
-| `Shift + A` | `⌘ + A` | Admin |
+Os atalhos usam **só letras e sinais, sem Ctrl, Alt, ⌘ ou Option**. Todo atalho do Windows, do macOS e dos navegadores usa um desses modificadores (ou F1 a F12), então os do Tusab nunca brigam com eles. Funcionam fora das caixas de texto e quando nenhuma janela está aberta. Para navegar, use os **números de 0 a 7**, na ordem da barra lateral (o teclado numérico também vale): uma tecla só, igual em qualquer idioma.
 
-Todos os atalhos com `Shift` são desativados automaticamente enquanto o foco está num campo de texto, para não interferir com a digitação, em qualquer sistema.
+| Atalho | Ação |
+|---|---|
+| `0` | Tela inicial |
+| `1` | Extração |
+| `2` | Repositório |
+| `3` | Biblioteca de Prompts |
+| `4` | Materiais |
+| `5` | Visão Geral |
+| `6` | Monitor |
+| `7` | Admin |
+| `N` | Criar na tela aberta: nova extração (Extração), novo projeto (Repositório) ou novo prompt (Biblioteca) |
+| `/` | Buscar na Biblioteca de Prompts |
+| `F` | Tela cheia (entrar e sair) |
+| `T` | Tema claro ou escuro |
+| `?` | Mostrar os atalhos |
+| `Esc` | Fechar a janela ou o aviso aberto |
 
-No macOS, a maioria dos atalhos também aceita `⌘` (Cmd), além do `Shift`. **Monitor e Relatório ficam só com `Shift`**, mesmo no Mac: as letras `M` e `R` colidem com atalhos do sistema e do navegador (Minimizar, Recarregar), que pegam a tecla antes da tela.
+**Podem ser desligados** em Ajuda › Atalhos de teclado (critério 2.1.4 da WCAG, para quem usa comando de voz ou digita sem querer). A escolha fica guardada no navegador.
 
-O app desktop, descontinuado, tinha atalhos a mais para o chat, o Assistente e o Histórico, que não existem na tela atual.
+A lista mora em `web_interface/src/constants/atalhos.js`, a mesma que o teclado e a Ajuda usam.
 
 ## Checklist WCAG 2.1 AA — resumo por princípio
 

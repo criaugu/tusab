@@ -241,9 +241,14 @@ export class Motor {
    * Para a IA: começa agora se o motor estiver livre, senão entra na fila.
    * Aceita canal (@handle, /channel/, /c/) e também vídeo ou playlist avulsos.
    */
-  extrairOuEnfileirar({ url, projeto_nome = '', fontes = [], maxVideos = null }) {
+  /**
+   * canal_pasta: pasta do canal a usar (a verificação de vídeos novos manda a pasta do canal que
+   * verificou). Sem ela, a pasta sai do nome do canal no YouTube; um canal guardado com o código
+   * (UC…) ganharia uma pasta nova a cada verificação, e os vídeos novos nunca entrariam nele.
+   */
+  extrairOuEnfileirar({ url, projeto_nome = '', fontes = [], maxVideos = null, canal_pasta = '' }) {
     const u = String(url).trim();
-    const item = { url: u, fontes: arr(fontes), projeto_nome, playlists: [], data_inicio: '', data_fim: '', max_videos: maxVideos };
+    const item = { url: u, fontes: arr(fontes), projeto_nome, playlists: [], data_inicio: '', data_fim: '', max_videos: maxVideos, canal_pasta };
     if (this.is_running) {
       this.fila.push(item);
       this._salvarFila();
@@ -251,7 +256,7 @@ export class Motor {
     }
     this.canal_url = u;
     this._aplicarProjeto(u, projeto_nome);
-    this.filtros = { fontes: item.fontes, playlists: [], data_inicio: '', data_fim: '', max_videos: maxVideos };
+    this.filtros = { fontes: item.fontes, playlists: [], data_inicio: '', data_fim: '', max_videos: maxVideos, canal_pasta };
     this.cancelar = false;
     this._liberarPausa();
     this.is_running = true;
@@ -302,6 +307,7 @@ export class Motor {
       this.filtros = {
         fontes: arr(proximo.fontes), playlists: arr(proximo.playlists),
         data_inicio: proximo.data_inicio || '', data_fim: proximo.data_fim || '', max_videos: proximo.max_videos || null,
+        canal_pasta: proximo.canal_pasta || '',
       };
       this.cancelar = false;
       this._liberarPausa();
@@ -310,14 +316,14 @@ export class Motor {
 
   // ── tusab_engine() ────────────────────────────────────────────────────────
 
-  async extrair({ canalUrl, projetoNome = '', fontes = [], playlists = [], data_inicio = '', data_fim = '', max_videos = null }) {
+  async extrair({ canalUrl, projetoNome = '', fontes = [], playlists = [], data_inicio = '', data_fim = '', max_videos = null, canal_pasta = '' }) {
     const ehCanal = URL_CANAL.test(canalUrl);
     let canalNomeRaw = extrairNomeCanal(canalUrl);
     if (!/@([^/?\s]+)/.test(canalUrl)) {
       const resolvido = await this.ytdlp.resolverNomeCanal(canalUrl);
       if (resolvido) canalNomeRaw = resolvido;
     }
-    const canalNome = sanitizarNome(canalNomeRaw);
+    const canalNome = sanitizarNome(String(canal_pasta || '').trim() || canalNomeRaw);
     const prefixo = projetoNome ? sanitizarNome(projetoNome) : canalNome;
     const canalDir = pastaYoutubeCanal(this.raiz, prefixo, canalNome);
     const dbFile = path.join(pastaGestao(this.raiz, prefixo), `${canalNome}_base.csv`);

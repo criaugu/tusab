@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Sun, Moon } from 'lucide-react';
 import { motion, animate } from 'framer-motion';
-import { LANGS, BTN_FOCUS } from '../../constants';
+import { BTN_FOCUS } from '../../constants';
+import { idiomasDaTela } from '../../i18n';
 import CircuitBackground from './CircuitBackground';
 
 function usePulseLogo() {
@@ -47,7 +48,7 @@ function LandingScreen({ darkMode, onToggleDark, onEnter, appUpdateInfo }) {
         {/* Language + theme — acima do logo */}
         <div className="flex items-center gap-2">
           <div className="flex gap-1">
-            {LANGS.map(lng => (
+            {idiomasDaTela().map(({ codigo: lng }) => (
               <button
                 key={lng}
                 onClick={() => i18n.changeLanguage(lng)}

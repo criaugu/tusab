@@ -41,16 +41,18 @@ test('IA extrai um canal, acompanha, busca com citação e lê a fonte', async (
     assert.deepEqual(tools.map((t) => t.name).sort(), [
       'tusab_abrir_painel', 'tusab_adicionar_arquivo', 'tusab_adicionar_youtube', 'tusab_buscar', 'tusab_buscar_fonte_publica', 'tusab_economia',
       'tusab_fontes_publicas', 'tusab_ler_fonte', 'tusab_ler_original', 'tusab_listar_projetos', 'tusab_novidades_semana',
-      'tusab_registrar_revisao', 'tusab_revisao_hoje', 'tusab_salvar_estudo', 'tusab_status',
+      'tusab_registrar_revisao', 'tusab_revisao_hoje', 'tusab_salvar_estudo', 'tusab_status', 'tusab_trilha',
     ]);
 
     const { prompts } = await cliente.listPrompts();
     const nomes = prompts.map((p) => p.name);
-    for (const n of ['abrir_tusab', 'flashcards', 'revisar-hoje', 'quiz', 'prova', 'resposta-verificavel', 'digest']) assert.ok(nomes.includes(n), n);
+    // "+" sem uso ainda: a seleção inicial e as trilhas; o resto da biblioteca fica na tela.
+    for (const n of ['abrir_tusab', 'flashcards', 'revisar-hoje', 'quiz', 'resposta-verificavel', 'trilha-concurso']) assert.ok(nomes.includes(n), n);
+    for (const n of ['prova', 'digest']) assert.ok(!nomes.includes(n), n);
     const cards = await cliente.getPrompt({ name: 'flashcards', arguments: { projeto: 'Bio', tema: 'célula' } });
     assert.match(cards.messages[0].content.text, /Crie 10 flashcards sobre "célula"[\s\S]*tusab_salvar_estudo \(projeto "Bio", tipo flashcards\)/);
     const atalho = await cliente.getPrompt({ name: 'abrir_tusab' });
-    assert.equal(atalho.messages[0].content.text, 'Abra o painel do Tusab.');
+    assert.equal(atalho.messages[0].content.text, 'Abra o painel do Tusab. Se você tiver um navegador próprio, abra nele; senão, no navegador do computador.');
     assert.ok(!fs.existsSync(path.join(raiz, 'data', 'config', 'boas_vindas.json')), 'boas-vindas desligada nos testes');
 
     const vazio = await cliente.callTool({ name: 'tusab_listar_projetos', arguments: {} });

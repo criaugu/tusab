@@ -1,0 +1,7 @@
+# Coletor de feedback do Tusab: só o index.php responde; a pasta "dados" (se existir) fica fechada.
+Options -Indexes
+DirectoryIndex index.php
+<FilesMatch "^(?!index\.php$).+">
+  Require all denied
+</FilesMatch>
+RedirectMatch 403 ^/dados(/|$)

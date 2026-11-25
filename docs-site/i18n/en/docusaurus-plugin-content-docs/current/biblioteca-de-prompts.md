@@ -27,7 +27,7 @@ A single list (`tusab-mcp/src/nucleo/prompts.js`) feeds two places:
 
 Default quantities: 8 in the quiz, 7 days in the study plan, 10 in the exam and the quotes, 9 in the exercises. The value given is kept between 1 and 50. The topic is cut at 200 characters and the project name at 120.
 
-Besides these, the `abrir_tusab` shortcut ("Open Tusab") opens the screen. Adding the 20 techniques in the next section, Claude's "+" menu therefore shows **42 shortcuts**: 21 built-in prompts, 20 techniques and the one that opens the screen.
+Besides these, the `abrir_tusab` shortcut ("Open Tusab") opens the screen. Adding the 20 techniques and the 22 prompts of the third and fourth batches (next sections), the Library has **63 prompts** and **5 trails**. Claude's "+" menu does not show them all: by default, the favorites and the most used (see [Favorites, most used and the "+" menu](#favoritos)).
 
 ## Evidence-based techniques (20 prompts)
 
@@ -55,6 +55,72 @@ Since 2.0.0, the Library has 20 prompts based on learning, teaching, research an
 | **Competing hypotheses** (`hipoteses-concorrentes`) | Work, Research | Most capable | Heuer, R. J., Jr. (1999). *Psychology of Intelligence Analysis. Washington, DC: Center for the Study of Intelligence, CIA (cap. 8, Analysis of Competing Hypotheses).* |
 | **An idea that sticks** (`ideia-memoravel`) | Teach, Work | Fast | Heath, C.; Heath, D. (2007). *Made to Stick: Why Some Ideas Survive and Others Die. Nova York: Random House.* |
 | **Weekly reflection** (`reflexao-semana`) | Study, Teach, Research, Work | Fast | Zimmerman, B. J. (2002). *Becoming a Self-Regulated Learner: An Overview. Theory Into Practice, 41(2), 64–70.* |
+
+## Third batch: source criticism and studying with video (16 prompts)
+
+Added on 24/11/2026 after an analysis of prompt libraries for NotebookLM and Gemini. Only what the Library did not have yet, and what works better with Tusab, made it in: citation by video minute, memory across conversations (flashcards and Materials) and several sources in the same project. The references were checked one by one; where the work is a guide rather than research, the preview says so.
+
+| Prompt | What for | Audience | Model | Basis |
+|---|---|---|---|---|
+| **Claim inventory** (`inventario-afirmacoes`) | Each claim in the sources classified as a finding, an assumption or a repetition of another author. | Research, Work | Most capable | Toulmin, S. (1958). *The Uses of Argument. Cambridge: Cambridge University Press (edição atualizada em 2003).* |
+| **Consensus and minority voice** (`consenso-minoria`) | What all the sources support, what only one says and why the minority may be right. | Research, Work | Most capable | Wineburg, S. S. (1991). *Historical problem solving: A study of the cognitive processes used in the evaluation of documentary and pictorial evidence. Journal of Educational Psychology, 83(1), 73–87.* |
+| **Same word, different meanings** (`glossario-divergente`) | Terms the sources use with different meanings, side by side. | Research, Study | Balanced | — |
+| **Trace the origin** (`rastro-origem`) | Who said it first and who only repeats it, to know what data everything rests on. | Research, Work | Most capable | Wineburg, S.; McGrew, S. (2019). *Lateral reading and the nature of expertise: Reading less and learning more when evaluating digital information. Teachers College Record, 121(11), 1–40.* |
+| **How the position changed** (`evolucao-posicao`) | How an author's or the field's view changed over time, by the sources' dates. | Research, Work | Balanced | — |
+| **Stress-test the conclusion** (`teste-estresse`) | The evidence that would weaken the main conclusion the most, and whether the base already has something like it. | Research, Work | Most capable | Lord, C. G.; Lepper, M. R.; Preston, E. (1984). *Considering the opposite: A corrective strategy for social judgment. Journal of Personality and Social Psychology, 47(6), 1231–1243.* |
+| **Methods and sample** (`metodos-amostra`) | For each study in the base: question, method, sample, period and stated limitations. | Research | Balanced | Greenhalgh, T. (1997). *How to read a paper: Getting your bearings (deciding what the paper is about). BMJ, 315(7102), 243–246.* |
+| **Audit my text** (`auditar-meu-texto`) | You paste your text and each sentence is checked against the base, with the missing citation. | Research, Work, Study | Most capable | — |
+| **Cornell notes** (`notas-cornell`) | Notes by video segment or PDF page, cue questions in the margin and a summary at the end. | Study | Balanced | Pauk, W.; Owens, R. J. Q. (2010). *How to Study in College (10ª ed.). Boston: Wadsworth, Cengage Learning.* |
+| **Mock exam with diagnosis** (`simulado-diagnostico`) | A short exam mixing formats; at the end, a score by topic and flashcards of what you got wrong. | Study | Balanced | Dunlosky, J.; Rawson, K. A.; Marsh, E. J.; Nathan, M. J.; Willingham, D. T. (2013). *Improving students' learning with effective learning techniques: Promising directions from cognitive and educational psychology. Psychological Science in the Public Interest, 14(1), 4–58.* |
+| **Syllabus coverage** (`cobertura-edital`) | You paste the syllabus or exam notice; each topic is marked as well covered, weak or missing in the base. | Study, Teach | Most capable | Biggs, J. (1996). *Enhancing teaching through constructive alignment. Higher Education, 32(3), 347–364.* |
+| **Socratic tutor** (`tutor-socratico`) | The AI does not give the answer: it asks questions, one at a time, until you get there. | Study | Balanced | Paul, R.; Elder, L. (2006). *The Thinker's Guide to the Art of Socratic Questioning. Foundation for Critical Thinking.* |
+| **Bridge between two topics** (`ponte-entre-temas`) | Unexpected links between two subjects in the base: shared principles and where the analogy breaks. | Study, Research | Most capable | Gentner, D.; Loewenstein, J.; Thompson, L. (2003). *Learning and transfer: A general role for analogical encoding. Journal of Educational Psychology, 95(2), 393–408.* |
+| **Watch only the essentials** (`trilha-de-trechos`) | A "playlist of moments": the video segments to watch, in order, within your time. | Study, Teach | Fast | Mayer, R. E. (2009). *Multimedia Learning (2ª ed.). New York: Cambridge University Press.* |
+| **Same content, another audience** (`outro-publico`) | The same subject in three versions: a child, a colleague in the field and a manager. | Teach, Work | Fast | — |
+| **A class from one video** (`aula-de-um-video`) | Turns a video from the base into a lesson plan with clips, question pauses and an activity. | Teach | Balanced | Brame, C. J. (2016). *Effective educational videos: Principles and guidelines for maximizing student learning from video content. CBE—Life Sciences Education, 15(4), es6.* |
+
+Some requests wait for the user: **Audit my text** and **Syllabus coverage** ask the user to paste the text into the conversation; **Socratic tutor** and **Mock exam with diagnosis** ask one question at a time. In **Watch only the essentials**, the quantity is the time available, in minutes (up to 240).
+
+## Fourth batch: elaboration, spacing and video with pauses (6 prompts)
+
+From the same reference research (24/11/2026). All of them have a checked reference.
+
+| Prompt | What for | Audience | Model | Basis |
+|---|---|---|---|---|
+| **Why is this true?** (`por-que-e-assim`) | The AI asks "why?" about the central facts and compares your explanation with the base. | Study | Balanced | Pressley, M.; McDaniel, M. A.; Turnure, J. E.; Wood, E.; Ahmad, M. (1987). *Generation and precision of elaboration: Effects on intentional and incidental learning. Journal of Experimental Psychology: Learning, Memory, and Cognition, 13(2), 291–300.* |
+| **Review calendar up to the exam** (`calendario-revisao`) | Sessions and reviews with intervals calculated from the deadline. | Study | Balanced | Cepeda, N. J.; Vul, E.; Rohrer, D.; Wixted, J. T.; Pashler, H. (2008). *Spacing effects in learning: A temporal ridgeline of optimal retention. Psychological Science, 19(11), 1095–1102.* |
+| **How sure are you?** (`certeza-antes-da-resposta`) | You give your confidence before each answer; high-confidence mistakes become the priority. | Study | Balanced | Butterfield, B.; Metcalfe, J. (2001). *Errors committed with high confidence are hypercorrected. Journal of Experimental Psychology: Learning, Memory, and Cognition, 27(6), 1491–1494.* |
+| **Misconceptions the sources correct** (`desfazer-equivocos`) | Each misconception stated, refuted and replaced by the right explanation. | Study, Teach | Balanced | Tippett, C. D. (2010). *Refutation text in science education: A review of two decades of research. International Journal of Science and Mathematics Education, 8(6), 951–970.* |
+| **Questions for pair discussion** (`perguntas-conceituais`) | Concept questions for voting and discussion among classmates. | Teach | Most capable | Crouch, C. H.; Mazur, E. (2001). *Peer Instruction: Ten years of experience and results. American Journal of Physics, 69(9), 970–977.* |
+| **Watch with questions in between** (`video-com-pausas`) | The video in parts, with 2 questions between one part and the next. | Study | Fast | Szpunar, K. K.; Khan, N. Y.; Schacter, D. L. (2013). *Interpolated memory tests reduce mind wandering and improve learning of online lectures. Proceedings of the National Academy of Sciences, 110(16), 6313–6317.* |
+
+In **Review calendar up to the exam**, the quantity is the number of days until the exam (up to 365).
+
+## Trails: prompts in sequence {#trilhas}
+
+A trail chains prompts from the Library and **saves the step of each project** (`data/config/trilhas.json`), with the topic chosen at the start. The result of each step goes to Materials, like any prompt. Code: `tusab-mcp/src/nucleo/trilhas.js`.
+
+| Trail | Steps |
+|---|---|
+| **Learn a topic from scratch** (`trilha-aprender-do-zero`) | Pretest (before studying) → Watch only the essentials → Cornell notes → Recall without looking → Mock exam with diagnosis → revisar-hoje |
+| **Exams and public tests** (`trilha-concurso`) | Syllabus coverage → plano-estudo → Cornell notes → Mock exam with diagnosis → revisar-hoje |
+| **Research review** (`trilha-revisao-pesquisa`) | Research question (PICO) → Source screening (PRISMA style) → Methods and sample → Synthesis matrix → Consensus and minority voice → Stress-test the conclusion → nota-tecnica |
+| **Check a text before publishing** (`trilha-checar-texto`) | Claim inventory → Trace the origin → Audit my text |
+| **Prepare a class** (`trilha-preparar-aula`) | Objectives by level (Bloom) → A class from one video → Quick end-of-class check → Assessment rubric |
+
+- **In Claude:** each trail has a shortcut in the "+" menu (`trilha-<id>`). It delivers the request for the current step and, at the end, asks the AI to check whether the step can be marked as done; with the user's OK, the AI records it with the `tusab_trilha` tool (actions `ver`, `concluir`, `voltar`, `reiniciar`) and gets the request for the next step.
+- **On the screen:** the **Trails** tab of the Library. Each trail shows its steps (done, current, to do), the topic field and the buttons **Start**, **Copy step N**, **I finished this step**, **Go back one step** and **Start over**. The screen and Claude share the same progress.
+
+## Favorites, most used and the "+" menu {#favoritos}
+
+With 63 prompts, the Claude "+" menu would be long. By default it shows:
+
+- the **favorites** (the star on each Library card);
+- the **8 most used** (each copy on the screen and each pick in the "+" menu counts as a use; the copy for a browser AI does not count again);
+- while there are no favorites or uses, an **initial selection** of 8 prompts (study summary, flashcards, review today, quiz, explain it simply, verifiable answer, Cornell notes and mock exam with diagnosis);
+- **always:** the 5 trails, the user's own prompts and "Open Tusab".
+
+In the Library, **Claude + menu** switches between *favorites and most used* and *all prompts*. The **Favorites and most used** tab lists the same prompts, and the "in +" badge marks what shows in the menu. The change applies right away, without restarting. Favorites and counts stay on this computer only, in `data/config/prompts_uso.json`.
 
 ## Filters and suggested model
 

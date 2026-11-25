@@ -18,9 +18,12 @@ import { BookOpen, GraduationCap, Search, Scale, PenLine, Inbox, Copy, Check, X,
 import { API_BASE, BTN_FOCUS } from '../../constants';
 import ModalWrapper from '../shared/ModalWrapper';
 import EconomiaTokens from './EconomiaTokens';
+import TrilhasPainel from './TrilhasPainel';
 
 const MEUS = 'meus';
 const TODOS = 'todos';
+const FAVORITOS = 'favoritos'; // favoritos e mais usados (o que o "+" do Claude mostra por padrão)
+const TRILHAS = 'trilhas';
 const ICONE_CATEGORIA = { estudar: BookOpen, ensinar: GraduationCap, pesquisar: Search, decidir: Scale, criar: PenLine, acompanhar: Inbox, [MEUS]: Star };
 const CHAVE_PROJETO = 'tusab_prompts_projeto';
 /** Evento que abre a aba de prompts num projeto (o App troca de aba; a aba troca de projeto). */
@@ -268,9 +271,31 @@ export default function PromptsTab({ darkMode, projetos = [] }) {
   const abasRef = useRef([]);
   const fecharCopiado = useCallback(() => setMostrarCopiado(false), []);
 
+  const [menu, setMenu] = useState('selecao'); // o que o "+" do Claude mostra: 'selecao' ou 'todos'
   const carregar = useCallback(() => axios.get(`${API_BASE}/prompts`).then((r) => {
     setLista(r.data?.prompts || []);
+    setMenu(r.data?.menu || 'selecao');
   }).catch(() => setAviso(t('ext.prompts.erro_carregar'))), [t]);
+
+  const alternarFavorito = async (p) => {
+    try {
+      const r = await axios.post(`${API_BASE}/prompts/favorito`, { id: p.id });
+      if (r.data?.error) throw new Error(r.data.message);
+      setAviso(t(r.data.favorito ? 'ext.prompts.favoritado' : 'ext.prompts.desfavoritado', { titulo: p.titulo }));
+      carregar(); // "no menu +" de todos pode mudar
+    } catch (e) {
+      setAviso(e?.response?.data?.message || e.message);
+    }
+  };
+  const mudarMenu = async (valor) => {
+    try {
+      const r = await axios.post(`${API_BASE}/prompts/menu`, { menu: valor });
+      if (r.data?.error) throw new Error(r.data.message);
+      carregar();
+    } catch (e) {
+      setAviso(e?.response?.data?.message || e.message);
+    }
+  };
 
   // Recarrega ao trocar de idioma: títulos, descrições e pedidos vêm do plugin já traduzidos.
   useEffect(() => { carregar(); }, [carregar, i18n.resolvedLanguage]);
@@ -310,6 +335,25 @@ export default function PromptsTab({ darkMode, projetos = [] }) {
     }
   };
 
+  // Passo de trilha: o mesmo caminho do "Copiar" (com o tema da trilha).
+  const copiarPasso = async (id, tema) => {
+    const extras = tema ? { tema } : {};
+    try {
+      const pedido = montar(id, extras);
+      const ok = await copiarTexto(pedido);
+      await pedido;
+      if (ok) {
+        setUltimoPedido({ id, projeto, extras });
+        setMostrarCopiado(true);
+      } else {
+        const p = lista.find((x) => x.id === id);
+        if (p) setAberto(p);
+      }
+    } catch (e) {
+      setAviso(e.message);
+    }
+  };
+
   const salvo = (msg) => {
     setEditando(null);
     setAviso(msg);
@@ -331,6 +375,8 @@ export default function PromptsTab({ darkMode, projetos = [] }) {
   // Abas "Para quê" (id fixo, rótulo no idioma da tela) + "Meus prompts", que sempre aparece.
   const abas = useMemo(() => [
     { id: TODOS, nome: t('ext.prompts.todos') },
+    { id: FAVORITOS, nome: t('ext.prompts.aba_favoritos') },
+    { id: TRILHAS, nome: t('ext.prompts.aba_trilhas') },
     ...PUBLICOS.map((id) => ({ id, nome: t(`ext.prompts.publico_${id}`) })),
     { id: MEUS, nome: t('ext.prompts.meus') },
   ], [t]);
@@ -343,12 +389,20 @@ export default function PromptsTab({ darkMode, projetos = [] }) {
     if (valor.trim() && categoria !== TODOS && categoria !== MEUS) setCategoria(TODOS);
   };
   const termo = normalizar(busca.trim());
-  const visiveis = useMemo(() => lista.filter((p) => {
+  const visiveis = useMemo(() => {
+    // Favoritos primeiro, depois os mais usados (do mais usado ao menos usado).
+    if (categoria === FAVORITOS) {
+      return lista.filter((p) => p.favorito || p.usos > 0)
+        .sort((a, b) => Number(b.favorito) - Number(a.favorito) || b.usos - a.usos);
+    }
+    if (categoria === TRILHAS) return [];
+    return lista.filter((p) => {
     if (categoria === MEUS ? p.categoria_id !== MEUS : categoria !== TODOS && !(p.publicos || []).includes(categoria)) return false;
     if (categoria === MEUS && pasta !== TODAS_PASTAS && (p.pasta || '') !== pasta) return false;
     if (!termo) return true;
     return [p.titulo, p.descricao, p.pedido, p.pasta, p.categoria, p.referencia?.autores].some((x) => normalizar(x).includes(termo));
-  }), [lista, categoria, pasta, termo]);
+    });
+  }, [lista, categoria, pasta, termo]);
   // Pasta escolhida que deixou de existir (renomeada/esvaziada) volta para "Todas".
   useEffect(() => {
     if (pasta !== TODAS_PASTAS && pasta !== '' && !pastas.includes(pasta)) setPasta(TODAS_PASTAS);
@@ -404,12 +458,21 @@ export default function PromptsTab({ darkMode, projetos = [] }) {
               <Gauge size={13} aria-hidden="true" /> {t('ext.economia.botao')}
             </button>
             <button onClick={() => setEditando({ titulo: '', descricao: '', pedido: '', pasta: categoria === MEUS && pasta !== TODAS_PASTAS ? pasta : '' })}
-              className={`flex items-center gap-1.5 ${btnSec}`} data-acao="novo">
+              className={`flex items-center gap-1.5 ${btnSec}`} data-acao="novo" data-atalho-novo>
               <Plus size={13} aria-hidden="true" /> {t('ext.prompts.novo')}
             </button>
           </div>
         </div>
         {semProjeto && <p className={`text-xs ${textoSec}`}>{t('ext.prompts.precisa_projeto')}</p>}
+        <label className={`flex flex-wrap items-center gap-2 text-xs ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+          <span className="font-bold">{t('ext.prompts.menu_rotulo')}</span>
+          <select value={menu} onChange={(e) => mudarMenu(e.target.value)} data-campo="menu-mais"
+            className={`rounded-lg border px-2 py-1 text-xs ${BTN_FOCUS} ${darkMode ? 'bg-white/5 border-white/15 text-white' : 'bg-white border-slate-300 text-slate-800'}`}>
+            <option value="selecao">{t('ext.prompts.menu_selecao')}</option>
+            <option value="todos">{t('ext.prompts.menu_todos')}</option>
+          </select>
+          <span className={textoSec}>{t('ext.prompts.menu_dica')}</span>
+        </label>
       </section>
 
       {/* Categorias */}
@@ -424,6 +487,11 @@ export default function PromptsTab({ darkMode, projetos = [] }) {
           </button>
         ))}
       </div>
+
+      {categoria === TRILHAS && <TrilhasPainel darkMode={darkMode} projeto={projeto} onCopiarPasso={copiarPasso} />}
+      {categoria === FAVORITOS && !visiveis.length && (
+        <p className={`text-sm ${textoSec}`}><Trans i18nKey="ext.prompts.favoritos_vazio" components={NEGRITO} /></p>
+      )}
 
       {/* Busca nos prompts: logo acima dos cartões (dentro da caixa do projeto parecia buscar projetos) */}
       <label className={`flex items-center gap-2 rounded-xl border px-3 py-2 focus-within:border-primary ${darkMode ? 'bg-white/5 border-white/15' : 'bg-white border-slate-300'}`}>
@@ -505,7 +573,17 @@ export default function PromptsTab({ darkMode, projetos = [] }) {
                     : <><Copy size={13} aria-hidden="true" /> {t('ext.prompts.copiar')}</>}
                 </button>
                 <button onClick={() => setAberto(p)} disabled={semProjeto} className={btnSec} data-acao="ajustar">{t('ext.prompts.ajustar')}</button>
-                <span className="ml-auto flex gap-1.5">
+                <span className="ml-auto flex gap-1.5 items-center">
+                  {p.no_menu && !meu && (
+                    <span className={`text-[10px] font-bold ${textoSec}`} title={t('ext.prompts.no_menu_dica')}>{t('ext.prompts.no_menu')}</span>
+                  )}
+                  {!meu && (
+                    <button onClick={() => alternarFavorito(p)} aria-pressed={!!p.favorito} data-acao="favoritar"
+                      aria-label={t('ext.prompts.favoritar_rotulo', { titulo: p.titulo })} title={t('ext.prompts.favoritar')}
+                      className={p.favorito ? btnIcone.replace(/text-slate-\d+/g, darkMode ? 'text-amber-400' : 'text-amber-700') : btnIcone}>
+                      <Star size={13} fill={p.favorito ? 'currentColor' : 'none'} aria-hidden="true" />
+                    </button>
+                  )}
                   {meu ? (
                     <>
                       <button onClick={() => setEditando({ id: p.id, titulo: p.titulo, descricao: p.descricao || '', pedido: p.pedido || '', base: p.base, pasta: p.pasta || '' })}
