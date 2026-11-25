@@ -90,12 +90,15 @@ export default function Feedback({ darkMode, tela }) {
   );
 }
 
+const SITE = 'https://tusab.solutions';
+
 function FormularioFeedback({ gatilho, darkMode, onFechar }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [nota, setNota] = useState(null);
   const [comentario, setComentario] = useState('');
   const [email, setEmail] = useState('');
-  const [comMetricas, setComMetricas] = useState(true);
+  // Desmarcada: os números de uso só vão se a pessoa marcar (consentimento não vem pré-marcado).
+  const [comMetricas, setComMetricas] = useState(false);
   const [previa, setPrevia] = useState(null);
   const [verPrevia, setVerPrevia] = useState(false);
   const [estado, setEstado] = useState('editando'); // editando | enviando | enviado | alternativa
@@ -216,6 +219,11 @@ function FormularioFeedback({ gatilho, darkMode, onFechar }) {
                 {podeEnviar ? (previa || '…') : t('feedback.previa_precisa')}
               </pre>
             </details>
+            <p className={`text-[11px] ${sec}`} data-quem-recebe>
+              {t('feedback.quem_recebe')}{' '}
+              <a href={i18n.resolvedLanguage === 'pt' ? `${SITE}/politica-de-privacidade#feedback-voluntario` : `${SITE}/en/politica-de-privacidade#feedback-voluntario`}
+                target="_blank" rel="noopener noreferrer" className={`underline rounded ${BTN_FOCUS}`}>{t('feedback.politica')}</a>
+            </p>
             {mensagem && <p role="alert" className={`text-xs ${darkMode ? 'text-red-300' : 'text-red-700'}`}>{mensagem}</p>}
             <div className="flex justify-end gap-2">
               <button type="button" onClick={onFechar} className={btnSec}>{t('ext.comum.cancelar')}</button>

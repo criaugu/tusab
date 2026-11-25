@@ -3,19 +3,19 @@ id: politica-de-privacidade
 title: Política de Privacidade
 sidebar_label: Política de Privacidade
 slug: /politica-de-privacidade
-description: Política de Privacidade do Tusab (LGPD e GDPR). Os dados ficam no computador do usuário; a CriAugu não recebe conteúdo, bases nem dados de uso.
+description: Política de Privacidade do Tusab (LGPD e GDPR). Os dados ficam no computador do usuário; a CriAugu só recebe o feedback que o usuário decide enviar.
 ---
 
 # Política de Privacidade do Tusab
 
-**Versão:** 2.0 · **Vigência:** a partir de novembro de 2026 (versão 2.0.0 do Tusab)
+**Versão:** 2.1 · **Vigência:** a partir de 25 de novembro de 2026 (versão 2.0.0 do Tusab em diante)
 **Responsável:** CriAugu, CNPJ 65.131.075/0001-57 · **Contato:** [tusab@tusab.solutions](mailto:tusab@tusab.solutions)
 
 Esta política vale para o Tusab a partir da versão 2.0.0, o conector local para o Claude e outras IAs. Para o app desktop descontinuado (versões 1.0.x), veja a [seção 9](#app-desktop).
 
 ## 1. O princípio: os dados ficam no seu computador
 
-O Tusab funciona no seu computador. A **CriAugu não opera nenhum servidor** que receba o conteúdo da sua base, as suas conversas com a IA, os seus arquivos ou dados sobre como você usa o Tusab. Não há conta, login, telemetria, cookies de rastreamento nem sincronização em nuvem. A única exceção é o [feedback voluntário](#feedback-voluntario): só sai se você decidir enviar, depois de ver exatamente o que vai.
+O Tusab funciona no seu computador. A **CriAugu não opera nenhum servidor** que receba o conteúdo da sua base, as suas conversas com a IA ou os seus arquivos. Não há conta, login, telemetria, cookies de rastreamento nem sincronização em nuvem. A única coisa que a CriAugu recebe é o [feedback voluntário](#feedback-voluntario): só sai se você decidir enviar, e você pode ver antes exatamente o que vai.
 
 Esta política segue a Lei Geral de Proteção de Dados (LGPD, Lei nº 13.709/2018) e, quando aplicável, o Regulamento Geral de Proteção de Dados da União Europeia (GDPR, Regulamento UE 2016/679).
 
@@ -34,7 +34,7 @@ Tudo fica na pasta que você escolhe ao instalar (a "pasta do repositório"):
 | Contador de economia de tokens (só números somados) | Mostrar quanto a busca economizou |
 | Contadores de uso (só números: ferramentas usadas, prompts, trilhas, dias de uso) e o estado do convite de feedback | Convidar para o feedback na hora certa e, se você quiser, enviar junto com ele |
 
-A CriAugu não tem acesso a nenhum desses dados.
+A CriAugu não tem acesso a nenhum desses dados. A única exceção são os números de uso que você decidir enviar junto com o feedback.
 
 ## 3. O que sai do seu computador
 
@@ -46,7 +46,7 @@ A CriAugu não tem acesso a nenhum desses dados.
 | Sites das páginas web que você adiciona | O pedido da página | Ao adicionar uma página |
 | GitHub | Download da ferramenta yt-dlp e da soma de conferência | Só se o computador ainda não tiver o yt-dlp |
 | Ollama **no seu próprio computador** (opção avançada) | O texto dos trechos e das perguntas, para calcular os vetores. Não sai do computador | Só se você ligar a busca por significado (`TUSAB_EMBEDDINGS=1`) |
-| **CriAugu**, no coletor de feedback da CriAugu ([feedback voluntário](#feedback-voluntario)) | A nota, o comentário, o e-mail (se você informar) e, se você deixar marcado, os números de uso | Só quando você clica em Enviar no formulário de feedback |
+| **CriAugu**, no coletor de feedback da CriAugu ([feedback voluntário](#feedback-voluntario)) | A nota, o comentário, o e-mail (se você informar), o código da instalação e, se você marcar, os números de uso | Só quando você clica em Enviar no formulário de feedback |
 
 **O que a ferramenta de IA faz com os trechos** (guardar, usar para treinar modelos, em que país ficam os servidores) segue os termos e a política de privacidade dessa ferramenta e do serviço de IA, e não os do Tusab. Você escolhe a ferramenta; leia a política dela. Esses serviços podem estar fora do Brasil, o que caracteriza transferência internacional de dados por iniciativa sua (LGPD, art. 33).
 
@@ -54,14 +54,14 @@ Para usar uma IA no navegador, o Tusab copia um pedido com trechos da base para 
 
 ### Feedback voluntário {#feedback-voluntario}
 
-De vez em quando (depois de concluir uma trilha, de guardar 5 materiais, de uma semana de uso ou numa versão nova; no máximo uma vez a cada 30 dias), a tela do Tusab convida você a dar uma nota e um comentário. Você também pode abrir o formulário pela Ajuda. Antes de enviar, você vê exatamente o que vai:
+De vez em quando (depois de concluir uma trilha, de guardar 5 materiais, de uma semana de uso ou numa versão nova; no máximo uma vez a cada 30 dias), a tela do Tusab convida você a dar uma nota e um comentário. Você também pode abrir o formulário pela Ajuda. Antes de enviar, você pode ver exatamente o que vai (em "Ver exatamente o que vai ser enviado"):
 
 - a nota de 0 a 10 e o comentário, se escrever (pedimos que não escreva dados pessoais nem trechos dos seus documentos);
 - o e-mail, só se você quiser resposta;
-- se você deixar marcado, os **números de uso**: quantas vezes cada ferramenta foi usada, quais prompts e trilhas, quantos projetos, fontes e vídeos, versão, sistema e idioma. **Nunca** vão o conteúdo da base, as consultas, nomes de projeto, títulos ou pastas;
-- um código aleatório da instalação, para juntar envios da mesma instalação sem identificar você.
+- só se você marcar a caixa (ela vem desmarcada), os **números de uso**: quantas vezes cada ferramenta foi usada, quais ferramentas de IA se conectaram ao Tusab, quais prompts e trilhas, quantos projetos, fontes, vídeos e trechos, a economia de tokens, a data do primeiro uso e os dias de uso, a versão do Tusab e do Node, o sistema e o idioma. **Nunca** vão o conteúdo da base, as consultas, nomes de projeto, títulos ou pastas;
+- um código aleatório da instalação, que junta os envios do mesmo computador. Ele não traz o seu nome, mas, se você informar o e-mail, a CriAugu consegue ligar esse código a você.
 
-O envio vai para o coletor da CriAugu (`coletor.criaugu.com`, na hospedagem contratada pela CriAugu na Hostinger, que atua como operadora), é guardado lá e chega por e-mail à caixa tusab@tusab.solutions. Se o envio direto falhar, o Tusab prepara o mesmo e-mail, que você manda se quiser. "Agora não" adia por 14 dias; "Não perguntar mais" desliga o convite de vez. Esses dados são usados só para melhorar o Tusab e responder a você, e são apagados a pedido pelo e-mail de contato.
+O envio vai para o coletor da CriAugu (`coletor.criaugu.com`, na hospedagem contratada pela CriAugu na Hostinger, que atua como operadora), é guardado lá e chega por e-mail à caixa tusab@tusab.solutions. A Hostinger é uma empresa com sede fora do Brasil, e os servidores podem ficar em outro país; nesse caso há transferência internacional de dados (LGPD, art. 33). Como em todo acesso à internet, a hospedagem registra o endereço IP e o horário do pedido nos registros do servidor; o coletor em si guarda o IP só como um código derivado dele (resumo com sal), por até 3 dias, para limitar abusos. Se o envio direto falhar, o Tusab prepara o mesmo e-mail, que você manda se quiser. "Agora não" adia por 14 dias; "Não perguntar mais" desliga o convite de vez. Esses dados são usados só para melhorar o Tusab e responder a você, são guardados por até 24 meses (ver a [seção 7](#7-retenção)) e podem ser apagados antes, a pedido, pelo e-mail de contato.
 
 Os detalhes técnicos estão em [Privacidade (detalhes técnicos)](/privacidade).
 
@@ -75,18 +75,19 @@ Os detalhes técnicos estão em [Privacidade (detalhes técnicos)](/privacidade)
 | Feedback voluntário (nota, comentário, e-mail opcional e números de uso) | Consentimento (LGPD, art. 7º, I), dado a cada envio; você pode pedir a exclusão a qualquer momento |
 | Dados pessoais de terceiros que você incluir na base (por exemplo, nomes em documentos) | A base legal é responsabilidade de quem inclui o conteúdo (veja os [Termos e Condições](/termos-e-condicoes)) |
 
-Como a CriAugu não recebe nenhum desses dados, ela não atua como controladora nem como operadora do conteúdo da sua base. Ela é responsável apenas pelo próprio software e por esta política.
+A CriAugu não recebe o conteúdo da sua base, então não atua como controladora nem como operadora desse conteúdo. **Ela é a controladora dos dados do feedback voluntário** (nota, comentário, e-mail opcional, código da instalação e números de uso), e a Hostinger atua como operadora.
 
 ## 5. Seus direitos
 
-Os seus dados estão no seu computador, então você exerce os direitos do art. 18 da LGPD diretamente:
+Os dados da sua base estão no seu computador, então você exerce os direitos do art. 18 da LGPD diretamente. Para o feedback, que a CriAugu recebe, use o e-mail de contato:
 
 | Direito | Como |
 |---|---|
 | Acesso e correção | A pasta do repositório pode ser aberta pelo sistema operacional; a tela do Tusab também permite ver e editar |
-| Exclusão | Pela tela (excluir, limpar ou reset total) ou apagando os arquivos. Excluir um documento apaga também o original |
+| Exclusão | Pela tela (excluir, limpar ou reset total) ou apagando os arquivos. Excluir um documento apaga também o original, e os vetores da busca por significado saem junto. Os contadores de uso e o código da instalação ficam em `data/config/uso.json` e `data/config/feedback.json`: apague esses arquivos para zerá-los |
 | Portabilidade | Os arquivos estão em formatos abertos (`.txt`, `.json`, `.csv`), e a base pode ser exportada num arquivo `.tusab` |
 | Interromper o tratamento | Desativar ou remover o Tusab da ferramenta de IA. Com a ferramenta fechada, o Tusab não roda |
+| Feedback já enviado | Peça acesso, correção ou exclusão pelo e-mail de contato, informando o código da instalação (ele aparece na prévia do envio). Você também pode retirar o consentimento a qualquer momento: basta não enviar mais e pedir a exclusão do que foi enviado |
 
 Dúvidas sobre privacidade: [tusab@tusab.solutions](mailto:tusab@tusab.solutions).
 
@@ -101,11 +102,13 @@ Recomendamos proteger o computador com senha e criptografia de disco (BitLocker 
 
 ## 7. Retenção
 
-A sua base fica guardada até você apagar. A CriAugu não retém dados seus, porque não os recebe.
+A sua base fica no seu computador até você apagar.
+
+**Feedback:** guardado pela CriAugu por até 24 meses a partir do envio e depois apagado, tanto os registros no coletor (apagados automaticamente) quanto os e-mails na caixa tusab@tusab.solutions. O código derivado do IP, usado para limitar abusos, é apagado em até 3 dias. Você pode pedir a exclusão antes, pelo e-mail de contato.
 
 ## 8. Crianças e adolescentes
 
-O Tusab não é destinado a menores de 16 anos sem o acompanhamento dos responsáveis. A CriAugu não coleta dados de ninguém, inclusive de menores.
+O Tusab não é destinado a menores de 16 anos sem o acompanhamento dos responsáveis. O feedback não pede idade: se você tem menos de 18 anos, não informe e-mail nem dados pessoais no comentário.
 
 ## 9. App desktop (descontinuado) {#app-desktop}
 
