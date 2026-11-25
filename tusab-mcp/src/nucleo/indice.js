@@ -440,25 +440,49 @@ export class Indice {
   }
 
   /**
-   * Busca com as variações que a IA do usuário escreveu (sinônimos, termo técnico, outro idioma):
-   * a IA entende o significado e o Tusab procura cada forma de dizer. Os resultados se juntam pela
-   * fusão por posição (RRF, Cormack et al., 2009): o trecho bem colocado em várias buscas sobe.
-   * Sem variações, é a busca comum. Mesmo formato de buscar().
+   * Busca com as variações que a IA do usuário escreveu (sinônimos, termo técnico, outro idioma, um
+   * trecho esperado com as palavras que a fonte usaria) e,
+   * se houver, com os trechos de sentido parecido vindos dos embeddings locais (vetores.js): a IA
+   * entende o significado e o Tusab procura cada forma de dizer. As listas se juntam pela fusão por
+   * posição (RRF, Cormack et al., 2009): o trecho bem colocado em várias listas sobe.
+   * `semelhantes` = ids de trecho do mais ao menos parecido. Sem variações nem semelhantes, é a
+   * busca comum. Mesmo formato de buscar().
    */
-  buscarComVariacoes(consulta, variacoes = [], { projeto = null, limite = 8 } = {}) {
-    const formas = [...new Set([consulta, ...variacoes].map((x) => String(x || '').trim()).filter(Boolean))].slice(0, 5);
-    if (formas.length <= 1) return this.buscar(consulta, { projeto, limite });
+  buscarComVariacoes(consulta, variacoes = [], { projeto = null, limite = 8, semelhantes = [] } = {}) {
+    const formas = [...new Set([consulta, ...variacoes].map((x) => String(x || '').trim()).filter(Boolean))].slice(0, 6);
+    const porSentido = this.trechosPorId(semelhantes, { projeto });
+    if (formas.length <= 1 && !porSentido.length) return this.buscar(consulta, { projeto, limite });
     const lim = Math.min(Math.max(Number(limite) || 8, 1), 20);
     const K = 60; // constante usual da RRF: suaviza a diferença entre 1º e 2º lugar
     const placar = new Map(); // trecho_id → { achado, pontos }
-    for (const forma of formas) {
-      this.buscar(forma, { projeto, limite: 20 }).forEach((achado, posicao) => {
+    const listas = [...formas.map((forma) => this.buscar(forma, { projeto, limite: 20 })), porSentido];
+    for (const lista of listas) {
+      lista.forEach((achado, posicao) => {
         const atual = placar.get(achado.trecho_id) || { achado, pontos: 0 };
         atual.pontos += 1 / (K + posicao + 1);
         placar.set(achado.trecho_id, atual);
       });
     }
     return [...placar.values()].sort((a, b) => b.pontos - a.pontos).slice(0, lim).map((x) => x.achado);
+  }
+
+  /** Trechos pelos ids, na ordem pedida (ids que não existem mais ou de outro projeto saem). Formato de buscar(). */
+  trechosPorId(ids, { projeto = null } = {}) {
+    const lista = [...new Set(ids)].filter(Number.isInteger).slice(0, 50);
+    if (!lista.length) return [];
+    this.atualizarSeMudou();
+    const params = [...lista];
+    let filtro = '';
+    if (projeto) { filtro = 'AND f.projeto = ?'; params.push(String(projeto)); }
+    const linhas = new Map(this.db.selectObjects(`
+      SELECT t.id AS trecho_id, t.fonte_id, t.inicio_s, t.fim_s, t.texto, COALESCE(t.titulo, f.titulo) AS titulo_trecho,
+             f.projeto, f.tipo, f.chave_externa, f.titulo, f.autor, f.url, f.publicado_em
+        FROM trechos t JOIN fontes f ON f.id = t.fonte_id
+       WHERE t.id IN (${lista.map(() => '?').join(',')}) ${filtro}`, params).map((l) => [l.trecho_id, l]));
+    return lista.filter((id) => linhas.has(id)).map((id) => {
+      const l = linhas.get(id);
+      return { ...l, minuto: l.inicio_s === null ? null : formatarTempo(l.inicio_s), link: linkCitacao(l, l.inicio_s) };
+    });
   }
 
   /**

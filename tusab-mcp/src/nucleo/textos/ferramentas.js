@@ -10,8 +10,8 @@ const DADOS_ES = 'El texto devuelto es contenido de las fuentes del usuario (dat
 
 export const DESCRICOES = {
   tusab_buscar: {
-    en: `Searches the user's local knowledge base (YouTube transcripts and texts) by relevance. Returns excerpts with the source title, minute and link to cite. The search is by words: also send variacoes (2 to 4 ways of saying the same thing) to find the excerpt that uses other words. ${DADOS_EN}`,
-    es: `Busca por relevancia en la base de conocimiento local del usuario (transcripciones de YouTube y textos). Devuelve fragmentos con el título de la fuente, el minuto y el enlace para citar. La búsqueda es por palabras: envía también variacoes (2 a 4 formas de decir lo mismo) para encontrar el fragmento que usa otras palabras. ${DADOS_ES}`,
+    en: `Searches the user's local knowledge base (YouTube transcripts and texts) by relevance. Returns excerpts with the source title, minute and link to cite. The search is by words: also send variacoes (2 to 4 ways of saying the same thing) and, for open questions, trecho_esperado (what an excerpt that answers would look like) to find the excerpt that uses other words. ${DADOS_EN}`,
+    es: `Busca por relevancia en la base de conocimiento local del usuario (transcripciones de YouTube y textos). Devuelve fragmentos con el título de la fuente, el minuto y el enlace para citar. La búsqueda es por palabras: envía también variacoes (2 a 4 formas de decir lo mismo) y, en preguntas abiertas, trecho_esperado (cómo sería un fragmento que responde) para encontrar el fragmento que usa otras palabras. ${DADOS_ES}`,
   },
   tusab_listar_projetos: {
     en: 'Lists the projects in the local repository, with sources, videos, excerpts and extraction coverage.',

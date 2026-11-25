@@ -40,6 +40,7 @@ data/
   temp/                                   legendas VTT temporárias
   bin/                                    yt-dlp baixado pelo Tusab
   tusab.sqlite                            índice de busca (reconstruível)
+  vetores/                                só com o Ollama (opção avançada): vetores dos trechos (reconstruível)
 ```
 
 ## Formato dos arquivos

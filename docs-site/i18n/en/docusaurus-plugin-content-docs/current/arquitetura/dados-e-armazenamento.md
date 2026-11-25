@@ -40,6 +40,7 @@ data/
   temp/                                   temporary VTT subtitles
   bin/                                    yt-dlp downloaded by Tusab
   tusab.sqlite                            search index (rebuildable)
+  vetores/                                only with Ollama (advanced option): excerpt vectors (rebuildable)
 ```
 
 ## File formats

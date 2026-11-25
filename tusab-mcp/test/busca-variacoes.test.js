@@ -69,3 +69,38 @@ test('tusab_buscar aceita variacoes (até 4) e recusa mais', async () => {
     tusab.fechar();
   }
 });
+
+test('tusab_buscar: trecho_esperado acha pelas palavras da fonte e, com poucos trechos, a IA é chamada a tentar de novo', async () => {
+  const tusab = await base();
+  const painel = new Painel(tusab);
+  const servidor = criarServidor(tusab, { painel });
+  const [a, b] = InMemoryTransport.createLinkedPair();
+  await servidor.connect(b);
+  const cliente = new Client({ name: 'teste', version: '1' });
+  await cliente.connect(a);
+  const buscar = async (args) => (await cliente.callTool({ name: 'tusab_buscar', arguments: { projeto: 'Saude', ...args } })).content[0].text;
+  try {
+    const nada = await buscar({ consulta: 'ataque cardíaco' });
+    assert.match(nada, /Nenhum trecho encontrado/);
+    assert.match(nada, /busque de novo mandando variacoes .* e trecho_esperado/, 'sem outras formas: tente de novo');
+
+    const comTrecho = await buscar({ consulta: 'ataque cardíaco', trecho_esperado: 'Quando uma artéria coronária é obstruída ocorre o infarto do miocárdio.' });
+    assert.match(comTrecho, /Cardiologia/);
+    assert.match(comTrecho, /mesmo com outras formas de dizer.*diga isso ao usuário/, 'já tentou: avisar o usuário');
+    assert.doesNotMatch(comTrecho, /⟦fonte [0-9a-f]{8}⟧\nQuando uma artéria/, 'o trecho esperado nunca volta como fonte');
+
+    const bastante = await buscar({ consulta: 'ataque cardíaco', variacoes: ['heart attack'], trecho_esperado: 'Dor no peito e infarto do miocárdio.' });
+    assert.match(bastante, /Cardiologia/);
+    assert.match(bastante, /Heart attack/);
+    assert.doesNotMatch(bastante, /Poucos trechos/, 'três ou mais trechos: sem aviso');
+
+    const longo = await cliente.callTool({ name: 'tusab_buscar', arguments: { consulta: 'x', trecho_esperado: 'a'.repeat(601) } });
+    assert.equal(longo.isError, true);
+    const { tools } = await cliente.listTools();
+    assert.ok(tools.find((t) => t.name === 'tusab_buscar').inputSchema.properties.trecho_esperado);
+  } finally {
+    await cliente.close();
+    painel.fechar();
+    tusab.fechar();
+  }
+});

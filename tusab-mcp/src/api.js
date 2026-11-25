@@ -232,6 +232,7 @@ export async function atenderApi(tusab, metodo, caminho, query, lerCorpo) {
       motor.projeto_nome = '';
       motor.stats = { ...motor.stats, status: 'Ocioso', progress: 0, projeto_nome: '' };
       tusab.indice.recriar();
+      tusab.vetores.esquecer();
       return ok(r);
     }
     case 'GET /metrics': {
@@ -367,7 +368,7 @@ export async function atenderApi(tusab, metodo, caminho, query, lerCorpo) {
       // IA no navegador: os trechos vão dentro do pedido (do tema, ou um panorama do projeto)
       tusab.sincronizar();
       const proj = String(projeto || '').trim();
-      let trechos = tema && String(tema).trim() ? tusab.indice.buscar(String(tema), { projeto: proj, limite: 12 }) : [];
+      let trechos = tema && String(tema).trim() ? await tusab.buscar(String(tema), [], { projeto: proj, limite: 12 }) : [];
       if (trechos.length < 4) {
         const vistos = new Set(trechos.map((x) => x.trecho_id));
         trechos = [...trechos, ...tusab.indice.panorama(proj, { limite: 12 }).filter((x) => !vistos.has(x.trecho_id))].slice(0, 12);

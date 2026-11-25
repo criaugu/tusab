@@ -9,6 +9,7 @@ import path from 'node:path';
 import { dataBr, escreverAtomico, garantirEstrutura, lerJson, salvarJson, sanitizarNome } from './caminhos.js';
 import { pastaProjeto } from './gestao.js';
 import { Indice } from './indice.js';
+import { Vetores } from './vetores.js';
 import { Atualizacao } from './atualizacao.js';
 import { Motor } from './motor.js';
 import { ServicoFontes } from '../fontes/servico.js';
@@ -23,6 +24,8 @@ export class Tusab {
     this.raiz = raiz;
     this.indice = indice;
     this.motor = motor;
+    // Busca por significado (opcional, Ollama local): o principal liga com vetores.iniciar().
+    this.vetores = new Vetores(raiz, indice);
     // Atualização automática de canais: verifica ao abrir e de hora em hora (timers não seguram o processo).
     this.atualizacao = new Atualizacao(raiz, motor);
     // Fontes públicas (fase C): resultados vão para documents/ e entram no índice; log no mesmo painel do motor.
@@ -94,6 +97,16 @@ export class Tusab {
   }
 
   /**
+   * A busca das ferramentas de IA: palavras (com as variações da IA) e, se o Ollama local estiver
+   * ligado, trechos de sentido parecido, juntos pela RRF. Sem Ollama, só palavras.
+   */
+  async buscar(consulta, variacoes = [], { projeto = null, limite = 8 } = {}) {
+    this.sincronizar();
+    const semelhantes = await this.vetores.semelhantes(consulta, { projeto });
+    return this.indice.buscarComVariacoes(consulta, variacoes, { projeto, limite, semelhantes });
+  }
+
+  /**
    * Mesmo formato de POST /neural/texto do desktop: neural/{projeto}/texts/{id}_{nome}.txt
    * com cabeçalho TITULO/FONTE/DATA e entrada em _manifest.json.
    */
@@ -121,6 +134,7 @@ export class Tusab {
 
   fechar() {
     this.atualizacao.pararAgendamento();
+    this.vetores.fechar();
     this.fontes.cancelarTodas().catch(() => {});
     this.indice.fechar();
   }
