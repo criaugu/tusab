@@ -28,6 +28,7 @@ Everything stays in the folder you choose at installation (the "repository folde
 | YouTube transcripts, documents, texts, web pages and public-source results you add | Building your knowledge base |
 | Original files (PDF, images, audio etc.) | Letting the AI look at the original |
 | Search index | Finding the right excerpts |
+| Excerpt vectors (only if you turn on search by meaning with Ollama, advanced option) | Finding excerpts with similar meaning. They live in `data/vetores/` and are removed when the source is deleted, on full reset and when the option is turned off |
 | Study materials and spaced-repetition state | Keeping what the AI produces and remembering review dates |
 | Your own requests (prompts), language, extraction queue and preferences | Configuring Tusab |
 | Token-savings counter (aggregate numbers only) | Showing how much the search saved |
@@ -44,6 +45,7 @@ CriAugu has no access to any of this data.
 | Public sources (paper databases, legislation, open data) | The term you searched for | When you search |
 | Sites of the web pages you add | The page request | When you add a page |
 | GitHub | Download of the yt-dlp tool and its checksum | Only if the computer does not have yt-dlp yet |
+| Ollama **on your own computer** (advanced option) | The text of the excerpts and questions, to compute the vectors. It does not leave the computer | Only if you turn on search by meaning (`TUSAB_EMBEDDINGS=1`) |
 | **CriAugu**, in the CriAugu feedback collector ([voluntary feedback](#feedback-voluntario)) | The score, the comment, the email (if you give it) and, if you leave it checked, the usage numbers | Only when you click Send in the feedback form |
 
 **What the AI tool does with the excerpts** (storing them, using them to train models, which country the servers are in) follows the terms and privacy policy of that tool and AI service, not Tusab's. You choose the tool; read its policy. These services may be outside Brazil, which is an international data transfer made at your initiative (LGPD, art. 33).

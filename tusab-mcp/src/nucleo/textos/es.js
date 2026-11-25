@@ -529,10 +529,11 @@ export default {
   'Sem conexão com o destino do feedback. Mande por e-mail: o texto já está pronto.': 'Sin conexión con el destino del feedback. Envíalo por correo: el texto ya está listo.',
   'Abra o painel do Tusab. Se você tiver um navegador próprio, abra nele; senão, no navegador do computador.': 'Abre el panel de Tusab. Si tienes un navegador propio, ábrelo en él; si no, en el navegador del ordenador.',
   'Busca por significado: ligada ({modelo}; {cobertos} de {total} trechos prontos).': 'Búsqueda por significado: activada ({modelo}; {cobertos} de {total} fragmentos listos).',
-  'Busca por significado: desligada (TUSAB_EMBEDDINGS=0).': 'Búsqueda por significado: desactivada (TUSAB_EMBEDDINGS=0).',
   'Busca por significado: desligada (TUSAB_OLLAMA_URL precisa ser um endereço deste computador).': 'Búsqueda por significado: desactivada (TUSAB_OLLAMA_URL debe ser una dirección de este ordenador).',
   'Busca por significado: desligada. Para ligar, instale o Ollama (ollama.com) e rode: ollama pull {modelo}': 'Búsqueda por significado: desactivada. Para activarla, instala Ollama (ollama.com) y ejecuta: ollama pull {modelo}',
   'Nenhum trecho encontrado na base para essa consulta.': 'No se encontraron fragmentos en la base para esta consulta.',
   'Poucos trechos, mesmo com outras formas de dizer. A base pode ter pouco sobre isso: diga isso ao usuário em vez de completar com conhecimento geral sem avisar.': 'Pocos fragmentos, incluso con otras formas de decirlo. La base puede tener poco sobre esto: díselo al usuario en lugar de completar con conocimiento general sin avisar.',
   'Poucos trechos. Antes de concluir, busque de novo mandando variacoes (sinônimos, termo técnico, inglês) e trecho_esperado (como seria um trecho que responde).': 'Pocos fragmentos. Antes de concluir, busca de nuevo enviando variacoes (sinónimos, término técnico, inglés) y trecho_esperado (cómo sería un fragmento que responde).',
+  'Busca por significado: desligada. Para ligar (opção avançada, com o Ollama neste computador): TUSAB_EMBEDDINGS=1.': 'Búsqueda por significado: desactivada. Para activarla (opción avanzada, con Ollama en este ordenador): TUSAB_EMBEDDINGS=1.',
+  'Busca por significado: desligada (modelo {modelo} não aceito: use um modelo local, sem "-cloud").': 'Búsqueda por significado: desactivada (modelo {modelo} no aceptado: usa un modelo local, sin "-cloud").',
 };

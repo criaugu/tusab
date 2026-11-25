@@ -14,7 +14,7 @@ Technical summary of the versions. From 2.0.0 on, Tusab is only the local connec
 **Next version (unreleased)**
 
 - Smarter search with nothing to install: for open questions, the AI sends a `trecho_esperado` in `tusab_buscar` (2 to 4 sentences like those of a source that answers) and Tusab also searches by its words. When the search finds few excerpts, Tusab asks the AI to try again with other words; if it already did, to tell the user instead of filling in from memory.
-- Advanced option, for those who already use [Ollama](https://ollama.com): with it running on the computer and an embedding model, `tusab_buscar` adds the excerpts with similar meaning (rank fusion, RRF). Nobody needs to install it: without Ollama, nothing changes or shows up. See [environment variables](/desenvolvimento/setup#environment-variables).
+- Advanced option, for those who already use [Ollama](https://ollama.com): turned on with `TUSAB_EMBEDDINGS=1`, with it running on the computer and an embedding model, `tusab_buscar` adds the excerpts with similar meaning (rank fusion, RRF). Nobody needs to install it: off by default, nothing changes or shows up. Text only goes to this computer (no redirects followed; cloud models refused). See [environment variables](/desenvolvimento/setup#environment-variables).
 
 **v2.0.0 (2026-11-19)** — Tusab becomes only the local connector for Claude and other AIs; the desktop app is discontinued.
 

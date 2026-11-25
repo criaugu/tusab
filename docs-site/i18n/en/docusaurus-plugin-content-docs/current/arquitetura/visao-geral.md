@@ -115,7 +115,7 @@ The discontinued [desktop app](/desktop/visao-geral) built the same code with `n
 
 ## What stays with the user's AI
 
-Conversing, summarizing, building quizzes and generating flashcards. Tusab has no chat of its own, LLM, Ollama, vector search, Google Drive, audio transcription, OCR or telemetry: it delivers the excerpts, keeps what needs memory across conversations and takes care of the base. Those features existed in the [desktop app](/desktop/visao-geral), now discontinued.
+Conversing, summarizing, building quizzes and generating flashcards. Tusab has no chat of its own, LLM, Google Drive, audio transcription, OCR or telemetry: it delivers the excerpts, keeps what needs memory across conversations and takes care of the base. Those features existed in the [desktop app](/desktop/visao-geral), now discontinued. The only exception is optional and off by default: search by meaning with the computer's own Ollama (see [environment variables](/desenvolvimento/setup#environment-variables)).
 
 ## Patterns
 

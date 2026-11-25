@@ -528,10 +528,11 @@ export default {
   'Sem conexão com o destino do feedback. Mande por e-mail: o texto já está pronto.': 'Could not reach the feedback destination. Send it by email: the text is ready.',
   'Abra o painel do Tusab. Se você tiver um navegador próprio, abra nele; senão, no navegador do computador.': 'Open the Tusab panel. If you have your own browser, open it there; otherwise, in the computer browser.',
   'Busca por significado: ligada ({modelo}; {cobertos} de {total} trechos prontos).': 'Search by meaning: on ({modelo}; {cobertos} of {total} excerpts ready).',
-  'Busca por significado: desligada (TUSAB_EMBEDDINGS=0).': 'Search by meaning: off (TUSAB_EMBEDDINGS=0).',
   'Busca por significado: desligada (TUSAB_OLLAMA_URL precisa ser um endereço deste computador).': 'Search by meaning: off (TUSAB_OLLAMA_URL must be an address on this computer).',
   'Busca por significado: desligada. Para ligar, instale o Ollama (ollama.com) e rode: ollama pull {modelo}': 'Search by meaning: off. To turn it on, install Ollama (ollama.com) and run: ollama pull {modelo}',
   'Nenhum trecho encontrado na base para essa consulta.': 'No excerpts found in the base for this query.',
   'Poucos trechos, mesmo com outras formas de dizer. A base pode ter pouco sobre isso: diga isso ao usuário em vez de completar com conhecimento geral sem avisar.': 'Few excerpts, even with other ways of saying it. The base may have little on this: tell the user so instead of filling in with general knowledge without saying it.',
   'Poucos trechos. Antes de concluir, busque de novo mandando variacoes (sinônimos, termo técnico, inglês) e trecho_esperado (como seria um trecho que responde).': 'Few excerpts. Before concluding, search again sending variacoes (synonyms, technical term, English) and trecho_esperado (what an excerpt that answers would look like).',
+  'Busca por significado: desligada. Para ligar (opção avançada, com o Ollama neste computador): TUSAB_EMBEDDINGS=1.': 'Search by meaning: off. To turn it on (advanced option, with Ollama on this computer): TUSAB_EMBEDDINGS=1.',
+  'Busca por significado: desligada (modelo {modelo} não aceito: use um modelo local, sem "-cloud").': 'Search by meaning: off (model {modelo} not accepted: use a local model, without "-cloud").',
 };

@@ -93,7 +93,10 @@ export class Tusab {
 
   /** Atualiza o índice se algum .txt mudou (barato quando nada mudou). */
   sincronizar() {
-    return this.indice.sincronizar();
+    const r = this.indice.sincronizar();
+    // Fonte apagada ou nova: tira do disco o vetor que sobrou e calcula os que faltam (só com Ollama ligado).
+    if (r?.lidos || r?.removidos) this.vetores.agendar();
+    return r;
   }
 
   /**

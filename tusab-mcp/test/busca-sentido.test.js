@@ -51,20 +51,28 @@ function ligar(tusab, url) {
   return tusab.vetores;
 }
 
-test('configuração: desligada por variável, e só aceita Ollama neste computador', () => {
-  assert.equal(configuracaoVetores({}).ligado, true);
-  assert.equal(configuracaoVetores({}).url, 'http://127.0.0.1:11434');
-  assert.equal(configuracaoVetores({}).modelo, 'nomic-embed-text');
+test('configuração: só liga quando pedido, só neste computador e sem modelo de nuvem', () => {
+  const padrao = configuracaoVetores({});
+  assert.equal(padrao.ligado, false, 'desligada até a pessoa pedir');
+  assert.equal(padrao.motivo, 'desligada');
+  assert.equal(padrao.explicita, false);
+  const on = configuracaoVetores({ TUSAB_EMBEDDINGS: '1' });
+  assert.equal(on.ligado, true);
+  assert.equal(on.url, 'http://127.0.0.1:11434');
+  assert.equal(on.modelo, 'nomic-embed-text');
   assert.equal(configuracaoVetores({ TUSAB_EMBEDDINGS: '0' }).motivo, 'desligada');
-  for (const u of ['http://localhost:11434', 'http://[::1]:11434', 'http://127.0.0.1:9999/']) {
-    assert.equal(configuracaoVetores({ TUSAB_OLLAMA_URL: u }).ligado, true, u);
+  for (const u of ['http://[::1]:11434', 'http://127.0.0.1:9999/', 'http://127.1:11434']) {
+    assert.equal(configuracaoVetores({ TUSAB_EMBEDDINGS: '1', TUSAB_OLLAMA_URL: u }).ligado, true, u);
   }
-  for (const u of ['https://api.exemplo.com', 'http://192.168.0.10:11434', 'http://127.0.0.1.exemplo.com', 'ftp://127.0.0.1/arquivo', 'lixo']) {
-    const c = configuracaoVetores({ TUSAB_OLLAMA_URL: u });
+  for (const u of ['http://localhost:11434', 'https://api.exemplo.com', 'http://192.168.0.10:11434', 'http://127.0.0.1.exemplo.com',
+    'http://127.0.0.1@exemplo.com', 'http://0.0.0.0:11434', 'ftp://127.0.0.1/arquivo', 'lixo']) {
+    const c = configuracaoVetores({ TUSAB_EMBEDDINGS: '1', TUSAB_OLLAMA_URL: u });
     assert.equal(c.ligado, false, u);
     assert.equal(c.motivo, 'endereco', u);
   }
-  assert.equal(configuracaoVetores({ TUSAB_EMBEDDINGS_MODELO: 'a b; rm' }).motivo, 'modelo');
+  for (const m of ['a b; rm', 'nomic-embed-text-cloud', 'qwen3-embedding:8b-cloud']) {
+    assert.equal(configuracaoVetores({ TUSAB_EMBEDDINGS: '1', TUSAB_EMBEDDINGS_MODELO: m }).motivo, 'modelo', m);
+  }
 });
 
 test('com Ollama: acha o trecho pelo sentido, sem palavra em comum, e junta com a busca por palavras', async () => {
@@ -195,7 +203,7 @@ test('opção avançada: quem não configurou nada não ouve falar do Ollama; qu
   const status = async () => (await cliente.callTool({ name: 'tusab_status', arguments: {} })).content[0].text;
   try {
     assert.equal(configuracaoVetores({}).explicita, false);
-    // Padrão (nada configurado) e sem Ollama na máquina: nenhuma menção.
+    // Padrão (nada configurado): nenhuma menção, mesmo que haja algo escutando na porta do Ollama.
     const fechado = await ollamaFalso();
     await fechado.fechar();
     tusab.vetores = new Vetores(tusab.raiz, tusab.indice, { ...configuracaoVetores({}), url: fechado.url });
@@ -206,13 +214,16 @@ test('opção avançada: quem não configurou nada não ouve falar do Ollama; qu
     // Configurado de propósito e sem Ollama: o status explica o que falta.
     tusab.vetores = new Vetores(tusab.raiz, tusab.indice, { ...configuracaoVetores({ TUSAB_EMBEDDINGS_MODELO: 'bge-m3' }), url: fechado.url });
     tusab.vetores.iniciar();
+    assert.match(await status(), /Busca por significado: desligada\. Para ligar .*TUSAB_EMBEDDINGS=1/);
+    tusab.vetores = new Vetores(tusab.raiz, tusab.indice, { ...configuracaoVetores({ TUSAB_EMBEDDINGS: '1', TUSAB_EMBEDDINGS_MODELO: 'bge-m3' }), url: fechado.url });
+    tusab.vetores.iniciar();
     await tusab.vetores.aguardar();
     assert.match(await status(), /Busca por significado: desligada\. Para ligar, instale o Ollama .* ollama pull bge-m3/);
 
-    // Ollama funcionando (mesmo sem configurar): aparece como ligada.
+    // Ligada e com o Ollama funcionando: aparece como ligada.
     const ollama = await ollamaFalso();
     try {
-      tusab.vetores = new Vetores(tusab.raiz, tusab.indice, { ...configuracaoVetores({}), url: ollama.url });
+      tusab.vetores = new Vetores(tusab.raiz, tusab.indice, { ...configuracaoVetores({ TUSAB_EMBEDDINGS: '1' }), url: ollama.url });
       tusab.vetores.iniciar();
       await tusab.vetores.aguardar();
       assert.match(await status(), /Busca por significado: ligada \(nomic-embed-text; 4 de 4 trechos prontos\)/);
@@ -222,6 +233,91 @@ test('opção avançada: quem não configurou nada não ouve falar do Ollama; qu
   } finally {
     await cliente.close();
     painel.fechar();
+    tusab.fechar();
+  }
+});
+
+test('segurança: não segue redirecionamento do "Ollama" (o texto da base não sai deste computador)', async () => {
+  const destino = await ollamaFalso();
+  const pedidosRedirecionados = destino.pedidos;
+  const srv = http.createServer((req, res) => {
+    req.resume();
+    req.on('end', () => res.writeHead(307, { Location: `${destino.url}/api/embed` }).end());
+  });
+  await new Promise((ok) => srv.listen(0, '127.0.0.1', ok));
+  const tusab = await base();
+  try {
+    const v = ligar(tusab, `http://127.0.0.1:${srv.address().port}`);
+    await v.aguardar();
+    assert.equal(pedidosRedirecionados.length, 0, 'o segundo servidor não recebeu nada');
+    assert.equal(v.estado().motivo, 'sem_ollama');
+  } finally {
+    tusab.fechar();
+    await new Promise((ok) => srv.close(ok));
+    await destino.fechar();
+  }
+});
+
+test('reset total enquanto o Ollama calcula: o lote que volta não recria os vetores', async () => {
+  let soltar;
+  const segurando = new Promise((ok) => { soltar = ok; });
+  const srv = http.createServer((req, res) => {
+    let corpo = '';
+    req.on('data', (c) => { corpo += c; });
+    req.on('end', async () => {
+      await segurando;
+      const j = JSON.parse(corpo);
+      res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify({ embeddings: j.input.map(vetorFalso) }));
+    });
+  });
+  await new Promise((ok) => srv.listen(0, '127.0.0.1', ok));
+  const tusab = await base();
+  try {
+    const v = ligar(tusab, `http://127.0.0.1:${srv.address().port}`);
+    await new Promise((ok) => setTimeout(ok, 50)); // o lote já está no "Ollama"
+    resetTotal(tusab.raiz);
+    tusab.indice.recriar();
+    v.esquecer();
+    soltar();
+    await v.aguardar();
+    assert.equal(fs.existsSync(path.dirname(v.arquivo)), false, 'nada voltou ao disco');
+  } finally {
+    soltar();
+    tusab.fechar();
+    srv.closeAllConnections?.();
+    await new Promise((ok) => srv.close(ok));
+  }
+});
+
+test('limpeza sem depender do Ollama: fonte apagada sai do disco com ele fechado; desligada apaga tudo; troca de modelo apaga o antigo', async () => {
+  const ollama = await ollamaFalso();
+  const tusab = await base();
+  try {
+    const v = ligar(tusab, ollama.url);
+    await v.aguardar();
+    await ollama.fechar(); // Ollama fecha
+    const v2 = ligar(tusab, ollama.url);
+    await v2.aguardar();
+    assert.deepEqual(await v2.semelhantes('coração'), []); // Ollama fechado: falha e entra em pausa
+    assert.equal(v2.estado().motivo, 'sem_ollama');
+    tusab.vetores = v2;
+    const pasta = path.join(tusab.raiz, 'data', 'neural', 'Outro', 'texts');
+    for (const f of fs.readdirSync(pasta)) if (f.endsWith('.txt')) fs.rmSync(path.join(pasta, f));
+    tusab.sincronizar();
+    assert.equal(new Vetores(tusab.raiz, tusab.indice, v2.config)._memoria().size, 3, 'vetor da fonte apagada saiu, mesmo em pausa');
+
+    // Troca de modelo: o arquivo do modelo antigo sai.
+    const outro = new Vetores(tusab.raiz, tusab.indice, { ...v2.config, modelo: 'outro-modelo' });
+    outro.iniciar();
+    assert.equal(fs.existsSync(v2.arquivo), false);
+    outro.fechar();
+
+    // Desligada: a pasta de vetores sai.
+    fs.mkdirSync(path.dirname(v2.arquivo), { recursive: true });
+    fs.writeFileSync(v2.arquivo, 'x');
+    new Vetores(tusab.raiz, tusab.indice, configuracaoVetores({})).iniciar();
+    assert.equal(fs.existsSync(path.dirname(v2.arquivo)), false);
+  } finally {
     tusab.fechar();
   }
 });

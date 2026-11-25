@@ -64,11 +64,11 @@ To use it in an AI tool during development, point its MCP configuration to `node
 | `YTDLP_FALSO_ATRASO` | With the simulated yt-dlp, a delay in milliseconds (e.g. `800`) to watch progress on the screen |
 | `TUSAB_IDIOMA` | Initial language (`pt`, `en`, `es`), used before the screen sets one |
 | `TUSAB_SEM_BOAS_VINDAS` | `1` turns off opening the screen automatically on the first run in a folder |
-| `TUSAB_EMBEDDINGS` | Advanced option (search by meaning with [Ollama](https://ollama.com)). By default, Tusab uses Ollama only if it is already running on `127.0.0.1:11434` with the model; `0` turns it off for good |
-| `TUSAB_OLLAMA_URL` | Ollama address. Only this computer is accepted (`127.0.0.1`, `localhost`, `::1`); any other address turns the feature off |
-| `TUSAB_EMBEDDINGS_MODELO` | Ollama embedding model. Default: `nomic-embed-text`. For Portuguese, compare with `bge-m3` or `qwen3-embedding:0.6b` |
+| `TUSAB_EMBEDDINGS` | `1` turns on the advanced option of search by meaning with [Ollama](https://ollama.com) running on this computer. Default: off (Tusab never sends the base, on its own, to whatever is listening on the Ollama port). When off, Tusab deletes `data/vetores/` |
+| `TUSAB_OLLAMA_URL` | Ollama address. Default: `http://127.0.0.1:11434`. Only this computer by number is accepted (`127.0.0.1` or `::1`) and redirects are not followed; any other address turns the feature off |
+| `TUSAB_EMBEDDINGS_MODELO` | Ollama embedding model. Default: `nomic-embed-text`. Cloud models (with `cloud` in the name) are refused. For Portuguese, compare with `bge-m3` or `qwen3-embedding:0.6b` |
 
-Search by meaning is an add-on, not a requirement: the main path is the user's own AI, which sends `variacoes` and `trecho_esperado` in `tusab_buscar`. With Ollama, Tusab keeps one vector per excerpt in `data/vetores/` (a cache rebuilt from the texts; removed with a deleted source and on full reset) and adds the excerpts with similar meaning through RRF. Whoever has not set any of the three variables sees no mention of Ollama in the status.
+Search by meaning is an add-on, not a requirement: the main path is the user's own AI, which sends `variacoes` and `trecho_esperado` in `tusab_buscar`. When on, Tusab keeps one vector per excerpt in `data/vetores/` (a cache rebuilt from the texts; as sensitive as the text; removed when the source is deleted, even with Ollama closed, on full reset and when switching models) and adds the excerpts with similar meaning through RRF. Whoever has not set any of the three variables sees no mention of Ollama in the status.
 
 ## Interface in `extensao` mode
 

@@ -4,20 +4,21 @@
 // isto só soma para quem já usa o Ollama. Ninguém é convidado a instalá-lo: sem configuração
 // explícita, o status nem menciona o recurso.
 //
-// Se o usuário tem o Ollama aberto (127.0.0.1:11434) com o modelo de embeddings, o Tusab
+// Só com TUSAB_EMBEDDINGS=1 e o Ollama aberto (127.0.0.1:11434) com o modelo de embeddings, o Tusab
 // transforma cada trecho da base num vetor e, na busca, junta duas listas pela fusão por
 // posição (RRF, em indice.js): a das palavras (FTS5/BM25) e a dos trechos de sentido parecido.
 // Sem Ollama, nada muda: a busca é só por palavras (com as variações da IA).
 //
-// - Privacidade: o texto só vai para um endereço local (127.0.0.1, localhost, ::1); qualquer
-//   outro endereço desliga o recurso.
+// - Privacidade: o texto só vai para este computador (127.0.0.1 ou ::1), sem seguir
+//   redirecionamento; outro endereço ou modelo "-cloud" desliga o recurso. Desligado, o
+//   Tusab apaga data/vetores/; ligado, apaga os vetores de outros modelos.
 // - Os .txt continuam sendo a fonte da verdade: os vetores são um cache em data/vetores/,
 //   chaveado pelo hash do texto do trecho, que pode ser apagado e refeito.
 // - Formato: data/vetores/<modelo>.bin = cabeçalho (8 bytes "TUSABV01" + uint32 dimensão) e
 //   registros [16 bytes do sha-256 do texto][dimensão × float32], vetores normalizados.
 // - Só o processo principal preenche (ver coordenacao.js): iniciar() liga o preenchimento.
 //
-// Variáveis: TUSAB_EMBEDDINGS=0 desliga; TUSAB_OLLAMA_URL (só local) e TUSAB_EMBEDDINGS_MODELO.
+// Variáveis: TUSAB_EMBEDDINGS=1 liga; TUSAB_OLLAMA_URL (só local) e TUSAB_EMBEDDINGS_MODELO.
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -38,7 +39,9 @@ const PISO_SEMELHANCA = 0.3; // abaixo disso o trecho não tem a ver com a consu
 
 /** Lê as variáveis de ambiente. `motivo` explica por que está desligado (vai para o status). */
 export function configuracaoVetores(env = process.env) {
-  const desligado = /^(0|false|nao|não|off|no)$/i.test(String(env.TUSAB_EMBEDDINGS ?? '').trim());
+  // Só liga quando a pessoa pede (TUSAB_EMBEDDINGS=1): o Tusab nunca manda a base, sozinho, para
+  // o que estiver escutando na porta do Ollama (outro programa, túnel para outra máquina...).
+  const pedido = /^(1|true|sim|on|yes)$/i.test(String(env.TUSAB_EMBEDDINGS ?? '').trim());
   // Alguém configurou de propósito: aí o status explica o que falta, se faltar.
   const explicita = ['TUSAB_EMBEDDINGS', 'TUSAB_OLLAMA_URL', 'TUSAB_EMBEDDINGS_MODELO'].some((k) => String(env[k] ?? '').trim());
   const modelo = String(env.TUSAB_EMBEDDINGS_MODELO || MODELO_PADRAO).trim();
@@ -46,11 +49,13 @@ export function configuracaoVetores(env = process.env) {
   let url = null;
   try {
     const u = new URL(bruto);
-    if (['http:', 'https:'].includes(u.protocol) && ['127.0.0.1', 'localhost', '[::1]'].includes(u.hostname)) url = u.origin;
+    // Só o endereço numérico deste computador ("localhost" depende do arquivo hosts).
+    if (['http:', 'https:'].includes(u.protocol) && ['127.0.0.1', '[::1]'].includes(u.hostname)) url = u.origin;
   } catch { /* endereço inválido: fica desligado */ }
-  if (desligado) return { ligado: false, motivo: 'desligada', url, modelo, explicita };
+  if (!pedido) return { ligado: false, motivo: 'desligada', url, modelo, explicita };
   if (!url) return { ligado: false, motivo: 'endereco', url: null, modelo, explicita };
-  if (!/^[\w.:/-]{1,100}$/.test(modelo)) return { ligado: false, motivo: 'modelo', url, modelo, explicita };
+  // Modelos "-cloud" do Ollama repassam o texto aos servidores dele: recusados.
+  if (!/^[\w.:/-]{1,100}$/.test(modelo) || /cloud/i.test(modelo)) return { ligado: false, motivo: 'modelo', url, modelo, explicita };
   return { ligado: true, motivo: null, url, modelo, explicita };
 }
 
@@ -88,11 +93,25 @@ export class Vetores {
     this.preenchendo = null;
     this.pausaAte = 0;
     this.ultimoErro = null;
+    this.geracao = 0; // muda a cada esquecer(): lote que estava no Ollama durante um reset é descartado
   }
 
-  /** Liga o preenchimento em segundo plano (só no processo principal). */
+  /**
+   * Liga o preenchimento em segundo plano (só no processo principal). Desligada, apaga vetores
+   * que tenham sobrado de quando estava ligada; ligada, apaga os de outros modelos.
+   */
   iniciar() {
-    if (!this.config.ligado || this.fechado) return;
+    if (this.fechado) return;
+    const pasta = path.dirname(this.arquivo);
+    if (!this.config.ligado) {
+      fs.rmSync(pasta, { recursive: true, force: true });
+      return;
+    }
+    try {
+      for (const f of fs.readdirSync(pasta)) {
+        if (path.join(pasta, f) !== this.arquivo) fs.rmSync(path.join(pasta, f), { recursive: true, force: true });
+      }
+    } catch { /* pasta ainda não existe */ }
     this.iniciado = true;
     this.agendar();
   }
@@ -103,10 +122,23 @@ export class Vetores {
 
   /** Esquece o cache (reset total da base): apaga o arquivo e a memória. */
   esquecer() {
+    this.geracao++;
     fs.rmSync(path.dirname(this.arquivo), { recursive: true, force: true });
     this.memoria = new Map();
     this.dimensao = 0;
     this.mapa = null;
+  }
+
+  /**
+   * Tira do disco o vetor de trecho que saiu da base (fonte apagada ou editada). Não depende do
+   * Ollama estar respondendo: roda a cada sincronização do índice e a cada busca.
+   */
+  limparOrfaos() {
+    if (!this.iniciado || this.fechado) return;
+    const mem = this._memoria();
+    if (!mem.size) return;
+    const vivos = new Set(this._itens().map((x) => x.hash));
+    if ([...mem.keys()].some((h) => !vivos.has(h))) this._compactar(vivos);
   }
 
   /** Para o status: ligada? quantos trechos já têm vetor? */
@@ -154,7 +186,9 @@ export class Vetores {
 
   /** Começa a preencher os trechos sem vetor, se ainda não estiver preenchendo. */
   agendar() {
-    if (!this.iniciado || this.fechado || this.preenchendo || Date.now() < this.pausaAte) return this.preenchendo;
+    if (!this.iniciado || this.fechado) return this.preenchendo;
+    if (!this.preenchendo) this.limparOrfaos(); // mesmo com o Ollama fora do ar
+    if (this.preenchendo || Date.now() < this.pausaAte) return this.preenchendo;
     this.preenchendo = this._preencher()
       .catch((e) => this._falhou(e))
       .finally(() => { this.preenchendo = null; });
@@ -185,6 +219,8 @@ export class Vetores {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: this.config.modelo, input: textos, truncate: true }),
+      // Redirecionamento levaria o texto da base para outro endereço: recusado.
+      redirect: 'error',
       signal: AbortSignal.timeout(esperaMs),
     });
     if (!r.ok) throw new Error(`Ollama respondeu ${r.status}${r.status === 404 ? ` (rode: ollama pull ${this.config.modelo})` : ''}`);
@@ -259,18 +295,23 @@ export class Vetores {
       );
       if (!linhas.length) return;
       const textos = linhas.map((r) => this._textoDoTrecho(r));
+      const geracao = this.geracao;
       const vetores = await this._embeddings(textos, ESPERA_LOTE_MS);
-      if (this.fechado) return;
+      // Enquanto o Ollama calculava, houve reset total (ou o processo fechou): o lote não volta ao disco.
+      if (this.fechado || geracao !== this.geracao) return;
       const dim = vetores[0].length;
       if (this.dimensao && dim !== this.dimensao) {
         // O modelo mudou de tamanho (outra versão): o cache antigo não serve mais.
         this.esquecer();
         mem = this._memoria();
       }
+      // Só guarda vetor de trecho que ainda está na base (a fonte pode ter sido apagada nesse meio-tempo).
+      const aindaVivos = new Set(this._itens().map((x) => x.hash));
       const novo = !this.dimensao || !fs.existsSync(this.arquivo);
       const partes = novo ? [this._cabecalho(dim)] : [];
       textos.forEach((txt, i) => {
         const h = hashDe(txt);
+        if (!aindaVivos.has(h)) return;
         mem.set(h, vetores[i]);
         partes.push(this._registro(h, vetores[i]));
       });

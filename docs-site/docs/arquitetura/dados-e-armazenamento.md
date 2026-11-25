@@ -74,6 +74,7 @@ Arquivos são gravados num temporário (`{arquivo}.{pid}.{hora}.tmp`) e renomead
 |---|---|
 | `neural/` | Sim, com atenção a dados pessoais nos próprios documentos e originais (fotos podem ter localização) |
 | `tusab.sqlite` | Não precisa: é reconstruído a partir de `neural/` |
+| `vetores/` | Não: é tão sensível quanto o texto (dá para recuperar boa parte do texto a partir dos vetores) e é refeito a partir de `neural/` |
 | `config/` | Não há segredos (o Tusab não guarda chaves), mas é configuração local deste computador |
 
 Para compartilhar um projeto, prefira o arquivo `.tusab` (ver [Repositório e documentos](/funcionalidades/repositorio-multi-fonte#exportar-e-importar)).

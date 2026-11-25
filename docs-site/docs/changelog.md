@@ -14,7 +14,7 @@ Resumo técnico das versões. A partir da 2.0.0 o Tusab é só o conector local 
 **Próxima versão (não publicada)**
 
 - Busca mais esperta sem instalar nada: em perguntas abertas, a IA manda em `tusab_buscar` um `trecho_esperado` (2 a 4 frases como as de uma fonte que responde) e o Tusab busca também pelas palavras dele. Quando a busca acha poucos trechos, o Tusab pede à IA que tente de novo com outras palavras; se ela já tentou, que avise o usuário em vez de completar de memória.
-- Opção avançada, para quem já usa o [Ollama](https://ollama.com): com ele aberto no computador e um modelo de embeddings, `tusab_buscar` soma os trechos de sentido parecido (fusão de posição, RRF). Ninguém precisa instalá-lo: sem Ollama, nada muda nem aparece. Ver [variáveis de ambiente](/desenvolvimento/setup#variáveis-de-ambiente).
+- Opção avançada, para quem já usa o [Ollama](https://ollama.com): ligada com `TUSAB_EMBEDDINGS=1`, com ele aberto no computador e um modelo de embeddings, `tusab_buscar` soma os trechos de sentido parecido (fusão de posição, RRF). Ninguém precisa instalá-lo: desligada por padrão, nada muda nem aparece. O texto só vai para este computador (sem seguir redirecionamento; modelos de nuvem recusados). Ver [variáveis de ambiente](/desenvolvimento/setup#variáveis-de-ambiente).
 
 **v2.0.0 (2026-11-19)** — O Tusab passa a ser só o conector local para o Claude e outras IAs; o app desktop é descontinuado.
 

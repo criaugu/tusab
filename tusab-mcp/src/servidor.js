@@ -77,7 +77,8 @@ function linhaBuscaPorSentido(vetores) {
   // Opção avançada: quem não configurou nada não ouve falar do Ollama.
   if (!e.ligada && !e.explicita) return '';
   if (e.ligada) return t('Busca por significado: ligada ({modelo}; {cobertos} de {total} trechos prontos).', e);
-  if (e.motivo === 'desligada') return t('Busca por significado: desligada (TUSAB_EMBEDDINGS=0).');
+  if (e.motivo === 'desligada') return t('Busca por significado: desligada. Para ligar (opção avançada, com o Ollama neste computador): TUSAB_EMBEDDINGS=1.');
+  if (e.motivo === 'modelo') return t('Busca por significado: desligada (modelo {modelo} não aceito: use um modelo local, sem "-cloud").', e);
   if (e.motivo === 'endereco') return t('Busca por significado: desligada (TUSAB_OLLAMA_URL precisa ser um endereço deste computador).');
   return t('Busca por significado: desligada. Para ligar, instale o Ollama (ollama.com) e rode: ollama pull {modelo}', e);
 }

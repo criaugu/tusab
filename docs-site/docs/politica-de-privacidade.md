@@ -28,6 +28,7 @@ Tudo fica na pasta que você escolhe ao instalar (a "pasta do repositório"):
 | Transcrições do YouTube, documentos, textos, páginas web e resultados de fontes públicas que você adiciona | Formar a sua base de conhecimento |
 | Arquivos originais (PDF, imagens, áudio etc.) | Permitir que a IA consulte o original |
 | Índice de busca | Encontrar os trechos certos |
+| Vetores dos trechos (só se você ligar a busca por significado com o Ollama, opção avançada) | Achar trechos de sentido parecido. Ficam em `data/vetores/` e saem quando a fonte é apagada, no reset total e quando a opção é desligada |
 | Materiais de estudo e estado da revisão espaçada | Guardar o que a IA gera e lembrar as datas de revisão |
 | Seus próprios pedidos (prompts), idioma, fila de extração e preferências | Configurar o Tusab |
 | Contador de economia de tokens (só números somados) | Mostrar quanto a busca economizou |
@@ -44,6 +45,7 @@ A CriAugu não tem acesso a nenhum desses dados.
 | Fontes públicas (bases de artigos, legislação, dados abertos) | O termo que você pesquisou | Ao fazer uma busca |
 | Sites das páginas web que você adiciona | O pedido da página | Ao adicionar uma página |
 | GitHub | Download da ferramenta yt-dlp e da soma de conferência | Só se o computador ainda não tiver o yt-dlp |
+| Ollama **no seu próprio computador** (opção avançada) | O texto dos trechos e das perguntas, para calcular os vetores. Não sai do computador | Só se você ligar a busca por significado (`TUSAB_EMBEDDINGS=1`) |
 | **CriAugu**, no coletor de feedback da CriAugu ([feedback voluntário](#feedback-voluntario)) | A nota, o comentário, o e-mail (se você informar) e, se você deixar marcado, os números de uso | Só quando você clica em Enviar no formulário de feedback |
 
 **O que a ferramenta de IA faz com os trechos** (guardar, usar para treinar modelos, em que país ficam os servidores) segue os termos e a política de privacidade dessa ferramenta e do serviço de IA, e não os do Tusab. Você escolhe a ferramenta; leia a política dela. Esses serviços podem estar fora do Brasil, o que caracteriza transferência internacional de dados por iniciativa sua (LGPD, art. 33).
