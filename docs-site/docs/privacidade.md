@@ -7,7 +7,7 @@ slug: /privacidade
 
 # Privacidade
 
-O Tusab guarda a base de conhecimento **no computador do usuário**. A CriAugu não opera servidor que receba conteúdo, conversas, bases ou dados de uso do Tusab.
+O Tusab guarda a base de conhecimento **no computador do usuário**. A CriAugu não opera servidor que receba conteúdo, conversas ou bases. O único envio à CriAugu é o [feedback voluntário](/politica-de-privacidade#feedback-voluntario), quando o usuário decide mandar.
 
 Esta página descreve tecnicamente o que fica no computador e o que sai dele. A política formal (LGPD, Lei nº 13.709/2018, e GDPR) é a [Política de Privacidade](/politica-de-privacidade).
 
@@ -31,7 +31,7 @@ O Tusab não tem conta, login nem telemetria automática: na tela, o módulo de 
 | Fontes públicas | O tema pesquisado | Ao buscar numa fonte pública |
 | Sites de páginas web | Pedido da página e do `robots.txt` | Ao adicionar uma página web |
 | GitHub (`github.com/yt-dlp`) | Download do yt-dlp e da lista de somas SHA-256 | Só se o computador não tiver o yt-dlp |
-| Coletor de feedback da CriAugu (`coletor.criaugu.com`, hospedagem na Hostinger; código em `coletor-feedback/`) | Nota, comentário, e-mail opcional, código aleatório da instalação e, se marcado, as contagens de uso (o que a prévia do formulário mostra) | Só ao clicar em Enviar no formulário de feedback |
+| Coletor de feedback da CriAugu (`coletor.criaugu.com`, hospedagem na Hostinger; código em `coletor-feedback/`) | Nota, comentário, e-mail opcional, código aleatório da instalação e, se a caixa for marcada (vem desmarcada), as contagens de uso (o que a prévia do formulário mostra). O coletor guarda só os campos de contagem conhecidos; limita envios por instalação, por IP (guardado como resumo com sal, por até 3 dias) e no total; manda no máximo 20 e-mails por hora; apaga registros com mais de 24 meses | Só ao clicar em Enviar no formulário de feedback |
 | Domínios de imagens do YouTube | Carregamento de miniaturas na tela | Ao exibir canais e vídeos na tela |
 
 O que a ferramenta de IA faz com os trechos recebidos (armazenamento, uso, país dos servidores) segue os termos dessa ferramenta e do serviço de IA, não do Tusab. Os servidores podem estar fora do Brasil.

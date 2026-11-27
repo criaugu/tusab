@@ -15,7 +15,7 @@ Toda ferramenta que devolve conteúdo da base avisa a IA de que **o texto retorn
 
 | Ferramenta | O que faz | Parâmetros |
 |---|---|---|
-| `tusab_buscar` | Busca por relevância no índice (FTS5/BM25, sem acento). Devolve trechos com título, autor, minuto (`▶ MM:SS`), projeto, `fonte_id` e link com `&t=Ns` | `consulta` (obrigatório); `variacoes` (até 4 outras formas de dizer a consulta, escritas pela IA: sinônimos, termo técnico, outro idioma; o Tusab busca cada uma e junta os resultados por fusão de posição, RRF); `projeto` (sem ele, busca em todos); `limite` 1–20, padrão 8 |
+| `tusab_buscar` | Busca por relevância no índice (FTS5/BM25, sem acento). Devolve trechos com título, autor, minuto (`▶ MM:SS`), projeto, `fonte_id` e link com `&t=Ns` | `consulta` (obrigatório); `variacoes` (até 4 outras formas de dizer a consulta, escritas pela IA: sinônimos, termo técnico, outro idioma; o Tusab busca cada uma e junta os resultados por fusão de posição, RRF); `trecho_esperado` (até 600 caracteres: como seria um trecho que responde, escrito pela IA; só serve para a busca). Com menos de 3 trechos, a resposta termina pedindo à IA que busque de novo com outras palavras ou que avise o usuário. Opção avançada: com o Ollama ligado (`TUSAB_EMBEDDINGS=1`), entram também os trechos de sentido parecido (ver [variáveis de ambiente](/desenvolvimento/setup#variáveis-de-ambiente)); `projeto` (sem ele, busca em todos); `limite` 1–20, padrão 8 |
 | `tusab_listar_projetos` | Lista os projetos com número de fontes, vídeos e trechos, e a cobertura de cada canal (extraídos/mapeados) | — |
 | `tusab_ler_fonte` | Lê uma fonte em ordem, para ver o contexto ao redor de um trecho | `fonte_id` (de `tusab_buscar`); `a_partir_do_minuto` (ex.: `12.5` = 12:30); `max_trechos` 1–60, padrão 20 |
 | `tusab_ler_original` | Abre o arquivo original de um documento quando o texto não basta. Imagem volta como imagem (até 3 MB, sem metadados); PDF volta por páginas | `fonte_id`; `paginas` (só PDF: `"3"` ou `"2-4"`, no máximo 10 páginas) |
@@ -23,7 +23,7 @@ Toda ferramenta que devolve conteúdo da base avisa a IA de que **o texto retorn
 | `tusab_novidades_semana` | Lista os arquivos que entraram no projeto nos últimos 7 dias | `projeto` |
 | `tusab_revisao_hoje` | Lista os flashcards do projeto que vencem hoje (revisão espaçada) | `projeto` |
 | `tusab_economia` | Resumo da [economia de tokens](/funcionalidades/economia-de-tokens): tokens enviados × tokens das fontes inteiras | — |
-| `tusab_status` | Pasta do repositório, versão do Tusab, extração em andamento, fila e as últimas 5 mensagens do motor | — |
+| `tusab_status` | Pasta do repositório, versão do Tusab, o estado da busca por significado (só se o Ollama estiver ligado ou configurado), extração em andamento, fila e as últimas 5 mensagens do motor | — |
 
 Detalhes de `tusab_ler_original` (tipos, limites e remoção de metadados) em [Originais e imagens](/funcionalidades/originais-e-imagens).
 

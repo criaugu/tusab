@@ -40,6 +40,7 @@ data/
   temp/                                   temporary VTT subtitles
   bin/                                    yt-dlp downloaded by Tusab
   tusab.sqlite                            search index (rebuildable)
+  vetores/                                only with Ollama (advanced option): excerpt vectors (rebuildable)
 ```
 
 ## File formats
@@ -73,6 +74,7 @@ Files are written to a temporary file (`{file}.{pid}.{time}.tmp`) and renamed in
 |---|---|
 | `neural/` | Yes, paying attention to personal data in the documents and originals themselves (photos may carry location) |
 | `tusab.sqlite` | Not needed: it is rebuilt from `neural/` |
+| `vetores/` | No: it is as sensitive as the text (much of the text can be recovered from the vectors) and it is rebuilt from `neural/` |
 | `config/` | No secrets (Tusab stores no keys), but it is this computer's local configuration |
 
 To share a project, prefer the `.tusab` file (see [Repository and documents](/funcionalidades/repositorio-multi-fonte#export-and-import)).

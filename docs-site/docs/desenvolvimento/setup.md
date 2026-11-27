@@ -64,6 +64,11 @@ Para usar numa ferramenta de IA durante o desenvolvimento, aponte a configuraç�
 | `YTDLP_FALSO_ATRASO` | Com o yt-dlp simulado, atraso em milissegundos (ex.: `800`) para ver o progresso na tela |
 | `TUSAB_IDIOMA` | Idioma inicial (`pt`, `en`, `es`), usado antes de a tela definir um |
 | `TUSAB_SEM_BOAS_VINDAS` | `1` desliga a abertura automática da tela na primeira execução numa pasta |
+| `TUSAB_EMBEDDINGS` | `1` liga a opção avançada de busca por significado com o [Ollama](https://ollama.com) aberto neste computador. Padrão: desligada (o Tusab nunca manda a base, sozinho, para o que estiver escutando na porta do Ollama). Desligada, o Tusab apaga `data/vetores/` |
+| `TUSAB_OLLAMA_URL` | Endereço do Ollama. Padrão: `http://127.0.0.1:11434`. Só aceita este computador pelo número (`127.0.0.1` ou `::1`) e não segue redirecionamento; outro endereço desliga o recurso |
+| `TUSAB_EMBEDDINGS_MODELO` | Modelo de embeddings do Ollama. Padrão: `nomic-embed-text`. Modelos de nuvem (com `cloud` no nome) são recusados. Para português, vale comparar com `bge-m3` ou `qwen3-embedding:0.6b` |
+
+A busca por significado é complemento, não requisito: o caminho principal é a própria IA do usuário, que manda `variacoes` e `trecho_esperado` em `tusab_buscar`. Ligada, o Tusab guarda um vetor por trecho em `data/vetores/` (cache refeito a partir dos textos; tão sensível quanto o texto; sai quando a fonte é apagada, mesmo com o Ollama fechado, no reset total e ao trocar de modelo) e soma os trechos de sentido parecido pela RRF. Quem não configurou nenhuma das três variáveis não vê menção ao Ollama no status.
 
 ## Interface no modo `extensao`
 

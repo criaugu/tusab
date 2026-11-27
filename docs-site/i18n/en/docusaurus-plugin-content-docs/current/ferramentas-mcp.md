@@ -15,7 +15,7 @@ Every tool that returns content from the base tells the AI that **the returned t
 
 | Tool | What it does | Parameters |
 |---|---|---|
-| `tusab_buscar` | Relevance search in the index (FTS5/BM25, accent-insensitive). Returns excerpts with title, author, minute (`▶ MM:SS`), project, `fonte_id` and a link with `&t=Ns` | `consulta` (required); `variacoes` (up to 4 other ways of saying the query, written by the AI: synonyms, technical term, another language; Tusab searches each one and merges the results by rank fusion, RRF); `projeto` (without it, searches all); `limite` 1–20, default 8 |
+| `tusab_buscar` | Relevance search in the index (FTS5/BM25, accent-insensitive). Returns excerpts with title, author, minute (`▶ MM:SS`), project, `fonte_id` and a link with `&t=Ns` | `consulta` (required); `variacoes` (up to 4 other ways of saying the query, written by the AI: synonyms, technical term, another language; Tusab searches each one and merges the results by rank fusion, RRF); `trecho_esperado` (up to 600 characters: what an excerpt that answers would look like, written by the AI; used only for searching). With fewer than 3 excerpts, the answer ends asking the AI to search again with other words or to tell the user. Advanced option: with Ollama turned on (`TUSAB_EMBEDDINGS=1`), excerpts with similar meaning join too (see [environment variables](/desenvolvimento/setup#environment-variables)); `projeto` (without it, searches all); `limite` 1–20, default 8 |
 | `tusab_listar_projetos` | Lists projects with the number of sources, videos and excerpts, and the coverage of each channel (extracted/mapped) | — |
 | `tusab_ler_fonte` | Reads a source in order, to see the context around an excerpt | `fonte_id` (from `tusab_buscar`); `a_partir_do_minuto` (e.g. `12.5` = 12:30); `max_trechos` 1–60, default 20 |
 | `tusab_ler_original` | Opens a document's original file when the text is not enough. An image comes back as an image (up to 3 MB, without metadata); a PDF comes back by pages | `fonte_id`; `paginas` (PDF only: `"3"` or `"2-4"`, at most 10 pages) |
@@ -23,7 +23,7 @@ Every tool that returns content from the base tells the AI that **the returned t
 | `tusab_novidades_semana` | Lists the files added to the project in the last 7 days | `projeto` |
 | `tusab_revisao_hoje` | Lists the project's flashcards due today (spaced repetition) | `projeto` |
 | `tusab_economia` | Summary of [token savings](/funcionalidades/economia-de-tokens): tokens sent × tokens of the full sources | — |
-| `tusab_status` | Repository folder, Tusab version, running extraction, queue and the engine's last 5 messages | — |
+| `tusab_status` | Repository folder, Tusab version, the state of search by meaning (only if Ollama is on or configured), running extraction, queue and the engine's last 5 messages | — |
 
 Details of `tusab_ler_original` (types, limits and metadata removal) are in [Originals and images](/funcionalidades/originais-e-imagens).
 

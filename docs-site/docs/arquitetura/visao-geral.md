@@ -115,7 +115,7 @@ O [app desktop](/desktop/visao-geral), descontinuado, compilava o mesmo código 
 
 ## O que fica com a IA do usuário
 
-Conversar, resumir, montar quizzes e gerar flashcards. O Tusab não tem chat próprio, LLM, Ollama, busca vetorial, Google Drive, transcrição de áudio, OCR nem telemetria: entrega os trechos, guarda o que precisa de memória entre conversas e cuida da base. Esses recursos existiam no [app desktop](/desktop/visao-geral), descontinuado.
+Conversar, resumir, montar quizzes e gerar flashcards. O Tusab não tem chat próprio, LLM, Google Drive, transcrição de áudio, OCR nem telemetria: entrega os trechos, guarda o que precisa de memória entre conversas e cuida da base. Esses recursos existiam no [app desktop](/desktop/visao-geral), descontinuado. A única exceção é opcional e fica desligada por padrão: a busca por significado com o Ollama do próprio computador (ver [variáveis de ambiente](/desenvolvimento/setup#variáveis-de-ambiente)).
 
 ## Padrões
 

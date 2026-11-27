@@ -11,6 +11,13 @@ Resumo técnico das versões. A partir da 2.0.0 o Tusab é só o conector local 
 
 ## Tusab (`tusab-mcp/`)
 
+**Próxima versão (não publicada)**
+
+- Busca mais esperta sem instalar nada: em perguntas abertas, a IA manda em `tusab_buscar` um `trecho_esperado` (2 a 4 frases como as de uma fonte que responde) e o Tusab busca também pelas palavras dele. Quando a busca acha poucos trechos, o Tusab pede à IA que tente de novo com outras palavras; se ela já tentou, que avise o usuário em vez de completar de memória.
+- Opção avançada, para quem já usa o [Ollama](https://ollama.com): ligada com `TUSAB_EMBEDDINGS=1`, com ele aberto no computador e um modelo de embeddings, `tusab_buscar` soma os trechos de sentido parecido (fusão de posição, RRF). Ninguém precisa instalá-lo: desligada por padrão, nada muda nem aparece. O texto só vai para este computador (sem seguir redirecionamento; modelos de nuvem recusados). Ver [variáveis de ambiente](/desenvolvimento/setup#variáveis-de-ambiente).
+- Feedback e privacidade (revisão de LGPD e segurança de 25/11): a caixa "Incluir os números de uso" passa a vir desmarcada; o formulário mostra quem recebe e por quanto tempo, com link para a política. [Política de Privacidade](/politica-de-privacidade) 2.1: a CriAugu se declara controladora do feedback voluntário, guarda por até 24 meses, e o texto explica o código da instalação, o IP e a hospedagem fora do Brasil. O coletor (já no ar) passa a limitar envios por IP, mandar no máximo 20 e-mails por hora, aceitar só os campos de contagem conhecidos e apagar sozinho o que tiver mais de 24 meses.
+- No Claude Desktop, "abrir o Tusab" abre a tela direto no navegador do próprio Claude: o Tusab não abre mais o navegador do computador e pede ao Claude que abra o link, sem perguntar. Nas outras ferramentas de IA, continua abrindo o navegador do computador.
+
 **v2.0.0 (2026-11-19)** — O Tusab passa a ser só o conector local para o Claude e outras IAs; o app desktop é descontinuado.
 
 - Várias IAs na mesma base ao mesmo tempo: a primeira ferramenta de IA que abre o Tusab numa pasta vira a principal (só ela lê e grava a base); as outras repassam as ferramentas a ela pela API local e assumem sozinhas se ela fechar. A tela mostra todas as IAs conectadas. Antes, duas IAs abertas na mesma pasta podiam corromper a base.

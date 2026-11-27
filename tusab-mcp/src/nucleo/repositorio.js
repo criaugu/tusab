@@ -192,6 +192,9 @@ export function resetTotal(raiz) {
   for (const p of [c.banco, `${c.banco}.trava`]) {
     if (fs.existsSync(p)) { fs.rmSync(p, { force: true }); removidos.indices++; }
   }
+  // Vetores da busca por significado (vetores.js): derivados do texto, saem junto.
+  const vetores = path.join(c.data, 'vetores');
+  if (fs.existsSync(vetores)) { fs.rmSync(vetores, { recursive: true, force: true }); removidos.indices++; }
   salvarJson(c.fila, []);
   return { ok: true, removidos };
 }

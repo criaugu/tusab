@@ -7,7 +7,7 @@ slug: /privacidade
 
 # Privacy
 
-Tusab keeps the knowledge base **on the user's computer**. CriAugu runs no server that receives Tusab content, conversations, bases or usage data.
+Tusab keeps the knowledge base **on the user's computer**. CriAugu runs no server that receives content, conversations or bases. The only thing sent to CriAugu is [voluntary feedback](/politica-de-privacidade#feedback-voluntario), when the user decides to send it.
 
 This page describes technically what stays on the computer and what leaves it. The formal policy (Brazil's LGPD, Law No. 13,709/2018, and the GDPR) is the [Privacy Policy](/politica-de-privacidade).
 
@@ -31,7 +31,7 @@ Tusab has no account, login or automatic telemetry: on the screen, the analytics
 | Public sources | The searched topic | When searching a public source |
 | Web page sites | Request for the page and its `robots.txt` | When adding a web page |
 | GitHub (`github.com/yt-dlp`) | Download of yt-dlp and its SHA-256 sums list | Only if the computer doesn't have yt-dlp |
-| CriAugu feedback collector (`coletor.criaugu.com`, hosted at Hostinger; code in `coletor-feedback/`) | Score, comment, optional email, random installation code and, if checked, the usage counts (what the form preview shows) | Only when clicking Send in the feedback form |
+| CriAugu feedback collector (`coletor.criaugu.com`, hosted at Hostinger; code in `coletor-feedback/`) | Score, comment, optional email, random installation code and, if the box is checked (it starts unchecked), the usage counts (what the form preview shows). The collector keeps only the known count fields; limits submissions per installation, per IP (kept as a salted digest, for up to 3 days) and in total; sends at most 20 emails per hour; deletes records older than 24 months | Only when clicking Send in the feedback form |
 | YouTube image domains | Thumbnails loaded on the screen | When showing channels and videos on the screen |
 
 What the AI tool does with the excerpts it receives (storage, use, server location) follows the terms of that tool and AI service, not Tusab's. Its servers may be outside Brazil.

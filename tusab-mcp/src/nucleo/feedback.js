@@ -191,7 +191,7 @@ export async function enviarFeedback(tusab, versao = VERSAO, corpo = {}, { agora
   try {
     const r = await fetch(url, {
       method: 'POST', headers: { 'content-type': 'text/plain;charset=utf-8' }, body: JSON.stringify(envio),
-      redirect: 'follow', signal: AbortSignal.timeout(tempoLimiteMs),
+      redirect: 'error', signal: AbortSignal.timeout(tempoLimiteMs),
     });
     const resposta = await r.json().catch(() => null);
     if (!r.ok || !resposta?.ok) return falha(t('O envio não foi aceito agora. Mande por e-mail: o texto já está pronto.'));
