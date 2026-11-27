@@ -535,4 +535,5 @@ export default {
   'Poucos trechos. Antes de concluir, busque de novo mandando variacoes (sinônimos, termo técnico, inglês) e trecho_esperado (como seria um trecho que responde).': 'Few excerpts. Before concluding, search again sending variacoes (synonyms, technical term, English) and trecho_esperado (what an excerpt that answers would look like).',
   'Busca por significado: desligada. Para ligar (opção avançada, com o Ollama neste computador): TUSAB_EMBEDDINGS=1.': 'Search by meaning: off. To turn it on (advanced option, with Ollama on this computer): TUSAB_EMBEDDINGS=1.',
   'Busca por significado: desligada (modelo {modelo} não aceito: use um modelo local, sem "-cloud").': 'Search by meaning: off (model {modelo} not accepted: use a local model, without "-cloud").',
+  'O usuário pediu para abrir o Tusab: abra este link agora no seu navegador (por exemplo, o navegador do Claude), sem perguntar de novo. Se você não tiver navegador, mostre o link para o usuário clicar.': 'The user asked to open Tusab: open this link now in your browser (for example, the Claude browser), without asking again. If you have no browser, show the link for the user to click.',
 };

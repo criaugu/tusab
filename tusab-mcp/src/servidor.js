@@ -84,6 +84,15 @@ function linhaBuscaPorSentido(vetores) {
 }
 
 /**
+ * A ferramenta de IA tem navegador próprio? Hoje, o Claude Desktop (que se identifica como "claude-ai").
+ * O Claude Code e as outras ferramentas não têm: para elas, o painel abre no navegador do computador.
+ */
+export function temNavegadorProprio(cliente) {
+  const nome = String(cliente?.name || '');
+  return /claude/i.test(nome) && !/code/i.test(nome);
+}
+
+/**
  * Servidor MCP do Tusab. Com `encaminhar`, as ferramentas não rodam aqui: cada chamada vai para
  * encaminhar(nome, argumentos), que a leva ao processo principal (ver iniciar e coordenacao.js).
  * Sempre expõe executarFerramenta(nome, argumentos), usada pelo principal para atender os mensageiros.
@@ -100,12 +109,20 @@ export function criarServidor(tusab, { painel = new Painel(tusab, { versao: VERS
     const lng = idioma();
     return { title: t(config.title), description: (lng !== 'pt' && DESCRICOES[nome]?.[lng]) || config.description };
   };
+  // A IA que tem navegador próprio (Claude Desktop) abre o painel nele: sem o parâmetro, o Tusab não
+  // abre o navegador do computador e pede à IA que abra o link. Vale só para a IA desta conexão.
+  const ajustarArgumentos = (nome, argumentos) => (
+    nome === 'tusab_abrir_painel' && argumentos?.abrir_navegador === undefined
+      && temNavegadorProprio(servidor.server.getClientVersion())
+      ? { ...argumentos, abrir_navegador: false } : argumentos);
   // Cada chamada fica registrada (nome e hora) para a tela confirmar que a IA consultou o Tusab.
   const executores = new Map(); // nome → { executar, esquema }
   const registrar = (nome, config, fn) => {
     const comRegistro = (...args) => { tusab.registrarUsoMcp(nome); return fn(...args); };
     executores.set(nome, { executar: comRegistro, esquema: z.object(config.inputSchema || {}) });
-    const atender = encaminhar ? (argumentos) => encaminhar(nome, argumentos) : comRegistro;
+    const atender = encaminhar
+      ? (argumentos) => encaminhar(nome, ajustarArgumentos(nome, argumentos))
+      : (argumentos, ...resto) => comRegistro(ajustarArgumentos(nome, argumentos), ...resto);
     const reg = servidor.registerTool(nome, { ...config, ...noIdioma(nome, config) }, atender);
     textosFerramenta.set(reg, { nome, config });
     return reg;
@@ -296,7 +313,7 @@ export function criarServidor(tusab, { painel = new Painel(tusab, { versao: VERS
       'repositório, materiais e relatórios. Devolve o link. Se você tiver um navegador próprio dentro da ferramenta de IA (por exemplo, o navegador do Claude), '
       + 'passe abrir_navegador false e abra o link nele; se ele não abrir o endereço 127.0.0.1, chame de novo sem esse parâmetro.',
     inputSchema: {
-      abrir_navegador: z.boolean().optional().describe('Padrão true (abre o navegador do computador). Se false, só devolve o link, para abrir no navegador da própria ferramenta de IA.'),
+      abrir_navegador: z.boolean().optional().describe('Padrão true (abre o navegador do computador); no Claude Desktop, o padrão é false. Se false, só devolve o link, para abrir no navegador da própria ferramenta de IA.'),
     },
     annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
   }, async ({ abrir_navegador }) => {
@@ -305,6 +322,9 @@ export function criarServidor(tusab, { painel = new Painel(tusab, { versao: VERS
       if (abrir_navegador !== false) abrirNoNavegador(url);
       return texto(
         `${t('Painel do Tusab: {url}', { url })}\n` +
+        (abrir_navegador === false
+          ? `${t('O usuário pediu para abrir o Tusab: abra este link agora no seu navegador (por exemplo, o navegador do Claude), sem perguntar de novo. Se você não tiver navegador, mostre o link para o usuário clicar.')}\n`
+          : '') +
         t('Funciona só neste computador e enquanto esta ferramenta de IA estiver aberta. O link leva uma chave desta sessão: não compartilhe.'),
       );
     } catch (e) {
